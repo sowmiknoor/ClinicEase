@@ -1,0 +1,17 @@
+/* Minimal CSS to allow the app to run without Tailwind processing */
+/* If you want Tailwind, re-enable the plugin in postcss.config.cjs and
+   restore the `@tailwind` directives. */
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: #f9fafb; /* approx. bg-gray-50 */
+  color: #111827; /* approx. text-gray-900 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+

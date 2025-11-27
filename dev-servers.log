@@ -1,0 +1,72 @@
+Starting backend on port 5001...
+
+> backend@1.0.0 dev
+> nodemon server.js
+
+[33m[nodemon] 3.1.11[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node server.js`[39m
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+(node:64859) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:64859) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+MongoDB connected
+Server running on port 5001
+Cleaning up previous dev processes...
+Shutting down gracefully...
+Starting backend on port 5001...
+MongoDB disconnected
+[32m[nodemon] clean exit - waiting for changes before restart[39m
+
+> backend@1.0.0 dev
+> nodemon server.js
+
+[33m[nodemon] 3.1.11[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node server.js`[39m
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+(node:64916) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:64916) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+MongoDB connected
+Server running on port 5001
+Starting frontend on port 5173...
+Backend PID: 64894
+Frontend PID: 64917
+
+> frontend@0.0.0 dev
+> vite
+
+
+  ROLLDOWN-VITE v7.2.2  ready in 84 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+Opening http://localhost:5173 in default browser...
+To stop: kill 64894 64917
+[32m[nodemon] restarting child process[39m
+[32m[nodemon] restarting child process[39m
+[32m[nodemon] starting `node server.js`[39m
+/Users/sowmiknoor/Desktop/AI ClinicEase/scripts/start-all.sh: line 35: 64919 Hangup: 1               PORT=$FRONTEND_PORT npm run dev
+[32m[nodemon] starting `node server.js`[39m
+/Users/sowmiknoor/Desktop/AI ClinicEase/scripts/start-all.sh: line 26: 64896 Hangup: 1               PORT=5001 npm run dev
+/Users/sowmiknoor/Desktop/AI ClinicEase/scripts/start-all.sh: line 11: 64811 Hangup: 1               PORT=5001 npm run dev
+Backend PID: 64894
+Frontend PID: 64917
+To stop: kill 64894 64917
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+(node:68101) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:68118) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:68101) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(node:68118) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+MongoDB connected
+MongoDB connected
+Server running on port 5001
+Server running on port 5001
