@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Medication Reminder</title>
+</head>
+<body>
+  <h1>Medication Reminder</h1>
+
+  <h2>Add Reminder</h2>
+  <form id="reminderForm">
+    Patient ID: <input type="text" id="patientId"><br>
+    Medicine Name: <input type="text" id="medicineName"><br>
+    Dosage: <input type="text" id="dosage"><br>
+    Time: <input type="text" id="time" placeholder="HH:MM"><br>
+    Frequency: <input type="text" id="frequency"><br>
+    Reminder Description: <input type="text" id="reminder"><br>
+    Method: <input type="text" id="method"><br>
+    <button type="submit">Add Reminder</button>
+  </form>
+
+  <h2>All Reminders</h2>
+  <ul id="reminderList"></ul>
+
+  <script>
+    const form = document.getElementById('reminderForm');
+    const list = document.getElementById('reminderList');
+
+    async function fetchReminders() {
+      const res = await fetch('http://localhost:5000/api/medications/all');
+      const data = await res.json();
+      list.innerHTML = '';
+      data.forEach(r => {
+        const li = document.createElement('li');
+        li.textContent = `${r.patientId} - ${r.medicineName} - ${r.dosage} - ${r.time} - ${r.frequency} - ${r.reminder} - ${r.method}`;
+        list.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        patientId: document.getElementById('patientId').value,
+        medicineName: document.getElementById('medicineName').value,
+        dosage: document.getElementById('dosage').value,
+        time: document.getElementById('time').value,
+        frequency: document.getElementById('frequency').value,
+        reminder: document.getElementById('reminder').value,
+        method: document.getElementById('method').value
+      };
+      await fetch('http://localhost:5000/api/medications/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      form.reset();
+      fetchReminders();
+    });
+
+    fetchReminders();
+  </script>
+</body>
+</html>
