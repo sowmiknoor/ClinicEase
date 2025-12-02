@@ -12,7 +12,7 @@ export default function SymptomChecker() {
     setError("");
     setResults(null);
     try {
-      const res = await fetch("/api/symptom-checker", {
+      const res = await fetch("http://localhost:5000/api/symptom-checker", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symptoms: input.split(/,|\s+/).map(s => s.trim()).filter(Boolean) })
