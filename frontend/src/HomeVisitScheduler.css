@@ -1,0 +1,12 @@
+.visits-root { max-width: 1000px; margin: 20px auto; padding: 16px; font-family: Inter, system-ui, -apple-system; }
+.visits-root h2 { color: #0b3a5b; margin-bottom: 12px; }
+.visits-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.visit-form { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 10px 30px rgba(10,25,45,0.04); }
+.visit-form label { display:block; margin-top:8px; color:#4d6977; }
+.visit-form input, .visit-form textarea { width: 100%; padding: 8px 10px; margin-top:6px; border-radius:6px; border:1px solid #e6eef6; }
+.btn { margin-top: 12px; background: #2b9edb; color: white; padding: 10px 12px; border-radius:8px; border:none; cursor:pointer; }
+.visits-list { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 6px 20px rgba(10,25,45,0.04); }
+.visit-item { padding: 12px; border-bottom: 1px dashed #eef6fb; }
+.visit-item:last-child { border-bottom: none; }
+.muted { color: #6b7c86; margin-top:6px; }
+@media (max-width: 880px) { .visits-layout { grid-template-columns: 1fr; } }

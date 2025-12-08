@@ -1,8 +1,10 @@
 import { useState } from "react";
+import './Login.css';
 
 export default function Login({ onLoginSuccess }) {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState(null);
+  const [status, setStatus] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -10,57 +12,55 @@ export default function Login({ onLoginSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMsg(null);
+    setStatus(null);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
       });
       const data = await res.json();
       if (data.ok) {
-        setMsg(`✅ Login successful! Welcome ${data.user.name}`);
+        // Store userId and name for other components
+        try { localStorage.setItem('userId', data.user.id); localStorage.setItem('userName', data.user.name); } catch (e) {}
+        setStatus('success');
+        setMsg(`Login successful — Welcome ${data.user.name}`);
         setTimeout(() => {
-          setMsg("");
+          setMsg(null);
           if (onLoginSuccess) onLoginSuccess();
-        }, 1200);
+        }, 900);
       } else {
-        setMsg(`❌ Login failed: ${data.msg}`);
+        setStatus('error');
+        setMsg(data.msg || 'Login failed');
       }
     } catch (err) {
-      setMsg("❌ Login failed: Server error");
+      setStatus('error');
+      setMsg('Server error — please try again');
     }
   };
 
   return (
-    <div className="bg-white/95 p-10 rounded-3xl shadow-2xl border border-pink-200 animate-fade-in">
-      <h2 className="text-2xl font-bold mb-6 text-pink-700">Login</h2>
-      <form onSubmit={handleSubmit} autoComplete="off" className="space-y-6">
-        <input
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          autoComplete="username"
-          className="w-full px-4 py-2 border-2 border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-pink-50 transition"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          autoComplete="new-password"
-          className="w-full px-4 py-2 border-2 border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-pink-50 transition"
-        />
-        <button
-          type="submit"
-          className="w-full py-2 bg-gradient-to-r from-pink-500 to-blue-400 text-white font-bold rounded-lg shadow-lg hover:from-pink-600 hover:to-blue-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
-        >
-          Login
-        </button>
-      </form>
-      {msg && <p className="mt-4 text-center text-base font-medium text-pink-700">{msg}</p>}
+    <div className="login-root">
+      <div className="login-card">
+        <h2>Sign in to ClinicEase</h2>
+        <p className="helper">Enter your registered email and password to continue.</p>
+
+        <form onSubmit={handleSubmit} autoComplete="off" className="login-form">
+          <input name="email" placeholder="Email" value={form.email} onChange={handleChange} autoComplete="username" />
+          <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} autoComplete="current-password" />
+          <button className="login-btn" type="submit">Sign in</button>
+        </form>
+
+        {msg && (
+          <div className={`login-msg ${status === 'success' ? 'success' : 'error'}`}>{msg}</div>
+        )}
+
+        <div className="small-link">
+          <button onClick={() => window.alert('Password reset coming soon')}>Forgot password?</button>
+        </div>
+      </div>
     </div>
   );
 }

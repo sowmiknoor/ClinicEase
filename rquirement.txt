@@ -1,0 +1,85 @@
+Functional requirements
+1. Login & Registration
+Users (patients, doctors, admins) should be able to register and log in securely using email, phone number, or social accounts.
+
+
+
+2. Smart Symptom Checker
+
+User should be able to enter symptoms and receive suggested possible conditions or recommended specialist doctors.
+
+
+3.Personalized Health Dashboard
+
+User should be able to view a personalized dashboard showing ongoing treatments, health reminders, and preventive care tips.
+
+4.Medication Reminder System
+
+User should be able to receive alerts and notifications for scheduled medicine intake times.
+
+5. Home Visit Scheduling
+
+User should be able to request or schedule doctor home visits and view route tracking for the visit.
+
+6. Online Tele-Consultation Booking
+
+User should be able to book and attend online video consultations with doctors from home.
+
+7. Health Goal Tracking
+
+User should be able to set health goals (e.g., weight, blood pressure, glucose level) and track progress over time.
+
+8. Family Health Management
+
+User should be able to add and manage multiple family member profiles under a single account and schedule appointments for them.
+
+
+9. Recurring Appointment Automation
+
+User should be able to automatically schedule recurring or follow-up appointments for chronic conditions.
+
+10. AI-Based Treatment Suggestion
+
+User should be able to receive AI-generated treatment plan suggestions based on their medical history and symptoms.
+
+11. Prescription History Search
+
+User should be able to search, view, and download past prescriptions anytime.
+
+12. Medical Document Upload
+
+User should be able to upload, organize, and manage medical documents such as lab reports, scans, and insurance forms.
+
+13. Nutrition & Lifestyle Planner
+
+User should be able to get personalized diet and exercise recommendations based on their health records.
+
+14. Quick Refill Requests
+
+User should be able to request prescription refills directly without booking a new appointment.
+
+15. Doctor’s Smart Dashboard
+
+Doctor should be able to view a dashboard displaying patient progress, daily schedules, and treatment analytics.
+
+16. Feedback & Rating System
+
+User should be able to rate doctors and provide feedback on consultations and services.
+
+17. Emergency Alerts
+
+User should be able to receive emergency notifications for abnormal health readings or critical medical events.
+18. Local Pharmacy Integration
+
+User should be able to send prescriptions directly to nearby pharmacies for pickup or home delivery.
+
+19. Virtual Waiting Room
+User should be able to check estimated waiting times before joining a physical or virtual consultation.
+
+20. Test Reminders
+
+User should be able to set reminders for vaccinations, health check-ups, or lab tests.
+
+21. Community Health Forum
+
+User should be able to participate in a community forum to ask general health questions and get answers from verified doctors.

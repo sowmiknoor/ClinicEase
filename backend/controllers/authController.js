@@ -55,3 +55,21 @@ exports.login = async (req, res) => {
     res.status(500).json({ ok: false, msg: err.message });
   }
 };
+
+// MIDDLEWARE: Verify user ID (from request header or body)
+exports.authMiddleware = (req, res, next) => {
+  try {
+    // The userId should be passed in the request header or extracted from token
+    // For now, we expect it in the header
+    const userId = req.headers['x-user-id'] || req.body.userId;
+    
+    if (!userId) {
+      return res.status(401).json({ ok: false, error: 'User ID is required' });
+    }
+
+    req.userId = userId;
+    next();
+  } catch (err) {
+    res.status(401).json({ ok: false, error: 'Unauthorized' });
+  }
+};
