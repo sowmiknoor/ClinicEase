@@ -1,0 +1,355 @@
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px;
+  background: linear-gradient(135deg, #2b9edb, #1f6fb1);
+  color: white;
+}
+
+.profile-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-btn,
+.save-btn,
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.edit-btn:hover,
+.cancel-btn:hover {
+  background: white;
+  color: #1f6fb1;
+}
+
+.save-btn {
+  background: rgba(16, 185, 129, 0.9);
+  border-color: #10b981;
+}
+
+.save-btn:hover {
+  background: #10b981;
+  border-color: #059669;
+  color: white;
+}
+
+.profile-content {
+  padding: 40px 32px;
+  display: flex;
+  gap: 40px;
+}
+
+.profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-picture {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  box-shadow: 0 8px 24px rgba(43, 158, 219, 0.2);
+  border: 4px solid white;
+  position: relative;
+}
+
+.change-photo-btn {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.change-photo-btn:hover {
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  transform: translateY(-2px);
+}
+
+.profile-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.detail-item label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+}
+
+.detail-value .icon {
+  font-size: 20px;
+}
+
+.detail-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: white;
+  border: 2px solid #2b9edb;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.detail-input:focus {
+  outline: none;
+  border-color: #1f6fb1;
+  box-shadow: 0 0 0 3px rgba(43, 158, 219, 0.1);
+}
+
+.detail-input:disabled {
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.role-tag {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.role-tag.patient {
+  background: linear-gradient(135deg, #2b9edb, #1f6fb1);
+}
+
+.role-tag.doctor {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.role-tag.admin {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.profile-stats {
+  padding: 32px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.profile-stats h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+  font-size: 32px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Dark Mode Styles */
+.dark-mode .profile-card {
+  background: #1e293b;
+}
+
+.dark-mode .profile-header {
+  background: linear-gradient(135deg, #1e3a5f, #0f2942);
+}
+
+.dark-mode .profile-content {
+  background: #1e293b;
+}
+
+.dark-mode .detail-value {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .detail-input {
+  background: #0f172a;
+  border-color: #3b82f6;
+  color: #e2e8f0;
+}
+
+.dark-mode .detail-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dark-mode .detail-item label {
+  color: #94a3b8;
+}
+
+.dark-mode .profile-stats {
+  background: #0f172a;
+  border-top-color: #334155;
+}
+
+.dark-mode .profile-stats h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .stat-box {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+.dark-mode .stat-label {
+  color: #94a3b8;
+}
+
+.dark-mode .stat-value {
+  color: #f1f5f9;
+}
+
+.dark-mode .change-photo-btn {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .change-photo-btn:hover {
+  background: #475569;
+}
+
+@media (max-width: 768px) {
+  .profile-content {
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+  }
+
+  .detail-row {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 520px) {
+  .profile-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,32 +1,73 @@
 import { useState } from "react";
 import './SymptomChecker.css';
 
+const knowledgeBase = [
+  { condition: "Common Cold", keywords: ["cough", "runny", "congestion", "sore throat", "sneezing"], specialist: "General Physician" },
+  { condition: "Flu / Viral Fever", keywords: ["fever", "chills", "body ache", "fatigue", "cough"], specialist: "General Physician" },
+  { condition: "COVID-19", keywords: ["fever", "dry cough", "loss of smell", "loss of taste", "breathlessness"], specialist: "Pulmonologist" },
+  { condition: "Asthma", keywords: ["wheezing", "shortness of breath", "chest tightness", "cough"], specialist: "Pulmonologist" },
+  { condition: "Migraine", keywords: ["headache", "nausea", "light sensitivity", "aura", "throbbing"], specialist: "Neurologist" },
+  { condition: "Hypertension", keywords: ["high blood pressure", "dizziness", "blurred vision", "headache"], specialist: "Cardiologist" },
+  { condition: "Gastritis / Acid Reflux", keywords: ["heartburn", "acid", "bloating", "upper abdominal pain", "nausea"], specialist: "Gastroenterologist" },
+  { condition: "Urinary Tract Infection", keywords: ["burning urination", "frequent urination", "pelvic pain", "cloudy urine"], specialist: "Urologist" },
+  { condition: "Allergic Rhinitis", keywords: ["sneezing", "itchy nose", "watery eyes", "congestion"], specialist: "Allergist / Immunologist" },
+  { condition: "Dermatitis / Rash", keywords: ["rash", "itching", "redness", "scaling"], specialist: "Dermatologist" },
+  { condition: "Depression", keywords: ["sad", "low mood", "loss of interest", "sleep issues", "appetite change"], specialist: "Psychiatrist" },
+  { condition: "Anxiety", keywords: ["worry", "palpitations", "sweating", "restlessness", "panic"], specialist: "Psychiatrist" },
+  { condition: "Diabetes Mellitus", keywords: ["increased thirst", "frequent urination", "fatigue", "blurred vision"], specialist: "Endocrinologist" },
+];
+
+function inferConditions(symptomText) {
+  const tokens = symptomText
+    .toLowerCase()
+    .split(/,|\n|\s+/)
+    .map(t => t.trim())
+    .filter(Boolean);
+
+  const scores = knowledgeBase
+    .map(entry => {
+      const matchCount = entry.keywords.filter(k => tokens.some(t => t.includes(k))).length;
+      return { ...entry, score: matchCount };
+    })
+    .filter(e => e.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  const conditions = scores.map(e => `${e.condition} (confidence: ${(Math.min(1, e.score / (e.keywords.length || 1)) * 100).toFixed(0)}%)`);
+  const specialists = [];
+  scores.forEach(e => {
+    if (!specialists.includes(e.specialist)) specialists.push(e.specialist);
+  });
+
+  return { conditions, specialists };
+}
+
 export default function SymptomChecker() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setResults(null);
-    try {
-      const res = await fetch("/api/symptom-checker", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symptoms: input.split(/,|\s+/).map(s => s.trim()).filter(Boolean) })
-      });
-      const data = await res.json();
-      if (data.ok) {
-        setResults(data);
-      } else {
-        setError(data.msg || "No results found.");
-      }
-    } catch (err) {
-      setError("Server error. Please try again later.");
+
+    const trimmed = input.trim();
+    if (!trimmed) {
+      setError("Please enter at least one symptom.");
+      setLoading(false);
+      return;
     }
+
+    const data = inferConditions(trimmed);
+    if (!data.conditions.length) {
+      setError("No clear match. Please describe symptoms in more detail.");
+      setLoading(false);
+      return;
+    }
+
+    setResults({ ok: true, ...data });
     setLoading(false);
   };
 

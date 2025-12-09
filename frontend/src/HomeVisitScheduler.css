@@ -1,12 +1,172 @@
-.visits-root { max-width: 1000px; margin: 20px auto; padding: 16px; font-family: Inter, system-ui, -apple-system; }
-.visits-root h2 { color: #0b3a5b; margin-bottom: 12px; }
-.visits-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.visit-form { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 10px 30px rgba(10,25,45,0.04); }
-.visit-form label { display:block; margin-top:8px; color:#4d6977; }
-.visit-form input, .visit-form textarea { width: 100%; padding: 8px 10px; margin-top:6px; border-radius:6px; border:1px solid #e6eef6; }
-.btn { margin-top: 12px; background: #2b9edb; color: white; padding: 10px 12px; border-radius:8px; border:none; cursor:pointer; }
-.visits-list { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 6px 20px rgba(10,25,45,0.04); }
-.visit-item { padding: 12px; border-bottom: 1px dashed #eef6fb; }
+
+/* Dark Mode */
+.dark-mode .visits-root h2 {
+  color: #f1f5f9;
+}
+
+.dark-mode .visit-form {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark-mode .visit-form label {
+  color: #94a3b8;
+}
+
+.dark-mode .visit-form input,
+.dark-mode .visit-form textarea {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .visit-form input:focus,
+.dark-mode .visit-form textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dark-mode .btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.dark-mode .btn:hover {
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.dark-mode .visit-list h3,
+.dark-mode .visit-list .empty {
+  color: #cbd5e1;
+}
+
+.dark-mode .visit-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark-mode .visit-card h4 {
+  color: #f1f5f9;
+}
+
+.dark-mode .visit-card p,
+.dark-mode .visit-card small {
+  color: #cbd5e1;
+}
+
+.dark-mode .visit-card .tag {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .visit-card .tag.confirmed {
+  background: #064e3b;
+  border-color: #065f46;
+  color: #a7f3d0;
+}
+
+.dark-mode .visit-card .actions .link {
+  color: #60a5fa;
+}
+
+.visits-root { 
+  max-width: 1100px; 
+  margin: 0 auto; 
+  padding: 32px 24px; 
+  font-family: Inter, system-ui, -apple-system;
+}
+.visits-root h2 { 
+  color: #0b3a5b; 
+  margin: 0 0 28px;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.visits-layout { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 24px;
+}
+.visit-form { 
+  background: white; 
+  padding: 24px; 
+  border-radius: 14px; 
+  box-shadow: 0 8px 28px rgba(10, 25, 45, 0.05);
+  border: 1.5px solid #e0f0f8;
+}
+.visit-form label { 
+  display: block; 
+  margin-top: 12px; 
+  color: #4d6977;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.visit-form input, .visit-form textarea { 
+  width: 100%; 
+  padding: 12px 14px; 
+  margin-top: 6px;
+  border-radius: 10px; 
+  border: 1.5px solid #e6f0fa;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+.visit-form input:focus, .visit-form textarea:focus {
+  outline: none;
+  border-color: #2b9edb;
+  box-shadow: 0 0 0 3px rgba(43, 158, 219, 0.1);
+}
+.visit-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.btn { 
+  margin-top: 16px; 
+  background: linear-gradient(135deg, #2b9edb, #1f6fb1); 
+  color: white; 
+  padding: 12px 20px; 
+  border-radius: 10px;
+  border: none; 
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(43, 158, 219, 0.3);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(43, 158, 219, 0.4);
+}
+.visits-list { 
+  background: white; 
+  padding: 24px; 
+  border-radius: 14px; 
+  box-shadow: 0 8px 28px rgba(10, 25, 45, 0.05);
+  border: 1.5px solid #e0f0f8;
+}
+.visit-item { 
+  padding: 16px 0; 
+  border-bottom: 1px solid #f0f5fa;
+}
 .visit-item:last-child { border-bottom: none; }
-.muted { color: #6b7c86; margin-top:6px; }
-@media (max-width: 880px) { .visits-layout { grid-template-columns: 1fr; } }
+.visit-item h3 {
+  margin: 0 0 8px;
+  color: #0b3a5b;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.muted { 
+  color: #6b7c86; 
+  margin-top: 6px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1100px) { 
+  .visits-layout { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 768px) {
+  .visits-root { padding: 20px 16px; }
+  .visits-root h2 { font-size: 1.5rem; }
+  .visit-form, .visits-list { padding: 16px; }
+}

@@ -15,6 +15,12 @@ app.use("/api/symptom-checker", require("./routes/symptomCheckerRoutes"));
 app.use("/api/medications", require("./routes/medicationRoutes"));
 app.use("/api/visits", require("./routes/visitRoutes"));
 app.use("/api/consultations", require("./routes/consultationRoutes"));
+app.use("/api/prescriptions", require("./routes/prescriptionRoutes"));
+app.use("/api/labtests", require("./routes/labTestRoutes"));
+app.use("/api/records", require("./routes/recordRoutes"));
+app.use("/api/billing", require("./routes/invoiceRoutes"));
+app.use("/api/messages", require("./routes/messageRoutes"));
+app.use("/api/notifications", require("./routes/notificationRoutes"));
 
 // Example router
 const exampleRouter = require('./routes/example');

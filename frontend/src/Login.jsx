@@ -24,7 +24,11 @@ export default function Login({ onLoginSuccess }) {
       const data = await res.json();
       if (data.ok) {
         // Store userId and name for other components
-        try { localStorage.setItem('userId', data.user.id); localStorage.setItem('userName', data.user.name); } catch (e) {}
+        try {
+          localStorage.setItem('userId', data.user.id);
+          localStorage.setItem('userName', data.user.name);
+          localStorage.setItem('userRole', data.user.role || 'Patient');
+        } catch (e) {}
         setStatus('success');
         setMsg(`Login successful — Welcome ${data.user.name}`);
         setTimeout(() => {

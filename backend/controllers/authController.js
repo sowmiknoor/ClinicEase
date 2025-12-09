@@ -5,7 +5,11 @@ const User = require("../models/User");
 // REGISTER USER (NO SECURITY)
 exports.register = async (req, res) => {
   try {
-    const { name, email, phone, password, role } = req.body;
+    const { name, email, phone, password, confirmPassword, role } = req.body;
+
+    if (password !== confirmPassword) {
+      return res.json({ ok: false, msg: "Passwords do not match" });
+    }
 
     // Check if user already exists
     const exist = await User.findOne({ email });
@@ -62,14 +66,28 @@ exports.authMiddleware = (req, res, next) => {
     // The userId should be passed in the request header or extracted from token
     // For now, we expect it in the header
     const userId = req.headers['x-user-id'] || req.body.userId;
-    
+
     if (!userId) {
       return res.status(401).json({ ok: false, error: 'User ID is required' });
     }
 
-    req.userId = userId;
-    next();
+    User.findById(userId)
+      .then((user) => {
+        if (!user) return res.status(401).json({ ok: false, error: 'Invalid user' });
+        req.userId = userId;
+        req.user = user;
+        next();
+      })
+      .catch(() => res.status(401).json({ ok: false, error: 'Unauthorized' }));
   } catch (err) {
     res.status(401).json({ ok: false, error: 'Unauthorized' });
   }
+};
+
+// Simple role guard
+exports.requireRoles = (roles) => (req, res, next) => {
+  if (!req.user || !roles.includes(req.user.role)) {
+    return res.status(403).json({ ok: false, error: 'Forbidden' });
+  }
+  next();
 };

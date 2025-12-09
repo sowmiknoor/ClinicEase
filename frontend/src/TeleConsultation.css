@@ -1,14 +1,219 @@
-.tele-root{padding:18px;max-width:1100px;margin:20px auto;background:var(--card-bg, #fff);border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
-.tele-root h2{margin:0 0 14px;text-align:center}
-.tele-layout{display:flex;gap:20px}
-.tele-form{flex:0 0 360px;display:flex;flex-direction:column;gap:10px;padding:12px}
-.tele-form input,.tele-form textarea{padding:10px;border-radius:6px;border:1px solid #ddd}
-.tele-form label{font-weight:600;font-size:13px}
-.book-btn{background:#047857;color:#fff;padding:10px;border-radius:8px;border:none;cursor:pointer}
-.tele-list{flex:1;padding:12px}
-.tele-list ul{list-style:none;padding:0;margin:0}
-.consult-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #eee}
-.consult-main{display:flex;flex-direction:column}
-.consult-actions button{margin-left:8px;padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
-.join{background:#2563eb;color:#fff}
-.cancel{background:#ef4444;color:#fff}
+
+/* Dark Mode */
+.dark-mode .tele-root {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark-mode .tele-root h2 {
+  color: #f1f5f9;
+}
+
+.dark-mode .tele-form {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-color: #334155;
+}
+
+.dark-mode .tele-form label {
+  color: #e2e8f0;
+}
+
+.dark-mode .tele-form input,
+.dark-mode .tele-form textarea {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .tele-form input:focus,
+.dark-mode .tele-form textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.dark-mode .book-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.dark-mode .book-btn:hover {
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.dark-mode .sessions h3,
+.dark-mode .sessions p {
+  color: #cbd5e1;
+}
+
+.dark-mode .session-card {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.dark-mode .session-card h4 {
+  color: #f1f5f9;
+}
+
+.dark-mode .session-card p,
+.dark-mode .session-card small {
+  color: #cbd5e1;
+}
+
+.dark-mode .session-card .status {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .session-card .status.confirmed {
+  background: #064e3b;
+  border-color: #065f46;
+  color: #a7f3d0;
+}
+
+.tele-root {
+  padding: 32px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(10, 25, 45, 0.05);
+  border: 1.5px solid #e0f0f8;
+}
+.tele-root h2 {
+  margin: 0 0 24px;
+  text-align: center;
+  color: #0b3a5b;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.tele-layout {
+  display: flex;
+  gap: 24px;
+}
+.tele-form {
+  flex: 0 0 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8fbff, #f0f9ff);
+  border-radius: 12px;
+  border: 1.5px solid #e0f0f8;
+}
+.tele-form input, .tele-form textarea {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #e6f0fa;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+.tele-form input:focus, .tele-form textarea:focus {
+  outline: none;
+  border-color: #2b9edb;
+  box-shadow: 0 0 0 3px rgba(43, 158, 219, 0.1);
+}
+.tele-form label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0b3a5b;
+}
+.book-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+.book-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+.tele-list {
+  flex: 1;
+  padding: 20px;
+}
+.tele-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.consult-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1.5px solid #e0f0f8;
+  border-radius: 10px;
+  background: white;
+  transition: all 0.3s ease;
+}
+.consult-item:hover {
+  box-shadow: 0 6px 18px rgba(10, 25, 45, 0.08);
+  border-color: #2b9edb;
+}
+.consult-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.consult-main h4 {
+  margin: 0;
+  color: #0b3a5b;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.consult-main p {
+  margin: 0;
+  color: #6b7c86;
+  font-size: 0.85rem;
+}
+.consult-actions button {
+  margin-left: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+.consult-actions button:first-child {
+  margin-left: 0;
+}
+.join {
+  background: linear-gradient(135deg, #2b9edb, #1f6fb1);
+  color: white;
+  box-shadow: 0 2px 8px rgba(43, 158, 219, 0.2);
+}
+.join:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(43, 158, 219, 0.3);
+}
+.cancel {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+.cancel:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1100px) {
+  .tele-layout { flex-direction: column; gap: 20px; }
+  .tele-form { flex: 1; }
+}
+
+@media (max-width: 768px) {
+  .tele-root { padding: 20px 16px; }
+  .tele-root h2 { font-size: 1.5rem; }
+  .tele-layout { gap: 16px; }
+  .tele-form { padding: 16px; }
+  .tele-list { padding: 12px; }
+  .consult-item { padding: 12px; }
+}

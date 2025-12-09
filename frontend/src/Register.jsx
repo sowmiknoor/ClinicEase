@@ -7,6 +7,7 @@ export default function Register({ onRegistered }) {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
     role: 'Patient',
   });
   const [message, setMessage] = useState(null);
@@ -20,6 +21,12 @@ export default function Register({ onRegistered }) {
     e.preventDefault();
     setMessage(null);
     setStatus(null);
+
+    if (formData.password !== formData.confirmPassword) {
+      setStatus('error');
+      setMessage('Passwords do not match');
+      return;
+    }
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -34,7 +41,7 @@ export default function Register({ onRegistered }) {
           setMessage(null);
           if (onRegistered) onRegistered();
         }, 1100);
-        setFormData({ name: '', email: '', password: '', role: 'Patient' });
+        setFormData({ name: '', email: '', password: '', confirmPassword: '', role: 'Patient' });
       } else {
         setStatus('error');
         setMessage(data.msg || data.message || 'Registration failed.');
@@ -59,6 +66,7 @@ export default function Register({ onRegistered }) {
           <input name="name" placeholder="Full name" value={formData.name} onChange={handleChange} className="full" required />
           <input name="email" placeholder="Email address" value={formData.email} onChange={handleChange} required />
           <input name="password" type="password" placeholder="Create password" value={formData.password} onChange={handleChange} required />
+          <input name="confirmPassword" type="password" placeholder="Confirm password" value={formData.confirmPassword} onChange={handleChange} required />
           <select name="role" value={formData.role} onChange={handleChange}>
             <option value="Patient">Patient</option>
             <option value="Doctor">Doctor</option>
