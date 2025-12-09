@@ -18,6 +18,10 @@ const visitSchema = new mongoose.Schema(
     },
     requestedDateTime: { type: Date, required: true },
     status: { type: String, enum: ['requested', 'scheduled', 'in_progress', 'completed', 'canceled'], default: 'requested' },
+    isConfirmed: { type: Boolean, default: false },
+    confirmationDate: Date,
+    canceledDate: Date,
+    cancelReason: String,
     notes: String,
     route: [coordSchema], // route tracking: list of coords
     assignedVehicle: String,

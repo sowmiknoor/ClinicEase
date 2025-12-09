@@ -18,6 +18,12 @@ router.get('/:id', visitController.getVisitById);
 // Update status
 router.patch('/:id/status', visitController.updateStatus);
 
+// Confirm a visit
+router.put('/:id/confirm', visitController.confirmVisit);
+
+// Cancel a visit
+router.put('/:id/cancel', visitController.cancelVisit);
+
 // Add route point
 router.post('/:id/route', visitController.addRoutePoint);
 
@@ -25,3 +31,4 @@ router.post('/:id/route', visitController.addRoutePoint);
 router.get('/helpers/doctors', visitController.listDoctors);
 
 module.exports = router;
+

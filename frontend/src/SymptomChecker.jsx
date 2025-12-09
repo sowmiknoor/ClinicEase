@@ -1,53 +1,14 @@
 import { useState } from "react";
 import './SymptomChecker.css';
 
-const knowledgeBase = [
-  { condition: "Common Cold", keywords: ["cough", "runny", "congestion", "sore throat", "sneezing"], specialist: "General Physician" },
-  { condition: "Flu / Viral Fever", keywords: ["fever", "chills", "body ache", "fatigue", "cough"], specialist: "General Physician" },
-  { condition: "COVID-19", keywords: ["fever", "dry cough", "loss of smell", "loss of taste", "breathlessness"], specialist: "Pulmonologist" },
-  { condition: "Asthma", keywords: ["wheezing", "shortness of breath", "chest tightness", "cough"], specialist: "Pulmonologist" },
-  { condition: "Migraine", keywords: ["headache", "nausea", "light sensitivity", "aura", "throbbing"], specialist: "Neurologist" },
-  { condition: "Hypertension", keywords: ["high blood pressure", "dizziness", "blurred vision", "headache"], specialist: "Cardiologist" },
-  { condition: "Gastritis / Acid Reflux", keywords: ["heartburn", "acid", "bloating", "upper abdominal pain", "nausea"], specialist: "Gastroenterologist" },
-  { condition: "Urinary Tract Infection", keywords: ["burning urination", "frequent urination", "pelvic pain", "cloudy urine"], specialist: "Urologist" },
-  { condition: "Allergic Rhinitis", keywords: ["sneezing", "itchy nose", "watery eyes", "congestion"], specialist: "Allergist / Immunologist" },
-  { condition: "Dermatitis / Rash", keywords: ["rash", "itching", "redness", "scaling"], specialist: "Dermatologist" },
-  { condition: "Depression", keywords: ["sad", "low mood", "loss of interest", "sleep issues", "appetite change"], specialist: "Psychiatrist" },
-  { condition: "Anxiety", keywords: ["worry", "palpitations", "sweating", "restlessness", "panic"], specialist: "Psychiatrist" },
-  { condition: "Diabetes Mellitus", keywords: ["increased thirst", "frequent urination", "fatigue", "blurred vision"], specialist: "Endocrinologist" },
-];
-
-function inferConditions(symptomText) {
-  const tokens = symptomText
-    .toLowerCase()
-    .split(/,|\n|\s+/)
-    .map(t => t.trim())
-    .filter(Boolean);
-
-  const scores = knowledgeBase
-    .map(entry => {
-      const matchCount = entry.keywords.filter(k => tokens.some(t => t.includes(k))).length;
-      return { ...entry, score: matchCount };
-    })
-    .filter(e => e.score > 0)
-    .sort((a, b) => b.score - a.score);
-
-  const conditions = scores.map(e => `${e.condition} (confidence: ${(Math.min(1, e.score / (e.keywords.length || 1)) * 100).toFixed(0)}%)`);
-  const specialists = [];
-  scores.forEach(e => {
-    if (!specialists.includes(e.specialist)) specialists.push(e.specialist);
-  });
-
-  return { conditions, specialists };
-}
-
 export default function SymptomChecker() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const userId = localStorage.getItem('userId');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -60,63 +21,176 @@ export default function SymptomChecker() {
       return;
     }
 
-    const data = inferConditions(trimmed);
-    if (!data.conditions.length) {
-      setError("No clear match. Please describe symptoms in more detail.");
+    // Parse symptoms (comma or space separated)
+    const symptoms = trimmed
+      .split(/,|\n/)
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    if (symptoms.length === 0) {
+      setError("Please enter at least one symptom.");
       setLoading(false);
       return;
     }
 
-    setResults({ ok: true, ...data });
-    setLoading(false);
+    try {
+      const response = await fetch('/api/symptom-checker', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-id': userId
+        },
+        body: JSON.stringify({ symptoms })
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        setResults(data);
+      } else {
+        setError(data.msg || 'Unable to analyze symptoms. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      setError('Server error. Please check your connection.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveToRecords = async () => {
+    if (!results) return;
+    
+    try {
+      const response = await fetch('/api/records', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-id': userId
+        },
+        body: JSON.stringify({
+          type: 'Symptom Check',
+          description: input,
+          findings: results.conditions.join(', '),
+          recommendation: results.specialists.join(', '),
+          date: new Date().toISOString()
+        })
+      });
+
+      const data = await response.json();
+      if (data.ok) {
+        alert('✓ Saved to your medical records!');
+      }
+    } catch (err) {
+      console.error('Error saving to records:', err);
+    }
   };
 
   return (
     <div className="sym-root">
       <div className="sym-hero">
-        <h2>Smart Symptom Checker</h2>
-        <p>Enter symptoms and receive possible conditions and suggested specialists. Use medically-informed suggestions — for guidance only.</p>
+        <h2>🩺 Smart Symptom Checker with AI</h2>
+        <p>Describe your symptoms and receive AI-powered probable conditions and specialist recommendations. This is for informational guidance only — always consult a healthcare professional.</p>
 
         <form onSubmit={handleSubmit} className="sym-form">
-          <input
-            type="text"
-            placeholder="e.g. fever, cough, headache"
+          <textarea
+            placeholder="Enter your symptoms (e.g., fever, cough, headache) - separate multiple symptoms with commas or new lines"
             value={input}
             onChange={e => setInput(e.target.value)}
+            rows="4"
             required
           />
-          <button type="submit" disabled={loading}>{loading ? 'Checking...' : 'Check'}</button>
+          <button type="submit" disabled={loading} className="sym-submit">
+            {loading ? 'Analyzing...' : 'Analyze Symptoms'}
+          </button>
         </form>
       </div>
 
-      {error && <div style={{color:'#c0392b', marginTop:12}}>{error}</div>}
+      {error && <div className="sym-error">❌ {error}</div>}
 
       {results && (
         <div className="sym-results">
-          <div className="sym-card">
-            <h3>Possible Conditions</h3>
-            <div className="chips">
-              {results.conditions.slice(0,6).map((c,i) => <span key={i} className="chip">{c}</span>)}
-            </div>
-            <ul className="conditions-list">
-              {results.conditions.map((c,i) => <li key={i}>{c}</li>)}
-            </ul>
+          {/* Disclaimer */}
+          <div className="disclaimer-box">
+            <strong>⚠️ {results.disclaimer}</strong>
           </div>
 
-          <aside className="side-panel">
-            <h4>Recommended Specialists</h4>
-            <ul className="specialists">
-              {results.specialists.map((s,i) => <li key={i}>{s}</li>)}
-            </ul>
-
-            <div style={{marginTop:12}}>
-              <h4>Quick Actions</h4>
-              <div className="quick-actions">
-                <button onClick={() => window.alert('Feature coming soon')}>Book Tele-Consult</button>
-                <button onClick={() => window.alert('Feature coming soon')}>Save To Dashboard</button>
+          {/* Severity and Urgency */}
+          {results.severity && (
+            <div className="severity-section">
+              <div className="severity-item">
+                <label>Severity Level:</label>
+                <span className={`severity-badge ${results.severity}`}>
+                  {results.severity.charAt(0).toUpperCase() + results.severity.slice(1)}
+                </span>
+              </div>
+              <div className="severity-item">
+                <label>Urgency:</label>
+                <span className={`urgency-badge ${results.urgency}`}>
+                  {results.urgency.charAt(0).toUpperCase() + results.urgency.slice(1)}
+                </span>
               </div>
             </div>
-          </aside>
+          )}
+
+          {/* Possible Conditions */}
+          <div className="sym-card">
+            <h3>📋 Possible Conditions (with probability)</h3>
+            <div className="conditions-list">
+              {results.conditions && results.conditions.length > 0 ? (
+                results.conditions.map((condition, i) => (
+                  <div key={i} className="condition-item">
+                    <span className="condition-text">{condition}</span>
+                  </div>
+                ))
+              ) : (
+                <p className="no-results">Unable to identify specific conditions.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Recommended Specialists */}
+          <div className="sym-card">
+            <h3>👨‍⚕️ Recommended Specialists</h3>
+            <div className="specialists-grid">
+              {results.specialists && results.specialists.length > 0 ? (
+                results.specialists.map((specialist, i) => (
+                  <div key={i} className="specialist-badge">
+                    {specialist}
+                  </div>
+                ))
+              ) : (
+                <p className="no-results">No specific specialists identified.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Medical Advice */}
+          {results.advice && (
+            <div className="sym-card advice-card">
+              <h3>💡 Medical Advice</h3>
+              <p>{results.advice}</p>
+            </div>
+          )}
+
+          {/* AI Source */}
+          <div className="source-info">
+            <small>
+              {results.source === 'openai' 
+                ? '🤖 Analysis powered by OpenAI GPT' 
+                : '📚 Analysis based on medical knowledge base'}
+            </small>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="sym-actions">
+            <button onClick={saveToRecords} className="save-btn">
+              💾 Save to Medical Records
+            </button>
+            <button onClick={() => setResults(null)} className="new-btn">
+              🔄 Check Another
+            </button>
+          </div>
         </div>
       )}
     </div>

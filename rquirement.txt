@@ -4,24 +4,24 @@ Users (patients, doctors, admins) should be able to register and log in securely
 
 
 
-2. Smart Symptom Checker
+2. Smart Symptom Checker.....Done
 
 User should be able to enter symptoms and receive suggested possible conditions or recommended specialist doctors.
 
 
-3.Personalized Health Dashboard
+3.Personalized Health Dashboard....done
 
 User should be able to view a personalized dashboard showing ongoing treatments, health reminders, and preventive care tips.
 
-4.Medication Reminder System
+4.Medication Reminder System...done
 
 User should be able to receive alerts and notifications for scheduled medicine intake times.
 
-5. Home Visit Scheduling
+5. Home Visit Scheduling...done
 
 User should be able to request or schedule doctor home visits and view route tracking for the visit.
 
-6. Online Tele-Consultation Booking
+6. Online Tele-Consultation Booking...done
 
 User should be able to book and attend online video consultations with doctors from home.
 

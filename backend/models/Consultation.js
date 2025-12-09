@@ -8,6 +8,7 @@ const consultationSchema = new mongoose.Schema(
     durationMinutes: { type: Number, default: 30 },
     status: { type: String, enum: ['requested','scheduled','confirmed','in_progress','completed','canceled'], default: 'requested' },
     meetingLink: { type: String },
+    mobileNumber: { type: String },
     notes: { type: String },
     patientNotes: { type: String },
     providerNotes: { type: String }

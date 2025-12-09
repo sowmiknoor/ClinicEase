@@ -1,87 +1,163 @@
+import { useState } from 'react';
 import './Home.css';
 
-export default function Home({ onNavigate }) {
+export default function Home({ onNavigate, onLoginSuccess }) {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [msg, setMsg] = useState(null);
+  const [status, setStatus] = useState(null);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMsg(null);
+    setStatus(null);
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      if (data.ok) {
+        localStorage.setItem('userId', data.user.id);
+        localStorage.setItem('userName', data.user.name);
+        localStorage.setItem('userRole', data.user.role || 'Patient');
+        setStatus('success');
+        setMsg(`Welcome back, ${data.user.name}!`);
+        setTimeout(() => {
+          if (onLoginSuccess) onLoginSuccess();
+        }, 800);
+      } else {
+        setStatus('error');
+        setMsg(data.msg || 'Login failed');
+      }
+    } catch (err) {
+      setStatus('error');
+      setMsg('Server error — please try again');
+    }
+  };
+
   return (
-    <div className="home-root max-w-7xl mx-auto px-4">
-
-      <header className="home-hero professional">
-        <div className="hero-left">
-          <h1>Compassionate care, delivered — anytime, anywhere</h1>
-          <p className="lead">ClinicEase brings trusted clinical tools to your fingertips — symptom evaluation, medication management, home visits and secure tele-consultations.</p>
-
-          <div className="cta-group">
-            <button className="primary" onClick={() => onNavigate('register')}>Create Account</button>
-            <button className="secondary" onClick={() => onNavigate('symptom')}>Try Symptom Checker</button>
+    <div className="landing-page">
+      <div className="landing-container">
+        {/* Left Side - Marketing Content */}
+        <div className="landing-left">
+          <div className="landing-brand">
+            <h1 className="brand-title">ClinicEase</h1>
+            <p className="brand-tagline">Your Health, Simplified</p>
           </div>
 
-          <ul className="trust-list">
-            <li><strong>HIPAA-aware</strong> — privacy-first design</li>
-            <li><strong>Verified Doctors</strong> — curated clinician network</li>
-            <li><strong>24/7 Support</strong> — assistance when you need it</li>
-          </ul>
-        </div>
+          <h2 className="hero-headline">
+            Compassionate Healthcare,
+            <span className="gradient-text"> Anytime, Anywhere</span>
+          </h2>
 
-        <div className="hero-right">
-          {/* Simple inline medical illustration */}
-          <div className="illustration">
-            <svg width="320" height="260" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-              <rect x="8" y="20" width="304" height="220" rx="18" fill="#ffffff" stroke="#e6f0fa" strokeWidth="2"/>
-              <g transform="translate(32,42)">
-                <circle cx="56" cy="44" r="36" fill="#eaf8ff" stroke="#bdeafc" />
-                <path d="M56 34v20" stroke="#2b9edb" strokeWidth="3" strokeLinecap="round" />
-                <path d="M46 44h20" stroke="#2b9edb" strokeWidth="3" strokeLinecap="round" />
+          <p className="hero-description">
+            Experience seamless healthcare management with ClinicEase — your trusted partner for 
+            symptom checking, medication tracking, home visits, and virtual consultations.
+          </p>
 
-                <rect x="120" y="10" width="110" height="20" rx="6" fill="#f7fbff" stroke="#e6f0fa" />
-                <rect x="120" y="40" width="70" height="12" rx="4" fill="#eef9ff" />
+          <div className="feature-highlights">
+            <div className="highlight-item">
+              <div className="highlight-icon">🏥</div>
+              <div>
+                <h4>24/7 Healthcare Access</h4>
+                <p>Connect with verified doctors anytime</p>
+              </div>
+            </div>
+            <div className="highlight-item">
+              <div className="highlight-icon">🔒</div>
+              <div>
+                <h4>HIPAA Compliant</h4>
+                <p>Your privacy is our top priority</p>
+              </div>
+            </div>
+            <div className="highlight-item">
+              <div className="highlight-icon">💊</div>
+              <div>
+                <h4>Smart Reminders</h4>
+                <p>Never miss a medication or appointment</p>
+              </div>
+            </div>
+          </div>
 
-                <rect x="0" y="100" width="220" height="60" rx="8" fill="#f7fcfe" stroke="#e0f2fb" />
-                <text x="16" y="132" fill="#2b9edb" fontSize="12" fontWeight="700">Today's Schedule</text>
-                <text x="16" y="150" fill="#334854" fontSize="11">2 reminders • 1 upcoming visit</text>
-              </g>
-            </svg>
+          <div className="trust-badges">
+            <span className="badge">✓ 10,000+ Patients</span>
+            <span className="badge">✓ 500+ Doctors</span>
+            <span className="badge">✓ 24/7 Support</span>
           </div>
         </div>
-      </header>
 
-      <section className="features professional-features">
-        <h3>Core Features</h3>
-        <div className="feature-grid">
-          <article className="feature-card">
-            <div className="icon">🩺</div>
-            <h4>Smart Symptom Checker</h4>
-            <p>Fast triage to guide you to the right care and specialists.</p>
-          </article>
+        {/* Right Side - Login Form */}
+        <div className="landing-right">
+          <div className="login-box">
+            <h3>Welcome Back</h3>
+            <p className="login-subtitle">Sign in to access your health dashboard</p>
 
-          <article className="feature-card">
-            <div className="icon">💊</div>
-            <h4>Medication Management</h4>
-            <p>Reminders, adherence tracking, and quick refill requests.</p>
-          </article>
+            <form onSubmit={handleSubmit} className="landing-form">
+              <div className="form-group">
+                <label htmlFor="email">Email Address</label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-          <article className="feature-card">
-            <div className="icon">🏠</div>
-            <h4>Home Visit Scheduling</h4>
-            <p>Request vetted providers to visit your home with ETA and route tracking.</p>
-          </article>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-          <article className="feature-card">
-            <div className="icon">💻</div>
-            <h4>Tele-Consultations</h4>
-            <p>Secure video calls and e-prescriptions from verified clinicians.</p>
-          </article>
+              {msg && (
+                <div className={`landing-msg ${status}`}>
+                  {msg}
+                </div>
+              )}
+
+              <button type="submit" className="login-submit-btn">
+                Sign In
+              </button>
+            </form>
+
+            <div className="divider">
+              <span>or</span>
+            </div>
+
+            <button onClick={() => onNavigate('register')} className="register-btn">
+              Create New Account
+            </button>
+
+            <p className="help-text">
+              Need help? <a href="#">Contact Support</a>
+            </p>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <section className="trust-strip">
-        <p>Trusted by clinics and patients — integrations with local pharmacies and labs.</p>
-      </section>
-
-      <footer className="home-footer">
-        <div>© {new Date().getFullYear()} ClinicEase</div>
+      {/* Footer */}
+      <footer className="landing-footer">
+        <p>© {new Date().getFullYear()} ClinicEase. All rights reserved.</p>
         <div className="footer-links">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Contact</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact Us</a>
         </div>
       </footer>
     </div>

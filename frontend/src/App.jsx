@@ -23,6 +23,7 @@ function App() {
   const [page, setPage] = useState("home");
   const [userRole, setUserRole] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   
   // Handler to switch to login after registration
   const handleRegistered = () => setPage("login");
@@ -37,9 +38,19 @@ function App() {
     localStorage.removeItem('userName');
     localStorage.removeItem('userRole');
     setUserRole(null);
-    setPage("login");
+    setPage("home");
     setSidebarOpen(false);
   };
+
+  // Initialize dark mode from localStorage on mount
+  useEffect(() => {
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, []);
 
   // Get user role from localStorage on mount
   useEffect(() => {
@@ -77,7 +88,7 @@ function App() {
         { label: 'Lab Tests', page: 'labtests' },
         { label: 'Medical Records', page: 'records' },
         { label: 'Messages', page: 'messages' },
-        { label: 'Alerts', page: 'notifications' }
+        { label: '🔔', page: 'notifications', isIcon: true }
       ],
       Doctor: [
         { label: 'Dashboard', page: 'dashboard' },
@@ -88,7 +99,7 @@ function App() {
         { label: 'Billing', page: 'billing' },
         { label: 'Tele-Consult', page: 'tele' },
         { label: 'Messages', page: 'messages' },
-        { label: 'Alerts', page: 'notifications' }
+        { label: '🔔', page: 'notifications', isIcon: true }
       ],
       Admin: [
         { label: 'Dashboard', page: 'dashboard' },
@@ -99,15 +110,40 @@ function App() {
         { label: 'Billing', page: 'billing' },
         { label: 'Tele-Consult', page: 'tele' },
         { label: 'Messages', page: 'messages' },
-        { label: 'Alerts', page: 'notifications' }
+        { label: '🔔', page: 'notifications', isIcon: true }
       ]
     };
 
     return navItems[userRole] || [];
   };
 
+  // Fetch unread notifications count
+  useEffect(() => {
+    if (userRole) {
+      const fetchUnreadCount = async () => {
+        const userId = localStorage.getItem('userId');
+        try {
+          const res = await fetch('/api/notifications', {
+            headers: { 'x-user-id': userId }
+          });
+          const data = await res.json();
+          if (data.ok) {
+            const unread = data.notifications?.filter(n => !n.read).length || 0;
+            setUnreadNotifications(unread);
+          }
+        } catch (err) {
+          console.error('Failed to fetch notifications:', err);
+        }
+      };
+      fetchUnreadCount();
+      // Refresh every 30 seconds
+      const interval = setInterval(fetchUnreadCount, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [userRole, page]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-white to-pink-200 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-white to-pink-200">
       {/* Sidebar */}
       {userRole && (
         <>
@@ -142,13 +178,13 @@ function App() {
           {userRole && <button className="menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>}
         </div>
       </header>
-      <main className="app-main">
-      {page === "register" || page === "login" ? (
+      <main className="app-main" style={{ paddingTop: page === 'home' || page === 'login' || page === 'register' ? '0' : '88px' }}>
+      {page === "home" && <Home onNavigate={setPage} onLoginSuccess={handleLoginSuccess} />}
+      {(page === "register" || page === "login") && (
         <div className="flex flex-col items-center justify-start min-h-[calc(100vh-88px)]">
           <div className="w-full max-w-lg">
             {page === "register" && <Register onRegistered={handleRegistered} />}
             {page === "login" && <Login onLoginSuccess={handleLoginSuccess} />}
-            {page === "home" && <Home onNavigate={setPage} />}
           </div>
           <div className="auth-footer">
             {page === "register" ? (
@@ -162,7 +198,8 @@ function App() {
             )}
           </div>
         </div>
-      ) : (
+      )}
+      {page !== "home" && page !== "register" && page !== "login" && (
         <div className="w-full">
           <div className="bg-white shadow-md border-b border-gray-200 mb-6">
             <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -172,12 +209,14 @@ function App() {
                   <button 
                     key={item.page}
                     onClick={() => setPage(item.page)} 
-                    className={`nav-btn ${page === item.page ? "active" : ""}`}
+                    className={`nav-btn ${page === item.page ? "active" : ""} ${item.isIcon ? "notification-btn" : ""}`}
                   >
                     {item.label}
+                    {item.isIcon && unreadNotifications > 0 && (
+                      <span className="notification-badge">{unreadNotifications}</span>
+                    )}
                   </button>
                 ))}
-                <button onClick={handleLogout} className="nav-btn logout">Logout</button>
               </nav>
             </div>
           </div>

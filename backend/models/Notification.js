@@ -4,6 +4,7 @@ const notificationSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   title: String,
   body: String,
+  category: { type: String, enum: ['medication', 'tele-consult', 'lab-test', 'general'], default: 'general' },
   read: { type: Boolean, default: false },
 }, { timestamps: true });
 

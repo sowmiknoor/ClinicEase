@@ -6,6 +6,7 @@ const controller = require('../controllers/notificationController');
 router.use(authMiddleware);
 router.get('/', requireRoles(['Doctor','Admin','Patient']), controller.list);
 router.post('/', requireRoles(['Doctor','Admin','Patient']), controller.create);
+router.patch('/mark-all-read', requireRoles(['Doctor','Admin','Patient']), controller.markAllRead);
 router.patch('/:id/read', requireRoles(['Doctor','Admin','Patient']), controller.markRead);
 
 module.exports = router;

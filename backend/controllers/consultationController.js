@@ -4,7 +4,7 @@ const User = require('../models/User');
 // Create/book a consultation
 exports.bookConsultation = async (req, res) => {
   try {
-    const { doctorId, scheduledAt, durationMinutes, notes } = req.body;
+    const { doctorId, scheduledAt, durationMinutes, notes, mobileNumber } = req.body;
     if (!scheduledAt) {
       return res.status(400).json({ ok: false, error: 'scheduledAt is required' });
     }
@@ -12,11 +12,22 @@ exports.bookConsultation = async (req, res) => {
     // create placeholder meeting link (in real app integrate Jitsi/Zoom/API)
     const meetingLink = `https://meet.example.com/${Date.now().toString(36)}-${Math.floor(Math.random()*9000+1000)}`;
 
+    // Validate doctorId if provided - must be valid ObjectId or empty
+    let validDoctorId = undefined;
+    if (doctorId && doctorId.trim() !== '') {
+      // Check if it's a valid MongoDB ObjectId format (24 hex characters)
+      if (/^[0-9a-fA-F]{24}$/.test(doctorId)) {
+        validDoctorId = doctorId;
+      }
+      // If not valid ObjectId format, leave it undefined (optional field)
+    }
+
     const consult = new Consultation({
       userId: req.userId,
-      doctorId: doctorId || undefined,
+      doctorId: validDoctorId,
       scheduledAt: new Date(scheduledAt),
       durationMinutes: durationMinutes || 30,
+      mobileNumber: mobileNumber || undefined,
       notes,
       meetingLink,
       status: 'scheduled'

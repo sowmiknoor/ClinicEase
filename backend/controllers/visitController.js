@@ -100,3 +100,47 @@ exports.listDoctors = async (req, res) => {
     res.status(500).json({ ok: false, error: err.message });
   }
 };
+
+// Confirm a visit
+exports.confirmVisit = async (req, res) => {
+  try {
+    const visit = await Visit.findById(req.params.id);
+    if (!visit) return res.status(404).json({ ok: false, error: 'Visit not found' });
+    if (visit.userId.toString() !== req.userId) return res.status(403).json({ ok: false, error: 'Unauthorized' });
+
+    visit.isConfirmed = true;
+    visit.confirmationDate = new Date();
+    visit.status = 'scheduled';
+    await visit.save();
+    
+    res.json({ ok: true, message: 'Visit confirmed successfully', visit });
+  } catch (err) {
+    console.error('Error confirming visit:', err);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+};
+
+// Cancel a visit
+exports.cancelVisit = async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const visit = await Visit.findById(req.params.id);
+    if (!visit) return res.status(404).json({ ok: false, error: 'Visit not found' });
+    if (visit.userId.toString() !== req.userId) return res.status(403).json({ ok: false, error: 'Unauthorized' });
+
+    if (visit.status === 'completed') {
+      return res.status(400).json({ ok: false, error: 'Cannot cancel a completed visit' });
+    }
+
+    visit.status = 'canceled';
+    visit.canceledDate = new Date();
+    visit.cancelReason = reason || 'User canceled';
+    await visit.save();
+    
+    res.json({ ok: true, message: 'Visit canceled successfully', visit });
+  } catch (err) {
+    console.error('Error canceling visit:', err);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+};
+
