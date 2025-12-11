@@ -14,3 +14,4 @@ router.post('/:id/cancel', consultationController.cancelConsultation);
 router.get('/:id/meeting', consultationController.ensureMeetingLink);
 
 module.exports = router;
+//ho vai 
