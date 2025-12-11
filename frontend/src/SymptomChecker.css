@@ -205,10 +205,53 @@
 }
 
 @media (max-width: 768px) {
-  .sym-root { padding: 20px 16px; }
-  .sym-hero { padding: 20px; }
-  .sym-hero h2 { font-size: 1.5rem; }
-  .sym-results { gap: 16px; }
+  .sym-root { 
+    padding: 20px 16px;
+    margin-top: 64px;
+  }
+  .sym-hero { 
+    padding: 24px 20px;
+  }
+  .sym-hero h2 { 
+    font-size: 1.5rem;
+  }
+  .sym-hero p {
+    font-size: 14px;
+  }
+  .sym-form textarea {
+    font-size: 16px;
+  }
+  .sym-submit {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+  .sym-results { 
+    gap: 16px;
+  }
+  .result-card {
+    padding: 20px;
+  }
+  .quick-actions button {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sym-root {
+    padding: 16px 12px;
+    margin-top: 56px;
+  }
+  .sym-hero {
+    padding: 20px 16px;
+  }
+  .sym-hero h2 {
+    font-size: 1.25rem;
+  }
+  .result-card {
+    padding: 16px;
+  }
 }
 
 /* Updated Styles for AI Symptom Checker */

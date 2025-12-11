@@ -28,6 +28,14 @@ export default function Login({ onLoginSuccess }) {
           localStorage.setItem('userId', data.user.id);
           localStorage.setItem('userName', data.user.name);
           localStorage.setItem('userRole', data.user.role || 'Patient');
+          // Also store as JSON object for components that expect it
+          localStorage.setItem('user', JSON.stringify({
+            userId: data.user.id,
+            _id: data.user.id,
+            name: data.user.name,
+            email: data.user.email,
+            role: data.user.role || 'Patient'
+          }));
         } catch (e) {}
         setStatus('success');
         setMsg(`Login successful — Welcome ${data.user.name}`);

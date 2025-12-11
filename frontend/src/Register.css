@@ -171,10 +171,46 @@
   color: #9b2c2c;
 }
 
-@media (max-width: 600px) {
-  .register-card {
-    padding: 24px;
+@media (max-width: 768px) {
+  .register-root {
+    padding: 80px 16px 32px 16px;
   }
+  .register-card {
+    max-width: 100%;
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .register-root {
+    padding: 70px 12px 24px 12px;
+  }
+  .register-card {
+    padding: 28px 20px;
+    border-radius: 12px;
+  }
+  .register-card h2 {
+    font-size: 22px;
+  }
+  .register-card p.helper {
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .register-form input,
+  .register-form select {
+    font-size: 16px;
+  }
+  .register-submit {
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+  .register-msg {
+    font-size: 12px;
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 480px) {
   .register-card h2 {
     font-size: 20px;
   }

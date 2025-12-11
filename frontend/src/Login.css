@@ -203,15 +203,51 @@
   text-decoration: underline;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
+  .login-root {
+    padding: 80px 16px 32px 16px;
+  }
   .login-card {
+    max-width: 100%;
     padding: 32px 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  .login-root {
+    padding: 70px 12px 24px 12px;
+  }
+  .login-card {
+    padding: 28px 20px;
+    border-radius: 12px;
   }
   .login-card h2 {
     font-size: 24px;
   }
+  .login-card p.helper {
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .role-selector {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .role-option {
+    width: 100%;
+  }
+  .login-form input {
+    font-size: 16px;
+  }
+  .login-btn {
+    padding: 14px 20px;
+    font-size: 16px;
+  }
   .login-msg {
     font-size: 12px;
+    padding: 12px 14px;
+  }
+  .small-link {
+    font-size: 13px;
   }
 }
 

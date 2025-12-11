@@ -51,6 +51,7 @@ exports.login = async (req, res) => {
       email: user.email,
       phone: user.phone,
       role: user.role,
+      darkMode: user.darkMode || false,
       createdAt: user.createdAt
     };
 
@@ -90,4 +91,29 @@ exports.requireRoles = (roles) => (req, res, next) => {
     return res.status(403).json({ ok: false, error: 'Forbidden' });
   }
   next();
+};
+
+// UPDATE USER SETTINGS (including dark mode)
+exports.updateSettings = async (req, res) => {
+  try {
+    const { userId, darkMode } = req.body;
+    
+    if (!userId) {
+      return res.status(400).json({ ok: false, msg: 'User ID required' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { darkMode },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ ok: false, msg: 'User not found' });
+    }
+
+    res.json({ ok: true, msg: 'Settings updated', darkMode: user.darkMode });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };

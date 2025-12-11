@@ -20,6 +20,8 @@ body {
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   letter-spacing: 0.3px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* Tailwind-like Utility Classes */
@@ -121,6 +123,34 @@ body {
   pointer-events: auto;
   display: flex;
   align-items: center;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .global-header {
+    height: 64px;
+    padding: 0 16px;
+  }
+  
+  .global-header .brand {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+  
+  .global-header .brand::before {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .global-header {
+    height: 56px;
+    padding: 0 12px;
+  }
+  
+  .global-header .brand {
+    font-size: 14px;
+  }
   gap: 16px;
 }
 .global-header .brand:hover {
@@ -822,5 +852,43 @@ main.app-main {
 .dark-mode .max-w-7xl,
 .dark-mode .max-w-lg {
   color: #e2e8f0;
+}
+
+/* Mobile Touch Enhancements */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: rgba(14, 165, 233, 0.1);
+  }
+
+  button, a, input, select, textarea {
+    touch-action: manipulation;
+  }
+
+  /* Prevent text size adjustment on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Larger touch targets for mobile */
+  button, .btn, a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  input, select, textarea {
+    min-height: 44px;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
 }
 

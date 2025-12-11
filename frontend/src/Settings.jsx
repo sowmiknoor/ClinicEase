@@ -7,28 +7,58 @@ function Settings() {
   const [emailAlerts, setEmailAlerts] = useState(true);
 
   useEffect(() => {
-    // Check if dark mode is enabled in localStorage
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    setDarkMode(isDarkMode);
-    
-    // Apply dark mode to body
-    if (isDarkMode) {
-      document.body.classList.add('dark-mode');
+    // Get user from localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      const isDarkMode = user.darkMode || false;
+      setDarkMode(isDarkMode);
+      
+      // Apply dark mode to body
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+      }
     }
   }, []);
 
-  const handleDarkModeToggle = () => {
+  const handleDarkModeToggle = async () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     
-    // Save to localStorage
-    localStorage.setItem('darkMode', newDarkMode);
-    
-    // Apply to body
+    // Apply to body immediately
     if (newDarkMode) {
       document.body.classList.add('dark-mode');
     } else {
       document.body.classList.remove('dark-mode');
+    }
+
+    // Save to backend
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      
+      try {
+        const response = await fetch('http://localhost:5001/api/auth/update-settings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            darkMode: newDarkMode
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.ok) {
+          // Update user in localStorage
+          user.darkMode = newDarkMode;
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+      } catch (err) {
+        console.error('Failed to save dark mode setting:', err);
+      }
     }
   };
 

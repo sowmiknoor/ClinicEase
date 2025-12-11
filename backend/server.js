@@ -22,6 +22,15 @@ app.use("/api/billing", require("./routes/invoiceRoutes"));
 app.use("/api/messages", require("./routes/messageRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
 
+// New comprehensive routes
+app.use("/api/appointments", require("./routes/appointmentRoutes"));
+app.use("/api/medical-records", require("./routes/medicalRecordRoutes"));
+app.use("/api/lab-tests-new", require("./routes/labTestNewRoutes"));
+app.use("/api/messages-new", require("./routes/messageNewRoutes"));
+app.use("/api/medications-new", require("./routes/medicationNewRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/home-visits", require("./routes/homeVisitRoutes"));
+
 // Example router
 const exampleRouter = require('./routes/example');
 app.use('/api/example', exampleRouter);

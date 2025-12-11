@@ -247,13 +247,19 @@ input:checked + .toggle-slider:before {
 
 @media (max-width: 768px) {
   .settings-container {
-    padding: 16px;
+    padding: 20px 16px;
+    margin-top: 64px;
+  }
+
+  .settings-header h2 {
+    font-size: 24px;
   }
 
   .setting-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+    padding: 20px;
   }
 
   .toggle-switch {
@@ -262,5 +268,20 @@ input:checked + .toggle-slider:before {
 
   .about-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-container {
+    padding: 16px 12px;
+    margin-top: 56px;
+  }
+
+  .settings-header h2 {
+    font-size: 20px;
+  }
+
+  .setting-item {
+    padding: 16px;
   }
 }

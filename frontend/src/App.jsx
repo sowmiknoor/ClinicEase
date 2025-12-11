@@ -6,16 +6,17 @@ import Home from "./Home";
 import SymptomChecker from "./SymptomChecker";
 import MedicationReminder from "./MedicationReminder";
 import Dashboard from "./Dashboard";
-import HomeVisitScheduler from "./HomeVisitScheduler";
 import TeleConsultation from "./TeleConsultation";
 import Prescriptions from "./Prescriptions";
 import LabTests from "./LabTests";
-import Records from "./Records";
+import MedicalRecords from "./MedicalRecords";
 import Billing from "./Billing";
 import Messaging from "./Messaging";
 import Notifications from "./Notifications";
 import Profile from "./Profile";
 import Settings from "./Settings";
+import CreateMedicalRecord from "./CreateMedicalRecord";
+import HomeVisits from "./HomeVisits";
 import { useState, useEffect } from "react";
 
 
@@ -42,13 +43,17 @@ function App() {
     setSidebarOpen(false);
   };
 
-  // Initialize dark mode from localStorage on mount
+  // Initialize dark mode from user settings on mount
   useEffect(() => {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    if (isDarkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      const isDarkMode = user.darkMode || false;
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
     }
   }, []);
 
@@ -66,9 +71,9 @@ function App() {
 
     // Define role-based access
     const roleAccess = {
-      Patient: ['dashboard', 'medications', 'symptom', 'visits', 'tele', 'labtests', 'records', 'messages', 'notifications'],
-      Doctor: ['dashboard', 'medications', 'symptom', 'visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications'],
-      Admin: ['dashboard', 'medications', 'symptom', 'visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications']
+      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'messages', 'notifications'],
+      Doctor: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications'],
+      Admin: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications']
     };
 
     return roleAccess[userRole]?.includes(pageToCheck) || false;
@@ -83,7 +88,7 @@ function App() {
         { label: 'Dashboard', page: 'dashboard' },
         { label: 'Medications', page: 'medications' },
         { label: 'Symptom Check', page: 'symptom' },
-        { label: 'Home Visits', page: 'visits' },
+        { label: 'Home Visit Requests', page: 'home-visits' },
         { label: 'Tele-Consult', page: 'tele' },
         { label: 'Lab Tests', page: 'labtests' },
         { label: 'Medical Records', page: 'records' },
@@ -92,8 +97,9 @@ function App() {
       ],
       Doctor: [
         { label: 'Dashboard', page: 'dashboard' },
-        { label: 'Symptom Check', page: 'symptom' },
         { label: 'Prescriptions', page: 'prescriptions' },
+        { label: 'Create Medical Record', page: 'create-medical-record' },
+        { label: 'Home Visit Requests', page: 'home-visits' },
         { label: 'Lab Tests', page: 'labtests' },
         { label: 'Medical Records', page: 'records' },
         { label: 'Billing', page: 'billing' },
@@ -103,7 +109,6 @@ function App() {
       ],
       Admin: [
         { label: 'Dashboard', page: 'dashboard' },
-        { label: 'Symptom Check', page: 'symptom' },
         { label: 'Prescriptions', page: 'prescriptions' },
         { label: 'Lab Tests', page: 'labtests' },
         { label: 'Medical Records', page: 'records' },
@@ -236,7 +241,7 @@ function App() {
                     {userRole === 'Patient' && (
                       <>
                         <button onClick={() => setPage('medications')} className="hero-btn">Medication Reminders</button>
-                        <button onClick={() => setPage('visits')} className="hero-btn outline">Request Home Visit</button>
+                        <button onClick={() => setPage('home-visits')} className="hero-btn outline">Request Home Visit</button>
                         <button onClick={() => setPage('tele')} className="hero-btn">Book Tele-Consultation</button>
                       </>
                     )}
@@ -278,11 +283,12 @@ function App() {
           {page === "settings" && <Settings />}
           {page === "medications" && isPageAllowed('medications') && <MedicationReminder />}
           {page === "symptom" && isPageAllowed('symptom') && <SymptomChecker />}
-          {page === "visits" && isPageAllowed('visits') && <HomeVisitScheduler />}
+          {page === "home-visits" && isPageAllowed('home-visits') && <HomeVisits />}
           {page === "tele" && isPageAllowed('tele') && <TeleConsultation />}
           {page === "prescriptions" && isPageAllowed('prescriptions') && <Prescriptions />}
+          {page === "create-medical-record" && isPageAllowed('create-medical-record') && <CreateMedicalRecord />}
           {page === "labtests" && isPageAllowed('labtests') && <LabTests />}
-          {page === "records" && isPageAllowed('records') && <Records />}
+          {page === "records" && isPageAllowed('records') && <MedicalRecords />}
           {page === "billing" && isPageAllowed('billing') && <Billing />}
           {page === "messages" && isPageAllowed('messages') && <Messaging />}
           {page === "notifications" && isPageAllowed('notifications') && <Notifications />}

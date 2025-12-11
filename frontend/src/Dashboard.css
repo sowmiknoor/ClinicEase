@@ -259,18 +259,60 @@
 @media (max-width: 768px) {
   .dashboard-root {
     padding: 24px 16px;
+    margin-top: 64px;
   }
   .db-header {
-    padding: 28px 20px;
+    padding: 24px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
   .db-welcome h1 {
-    font-size: 26px;
+    font-size: 24px;
+  }
+  .db-welcome .sub {
+    font-size: 14px;
+  }
+  .db-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .db-actions .primary,
+  .db-actions .ghost {
+    width: 100%;
+    text-align: center;
+  }
+  .db-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   .card {
-    padding: 24px;
+    padding: 20px;
+  }
+  .card h3 {
+    font-size: 16px;
   }
   .stats .big {
-    font-size: 24px;
+    font-size: 22px;
+  }
+  .quick .quick-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-root {
+    padding: 16px 12px;
+    margin-top: 56px;
+  }
+  .db-header {
+    padding: 20px 16px;
+  }
+  .db-welcome h1 {
+    font-size: 20px;
+  }
+  .card {
+    padding: 16px;
   }
 }
 

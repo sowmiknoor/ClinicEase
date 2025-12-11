@@ -966,6 +966,7 @@
 @media (max-width: 768px) {
   .labtest-root {
     padding: 20px 16px;
+    margin-top: 64px;
   }
 
   .labtest-root h2 {
@@ -974,11 +975,30 @@
 
   .labtest-form,
   .labtest-list-section {
-    padding: 16px;
+    padding: 20px 16px;
+  }
+
+  .labtest-form h3 {
+    font-size: 16px;
+  }
+
+  .form-input,
+  .form-textarea {
+    font-size: 16px;
+  }
+
+  .input-with-btn {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-browse {
+    width: 100%;
   }
 
   .labtest-header {
     flex-direction: column;
+    gap: 12px;
   }
 
   .status-badge {
@@ -987,6 +1007,7 @@
 
   .labtest-actions {
     flex-direction: column;
+    width: 100%;
   }
 
   .btn-action {
@@ -995,6 +1016,8 @@
 
   .catalog-modal {
     max-height: 95vh;
+    max-width: 95%;
+    padding: 20px;
   }
 
   .catalog-tests {
@@ -1007,5 +1030,43 @@
 
   .catalog-category-filter {
     width: 100%;
+  }
+
+  .test-card {
+    padding: 16px;
+  }
+
+  .test-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .test-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .labtest-root {
+    padding: 16px 12px;
+    margin-top: 56px;
+  }
+
+  .labtest-root h2 {
+    font-size: 1.25rem;
+  }
+
+  .labtest-form,
+  .labtest-list-section {
+    padding: 16px 12px;
+  }
+
+  .catalog-modal {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .test-card {
+    padding: 14px;
   }
 }
