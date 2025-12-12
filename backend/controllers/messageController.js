@@ -2,6 +2,7 @@ const Message = require('../models/Message');
 const User = require('../models/User');
 const MedicalRecord = require('../models/MedicalRecord');
 const Prescription = require('../models/Prescription');
+const Notification = require('../models/Notification');
 
 // Get available recipients based on user role
 exports.getAvailableRecipients = async (req, res) => {
@@ -88,6 +89,17 @@ exports.send = async (req, res) => {
     const populated = await Message.findById(msg._id)
       .populate('fromUser', 'name email role')
       .populate('toUser', 'name email role');
+
+    // Send notification to recipient
+    const sender = await User.findById(fromUserId);
+    const notification = new Notification({
+      userId: toUser,
+      title: `💬 New Message from ${sender.name}`,
+      body: content.substring(0, 100) + (content.length > 100 ? '...' : ''),
+      category: 'message'
+    });
+    await notification.save();
+    console.log('Message notification sent to:', toUser);
 
     console.log('Message sent from', userRole, 'to', recipient.role);
     res.json({ ok: true, message: populated });

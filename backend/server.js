@@ -30,6 +30,8 @@ app.use("/api/messages-new", require("./routes/messageNewRoutes"));
 app.use("/api/medications-new", require("./routes/medicationNewRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/home-visits", require("./routes/homeVisitRoutes"));
+app.use("/api/doctors", require("./routes/doctorRoutes"));
+app.use("/api/forum", require("./routes/forumRoutes"));
 
 // Example router
 const exampleRouter = require('./routes/example');

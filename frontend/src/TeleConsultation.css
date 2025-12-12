@@ -200,6 +200,43 @@
   font-size: 0.85rem;
 }
 
+/* Patient and Doctor Info in Consultation Cards */
+.patient-info,
+.doctor-info {
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(43, 158, 219, 0.08);
+  border-left: 3px solid #2b9edb;
+  border-radius: 6px;
+}
+
+.patient-info strong,
+.doctor-info strong {
+  color: #0b3a5b;
+  font-size: 0.95rem;
+}
+
+/* Doctor Info Card (Selection) */
+.doctor-info-card {
+  margin-top: 12px;
+  padding: 14px;
+  background: linear-gradient(135deg, #f0f8ff, #e6f4fa);
+  border: 1.5px solid #2b9edb;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(43, 158, 219, 0.1);
+}
+
+.doctor-info-card p {
+  margin: 6px 0;
+  color: #0b3a5b;
+  font-size: 0.9rem;
+}
+
+.doctor-info-card strong {
+  color: #1f6fb1;
+}
+
+
 /* Status Badge */
 .status-badge {
   display: inline-block;
@@ -320,7 +357,11 @@
 }
 
 .join-btn,
-.cancel-btn {
+.cancel-btn,
+.accept-btn,
+.reject-btn,
+.complete-btn,
+.send-invite-btn {
   padding: 10px 16px;
   border-radius: 8px;
   border: none;
@@ -330,23 +371,51 @@
   transition: all 0.3s ease;
   flex: 1;
   min-width: 120px;
+  color: white;
 }
 
-.join-btn {
+.join-btn,
+.send-invite-btn {
   background: linear-gradient(135deg, #2b9edb, #1f6fb1);
-  color: white;
   box-shadow: 0 2px 8px rgba(43, 158, 219, 0.2);
 }
 
-.join-btn:hover {
+.join-btn:hover,
+.send-invite-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(43, 158, 219, 0.3);
 }
 
-.cancel-btn {
+.cancel-btn,
+.reject-btn {
   background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+.cancel-btn:hover,
+.reject-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.accept-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.accept-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.complete-btn {
+  background: linear-gradient(135deg, #14b8a6, #0d9488);
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.2);
+}
+
+.complete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
 }
 
 .cancel-btn:hover {

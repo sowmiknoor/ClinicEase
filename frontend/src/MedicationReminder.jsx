@@ -236,6 +236,58 @@ export default function MedicationReminder() {
         </button>
       </div>
 
+      {/* Online Medicine Store Banner */}
+      <div style={{
+        backgroundColor: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+        padding: '20px',
+        borderRadius: '12px',
+        marginBottom: '24px',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
+        flexWrap: 'wrap',
+        gap: '16px'
+      }}>
+        <div style={{ flex: '1', minWidth: '250px' }}>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', fontWeight: '700' }}>
+            🛒 Order Your Medicines Online
+          </h3>
+          <p style={{ margin: '0', opacity: '0.95', fontSize: '14px' }}>
+            Get your prescribed medications delivered to your doorstep with Arogga - Bangladesh's trusted online pharmacy
+          </p>
+        </div>
+        <a 
+          href="https://www.arogga.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{
+            backgroundColor: 'white',
+            color: '#059669',
+            padding: '12px 28px',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: '700',
+            fontSize: '15px',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+            whiteSpace: 'nowrap'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.transform = 'scale(1.05)';
+            e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.25)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'scale(1)';
+            e.target.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+          }}
+        >
+          Visit Arogga Store →
+        </a>
+      </div>
+
       {activeTab === 'active' && (
         <div className="tab-content">
           <button className="add-btn" onClick={() => setShowForm(!showForm)}>
@@ -393,6 +445,23 @@ export default function MedicationReminder() {
                     >
                       ✗ Missed
                     </button>
+                    <a
+                      href={`https://www.arogga.com/search?q=${encodeURIComponent(med.medicationName)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="action-btn order-online"
+                      style={{
+                        backgroundColor: '#10b981',
+                        color: 'white',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      🛒 Order
+                    </a>
                     <button
                       className="action-btn deactivate"
                       onClick={() => deactivateMedication(med._id)}

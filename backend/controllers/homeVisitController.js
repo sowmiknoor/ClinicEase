@@ -1,5 +1,6 @@
 const HomeVisit = require('../models/HomeVisit');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
 
 // Patient: Create home visit request
 exports.createHomeVisit = async (req, res) => {
@@ -12,6 +13,8 @@ exports.createHomeVisit = async (req, res) => {
     if (!doctor || doctor.role !== 'Doctor') {
       return res.status(404).json({ ok: false, message: 'Doctor not found' });
     }
+
+    const patient = await User.findById(patientId);
 
     const homeVisit = new HomeVisit({
       patientId,
@@ -27,11 +30,21 @@ exports.createHomeVisit = async (req, res) => {
 
     await homeVisit.save();
 
+    // Send notification to doctor
+    const notification = new Notification({
+      userId: doctorId,
+      title: '🏠 New Home Visit Request',
+      body: `${patient.name} has requested a home visit on ${new Date(visitDate).toLocaleDateString()} at ${visitTime}. Reason: ${reasonForVisit}`,
+      category: 'home-visit'
+    });
+    await notification.save();
+
     const populated = await HomeVisit.findById(homeVisit._id)
       .populate('patientId', 'name email phone')
       .populate('doctorId', 'name email phone');
 
     console.log('Home visit request created:', homeVisit._id, 'Patient:', patientId, 'Doctor:', doctorId);
+    console.log('Notification sent to doctor:', doctorId);
 
     res.json({ ok: true, message: 'Home visit request created successfully', homeVisit: populated });
   } catch (err) {

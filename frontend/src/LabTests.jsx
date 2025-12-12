@@ -14,7 +14,11 @@ export default function LabTests() {
   const [selectedTests, setSelectedTests] = useState([]); // Array of {testType, category}
   const [list, setList] = useState([]);
   const [catalog, setCatalog] = useState({});
+  const [bangladeshLabs, setBangladeshLabs] = useState([]);
+  const [treatedPatients, setTreatedPatients] = useState([]);
+  const [expandedBatches, setExpandedBatches] = useState({});
   const [showCatalog, setShowCatalog] = useState(false);
+  const [showAllTests, setShowAllTests] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const header = { 'Content-Type': 'application/json', 'x-user-id': userId };
@@ -22,6 +26,10 @@ export default function LabTests() {
   useEffect(() => { 
     fetchData(); 
     fetchCatalog();
+    fetchBangladeshLabs();
+    if (userRole === 'Doctor') {
+      fetchTreatedPatients();
+    }
   }, []);
 
   const fetchCatalog = async () => {
@@ -30,6 +38,42 @@ export default function LabTests() {
       const data = await res.json();
       if (data.ok) setCatalog(data.catalog);
     } catch (err) { console.error(err); }
+  };
+
+  const fetchBangladeshLabs = async () => {
+    try {
+      const res = await fetch('/api/labtests/bangladesh-labs', { headers: header });
+      const data = await res.json();
+      if (data.ok) setBangladeshLabs(data.labs || []);
+    } catch (err) { console.error(err); }
+  };
+
+  const fetchTreatedPatients = async () => {
+    try {
+      // Fetch patients from consultations where doctor is assigned
+      const res = await fetch('/api/consultations', { headers: header });
+      const data = await res.json();
+      if (data.ok) {
+        // Extract unique patients from consultations
+        const uniquePatients = [];
+        const patientIds = new Set();
+        
+        data.consultations.forEach(consultation => {
+          if (consultation.userId && !patientIds.has(consultation.userId._id)) {
+            patientIds.add(consultation.userId._id);
+            uniquePatients.push({
+              _id: consultation.userId._id,
+              name: consultation.userId.name,
+              email: consultation.userId.email
+            });
+          }
+        });
+        
+        setTreatedPatients(uniquePatients);
+      }
+    } catch (err) { 
+      console.error('Error fetching treated patients:', err); 
+    }
   };
 
   const fetchData = async () => {
@@ -220,22 +264,33 @@ export default function LabTests() {
       <p className="subtitle">Order and track lab tests from our comprehensive catalog</p>
 
       <div className="labtest-layout">
-        {/* Order Form */}
-        <div className="labtest-form-section">
-          <form className="labtest-form" onSubmit={submit}>
-            <h3>📋 Order Lab Test</h3>
-            
-            {userRole !== 'Patient' && (
+        {/* Order Form - Only for Doctors */}
+        {userRole === 'Doctor' || userRole === 'Admin' ? (
+          <div className="labtest-form-section">
+            <form className="labtest-form" onSubmit={submit}>
+              <h3>📋 Suggest Lab Test for Patient</h3>
+              
               <div className="form-group">
-                <label>👤 Patient ID <span className="optional-badge">Optional</span></label>
-                <input 
-                  className="form-input" 
-                  placeholder="Leave empty for self" 
-                  value={patientId} 
-                  onChange={e => setPatientId(e.target.value)} 
-                />
+                <label>👤 Select Patient <span className="required-badge">Required</span></label>
+                <select
+                  className="form-input"
+                  value={patientId}
+                  onChange={e => setPatientId(e.target.value)}
+                  required
+                >
+                  <option value="">-- Select a Treated Patient --</option>
+                  {treatedPatients.map(patient => (
+                    <option key={patient._id} value={patient._id}>
+                      {patient.name} - {patient.email}
+                    </option>
+                  ))}
+                </select>
+                {treatedPatients.length === 0 && (
+                  <p className="helper-text" style={{color: '#f59e0b', fontSize: '13px', marginTop: '8px'}}>
+                    ⚠️ No treated patients found. Patients will appear here after consultations.
+                  </p>
+                )}
               </div>
-            )}
 
             <div className="form-group">
               <label>🧪 Selected Tests <span className="required-badge">Required</span></label>
@@ -294,22 +349,37 @@ export default function LabTests() {
             </div>
 
             <div className="form-group">
-              <label>🏢 Lab Name</label>
-              <input 
-                className="form-input" 
-                placeholder="e.g., City Medical Laboratory" 
-                value={form.labName} 
-                onChange={e => setForm({...form, labName: e.target.value})} 
-              />
+              <label>🏢 Hospital / Diagnostic Center <span className="required-badge">Required</span></label>
+              <select
+                className="form-input"
+                value={form.labName}
+                onChange={e => {
+                  const selectedLab = bangladeshLabs.find(lab => lab.name === e.target.value);
+                  setForm({
+                    ...form, 
+                    labName: e.target.value,
+                    labLocation: selectedLab ? `${selectedLab.location}, ${selectedLab.city}` : ''
+                  });
+                }}
+                required
+              >
+                <option value="">-- Select Hospital/Diagnostic Center --</option>
+                {bangladeshLabs.map((lab, idx) => (
+                  <option key={idx} value={lab.name}>
+                    {lab.name} - {lab.city} ({lab.type})
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="form-group">
               <label>📍 Lab Location</label>
               <input 
                 className="form-input" 
-                placeholder="e.g., 123 Main St, Suite 100" 
+                placeholder="Auto-filled when you select a lab" 
                 value={form.labLocation} 
                 onChange={e => setForm({...form, labLocation: e.target.value})} 
+                readOnly
               />
             </div>
 
@@ -327,15 +397,23 @@ export default function LabTests() {
             <button className="btn-submit" type="submit" disabled={selectedTests.length === 0}>
               {selectedTests.length === 0 
                 ? 'Select Tests to Order' 
-                : `Order ${selectedTests.length} Test${selectedTests.length > 1 ? 's' : ''}`
+                : `Suggest ${selectedTests.length} Test${selectedTests.length > 1 ? 's' : ''}`
               }
             </button>
           </form>
-        </div>
+          </div>
+        ) : (
+          <div className="patient-notice">
+            <div className="notice-icon">👨‍⚕️</div>
+            <h3>Lab Tests Suggested by Your Doctor</h3>
+            <p>Your doctor will suggest lab tests based on your health condition.</p>
+            <p>All suggested tests will appear in the list below and in your Lab Results page.</p>
+          </div>
+        )}
 
         {/* Test List */}
         <div className="labtest-list-section">
-          <h3>📊 Your Lab Tests</h3>
+          <h3>📊 {userRole === 'Doctor' || userRole === 'Admin' ? 'Suggested Lab Tests' : 'Your Lab Tests'}</h3>
           
           {list.length === 0 ? (
             <div className="empty-state">
@@ -349,7 +427,10 @@ export default function LabTests() {
                 const grouped = {};
                 const singles = [];
                 
-                list.forEach(test => {
+                // Limit to 5 recent items unless showAllTests is true
+                const displayList = showAllTests ? list : list.slice(0, 5);
+                
+                displayList.forEach(test => {
                   if (test.batchOrderId) {
                     if (!grouped[test.batchOrderId]) {
                       grouped[test.batchOrderId] = [];
@@ -366,87 +447,119 @@ export default function LabTests() {
                     {Object.keys(grouped).map(batchId => {
                       const batchTests = grouped[batchId];
                       const firstTest = batchTests[0];
+                      const isExpanded = expandedBatches[batchId];
+                      const allCompleted = batchTests.every(t => t.status === 'completed');
+                      const anyInProgress = batchTests.some(t => t.status === 'in_progress');
+                      
                       return (
-                        <div key={batchId} className="batch-order-group">
-                          <div className="batch-header">
-                            <div className="batch-info">
-                              <h4>📦 Batch Order - {batchTests.length} Test{batchTests.length > 1 ? 's' : ''}</h4>
-                              <span className="batch-id">ID: {batchId.split('-')[1]}</span>
-                              <p className="batch-note">All {batchTests.length} tests will be in ONE combined PDF report</p>
+                        <div key={batchId} className="batch-order-card">
+                          <div className="batch-card-header">
+                            <div className="batch-main-info">
+                              <div className="batch-title-section">
+                                <h4>📦 Lab Test Batch ({batchTests.length} Tests)</h4>
+                                <span className="batch-id-tag">#{batchId.split('-')[1]}</span>
+                              </div>
+                              <div className="batch-test-names">
+                                {batchTests.map((t, idx) => (
+                                  <span key={idx} className="test-name-chip">
+                                    {t.testType}
+                                  </span>
+                                ))}
+                              </div>
+                              <div className="batch-meta-info">
+                                {firstTest.scheduledDate && (
+                                  <span className="batch-meta-item">
+                                    📅 {new Date(firstTest.scheduledDate).toLocaleDateString()}
+                                  </span>
+                                )}
+                                {firstTest.labName && (
+                                  <span className="batch-meta-item">
+                                    🏢 {firstTest.labName}
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                            <button 
-                              className="btn-action btn-download-batch"
-                              onClick={() => downloadBatchPDF(batchId)}
-                              title="Download combined PDF for all tests"
-                            >
-                              📄 Download Combined PDF ({batchTests.length} Test{batchTests.length > 1 ? 's' : ''})
-                            </button>
+                            
+                            <div className="batch-actions-section">
+                              <div className="batch-status-indicator">
+                                {allCompleted ? (
+                                  <span className="status-badge status-completed">✅ All Completed</span>
+                                ) : anyInProgress ? (
+                                  <span className="status-badge status-in_progress">🔬 In Progress</span>
+                                ) : (
+                                  <span className="status-badge status-ordered">📝 Ordered</span>
+                                )}
+                              </div>
+                              
+                              <div className="batch-action-buttons">
+                                <button 
+                                  className="btn-action btn-download-batch"
+                                  onClick={() => downloadBatchPDF(batchId)}
+                                  title="Download combined PDF for all tests"
+                                >
+                                  📄 Download PDF
+                                </button>
+                                <button 
+                                  className="btn-action btn-toggle-details"
+                                  onClick={() => setExpandedBatches(prev => ({...prev, [batchId]: !prev[batchId]}))}
+                                >
+                                  {isExpanded ? '▲ Hide Details' : '▼ Show Details'}
+                                </button>
+                              </div>
+                            </div>
                           </div>
                           
-                          <div className="batch-tests">
-                            {batchTests.map(test => {
-                              const badge = getStatusBadge(test.status);
-                              return (
-                                <div key={test._id} className="labtest-card batch-test-card">
-                                  <div className="labtest-header">
-                                    <div className="test-info">
-                                      <h4>{test.testType}</h4>
-                                      {test.category && <span className="category-tag">{test.category}</span>}
+                          {isExpanded && (
+                            <div className="batch-details-expanded">
+                              <div className="batch-details-header">
+                                <h5>Individual Test Details:</h5>
+                              </div>
+                              {batchTests.map(test => {
+                                const badge = getStatusBadge(test.status);
+                                return (
+                                  <div key={test._id} className="batch-test-item">
+                                    <div className="batch-test-info">
+                                      <div className="batch-test-name-status">
+                                        <strong>{test.testType}</strong>
+                                        <span className={`status-badge-small ${badge.class}`}>{badge.label}</span>
+                                      </div>
+                                      {test.category && <span className="category-tag-small">{test.category}</span>}
+                                      {test.notes && (
+                                        <div className="test-notes-small">
+                                          <strong>Notes:</strong> {test.notes}
+                                        </div>
+                                      )}
                                     </div>
-                                    <span className={`status-badge ${badge.class}`}>{badge.label}</span>
+                                    
+                                    <div className="batch-test-actions">
+                                      {test.status !== 'completed' && (
+                                        <>
+                                          <button 
+                                            className="btn-small btn-progress"
+                                            onClick={() => updateStatus(test._id, 'in_progress')}
+                                          >
+                                            🔬 In Progress
+                                          </button>
+                                          <button 
+                                            className="btn-small btn-complete"
+                                            onClick={() => updateStatus(test._id, 'completed')}
+                                          >
+                                            ✅ Complete
+                                          </button>
+                                        </>
+                                      )}
+                                      <button 
+                                        className="btn-small btn-delete"
+                                        onClick={() => deleteTest(test._id, test.testType)}
+                                      >
+                                        🗑️
+                                      </button>
+                                    </div>
                                   </div>
-
-                                  <div className="labtest-details">
-                                    {test.scheduledDate && (
-                                      <div className="detail-row">
-                                        <span className="detail-label">📅 Scheduled:</span>
-                                        <span className="detail-value">{new Date(test.scheduledDate).toLocaleString()}</span>
-                                      </div>
-                                    )}
-                                    {test.labName && (
-                                      <div className="detail-row">
-                                        <span className="detail-label">🏢 Lab:</span>
-                                        <span className="detail-value">{test.labName}</span>
-                                      </div>
-                                    )}
-                                    {test.notes && (
-                                      <div className="detail-notes">
-                                        <strong>Notes:</strong> {test.notes}
-                                      </div>
-                                    )}
-                                  </div>
-
-                                  <div className="labtest-actions">
-                                    {test.status !== 'completed' && (
-                                      <>
-                                        <button 
-                                          className="btn-action btn-progress"
-                                          onClick={() => updateStatus(test._id, 'in_progress')}
-                                        >
-                                          🔬 In Progress
-                                        </button>
-                                        <button 
-                                          className="btn-action btn-complete"
-                                          onClick={() => updateStatus(test._id, 'completed')}
-                                        >
-                                          ✅ Complete
-                                        </button>
-                                      </>
-                                    )}
-                                    <button 
-                                      className="btn-action btn-delete"
-                                      onClick={() => deleteTest(test._id, test.testType)}
-                                    >
-                                      🗑️ Delete
-                                    </button>
-                                  </div>
-                                  <div className="batch-test-note">
-                                    💡 Use "Download Combined PDF" button above to get all tests in one report
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -526,6 +639,29 @@ export default function LabTests() {
                   </>
                 );
               })()}
+              
+              {/* View All Button */}
+              {!showAllTests && list.length > 5 && (
+                <div className="view-all-section">
+                  <button 
+                    className="btn-view-all"
+                    onClick={() => setShowAllTests(true)}
+                  >
+                    📋 View All Lab Tests ({list.length} total)
+                  </button>
+                </div>
+              )}
+              
+              {showAllTests && list.length > 5 && (
+                <div className="view-all-section">
+                  <button 
+                    className="btn-view-all"
+                    onClick={() => setShowAllTests(false)}
+                  >
+                    ▲ Show Recent Only (5 tests)
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

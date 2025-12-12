@@ -17,6 +17,10 @@ import Profile from "./Profile";
 import Settings from "./Settings";
 import CreateMedicalRecord from "./CreateMedicalRecord";
 import HomeVisits from "./HomeVisits";
+import DoctorsList from "./DoctorsList";
+import DoctorProfileEdit from "./DoctorProfileEdit";
+import DoctorProfileView from "./DoctorProfileView";
+import CommunityForum from "./CommunityForum";
 import { useState, useEffect } from "react";
 
 
@@ -71,9 +75,9 @@ function App() {
 
     // Define role-based access
     const roleAccess = {
-      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'messages', 'notifications'],
-      Doctor: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications'],
-      Admin: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications']
+      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'messages', 'notifications', 'doctors', 'forum'],
+      Doctor: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum'],
+      Admin: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum']
     };
 
     return roleAccess[userRole]?.includes(pageToCheck) || false;
@@ -86,12 +90,14 @@ function App() {
     const navItems = {
       Patient: [
         { label: 'Dashboard', page: 'dashboard' },
+        { label: 'Find Doctors', page: 'doctors' },
         { label: 'Medications', page: 'medications' },
         { label: 'Symptom Check', page: 'symptom' },
         { label: 'Home Visit Requests', page: 'home-visits' },
         { label: 'Tele-Consult', page: 'tele' },
         { label: 'Lab Tests', page: 'labtests' },
         { label: 'Medical Records', page: 'records' },
+        { label: 'Community Forum', page: 'forum' },
         { label: 'Messages', page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ],
@@ -104,16 +110,19 @@ function App() {
         { label: 'Medical Records', page: 'records' },
         { label: 'Billing', page: 'billing' },
         { label: 'Tele-Consult', page: 'tele' },
+        { label: 'Community Forum', page: 'forum' },
         { label: 'Messages', page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ],
       Admin: [
         { label: 'Dashboard', page: 'dashboard' },
+        { label: 'All Doctors', page: 'doctors' },
         { label: 'Prescriptions', page: 'prescriptions' },
         { label: 'Lab Tests', page: 'labtests' },
         { label: 'Medical Records', page: 'records' },
         { label: 'Billing', page: 'billing' },
         { label: 'Tele-Consult', page: 'tele' },
+        { label: 'Community Forum', page: 'forum' },
         { label: 'Messages', page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ]
@@ -147,8 +156,40 @@ function App() {
     }
   }, [userRole, page]);
 
+  // Get role-based background gradient
+  const getBackgroundClass = () => {
+    if (!userRole) return 'bg-gradient-to-br from-blue-200 via-white to-pink-200';
+    
+    switch(userRole) {
+      case 'Patient':
+        return 'bg-gradient-to-br from-pink-100 via-rose-50 to-purple-100';
+      case 'Doctor':
+        return 'bg-gradient-to-br from-blue-100 via-cyan-50 to-teal-100';
+      case 'Admin':
+        return 'bg-gradient-to-br from-slate-800 via-gray-700 to-slate-900';
+      default:
+        return 'bg-gradient-to-br from-blue-200 via-white to-pink-200';
+    }
+  };
+
+  // Get role-based header styling
+  const getHeaderClass = () => {
+    if (!userRole) return 'global-header';
+    
+    switch(userRole) {
+      case 'Patient':
+        return 'global-header patient-header';
+      case 'Doctor':
+        return 'global-header doctor-header';
+      case 'Admin':
+        return 'global-header admin-header';
+      default:
+        return 'global-header';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-white to-pink-200">
+    <div className={`min-h-screen ${getBackgroundClass()}`}>
       {/* Sidebar */}
       {userRole && (
         <>
@@ -158,7 +199,7 @@ function App() {
               <button className="close-btn" onClick={() => setSidebarOpen(false)}>×</button>
             </div>
             <div className="sidebar-content">
-              <button className="sidebar-btn profile-btn" onClick={() => { setPage('profile'); setSidebarOpen(false); }}>
+              <button className="sidebar-btn profile-btn" onClick={() => { setPage(userRole === 'Doctor' ? 'doctor-profile-edit' : 'profile'); setSidebarOpen(false); }}>
                 <span className="icon">👤</span>
                 <span>Profile</span>
               </button>
@@ -176,7 +217,7 @@ function App() {
         </>
       )}
 
-      <header className="global-header">
+      <header className={getHeaderClass()}>
         <div className="brand">CLINICEASE</div>
         <div className="header-right">
           {userRole && <div className="role-badge">{userRole}</div>}
@@ -206,7 +247,7 @@ function App() {
       )}
       {page !== "home" && page !== "register" && page !== "login" && (
         <div className="w-full">
-          <div className="bg-white shadow-md border-b border-gray-200 mb-6">
+          <div className={`bg-white shadow-md border-b border-gray-200 mb-6 nav-bar-wrapper ${userRole ? userRole.toLowerCase() + '-nav' : ''}`}>
             <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
               <div />
               <nav className="top-nav" role="navigation" aria-label="Main Navigation">
@@ -228,7 +269,7 @@ function App() {
 
           {/* Hero / quick actions area for the main page */}
           {page === 'dashboard' && (
-            <div className="page-hero max-w-7xl mx-auto px-4 mb-6">
+            <div className={`page-hero max-w-7xl mx-auto px-4 mb-6 ${userRole ? userRole.toLowerCase() + '-hero' : ''}`}>
               <div className="hero-inner">
                 <div className="hero-left">
                   <h2>Welcome to ClinicEase</h2>
@@ -292,6 +333,10 @@ function App() {
           {page === "billing" && isPageAllowed('billing') && <Billing />}
           {page === "messages" && isPageAllowed('messages') && <Messaging />}
           {page === "notifications" && isPageAllowed('notifications') && <Notifications />}
+          {page === "doctors" && isPageAllowed('doctors') && <DoctorsList onViewProfile={setPage} />}
+          {page === "doctor-profile-edit" && isPageAllowed('doctor-profile-edit') && <DoctorProfileEdit />}
+          {page === "doctor-profile-view" && <DoctorProfileView onBack={() => setPage('doctors')} />}
+          {page === "forum" && isPageAllowed('forum') && <CommunityForum />}
 
           {/* Unauthorized access message */}
           {page && !['dashboard', 'home', 'profile', 'settings'].includes(page) && !isPageAllowed(page) && (

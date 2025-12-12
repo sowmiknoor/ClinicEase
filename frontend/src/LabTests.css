@@ -49,6 +49,34 @@
   letter-spacing: -0.3px;
 }
 
+/* Patient Notice */
+.patient-notice {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: 40px 32px;
+  border-radius: 16px;
+  border: 2px solid #0ea5e9;
+  text-align: center;
+}
+
+.notice-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.patient-notice h3 {
+  color: #0f172a;
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.patient-notice p {
+  color: #64748b;
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .form-group {
   margin-bottom: 16px;
 }
@@ -245,99 +273,245 @@
   transform: rotate(90deg);
 }
 
-/* Batch Order Groups */
-.batch-order-group {
-  background: linear-gradient(135deg, #f0f8ff, #e8f4ff);
-  border: 2px solid #2b9edb;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.batch-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Batch Order Cards - Compact Design */
+.batch-order-card {
+  background: white;
+  border: 2px solid #e0f2fe;
+  border-radius: 12px;
   margin-bottom: 16px;
-  padding-bottom: 14px;
-  border-bottom: 2px solid #d1ecf1;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.batch-info h4 {
-  color: #0b3a5b;
-  margin: 0 0 4px;
-  font-size: 1.1rem;
-  font-weight: 700;
+.batch-order-card:hover {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
 }
 
-.batch-id {
-  display: inline-block;
-  background: rgba(43, 158, 219, 0.1);
-  color: #1f6fb1;
-  padding: 4px 10px;
+.batch-card-header {
+  padding: 20px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-bottom: 2px solid #e0f2fe;
+}
+
+.batch-main-info {
+  margin-bottom: 16px;
+}
+
+.batch-title-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.batch-title-section h4 {
+  color: #0f172a;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.batch-id-tag {
+  background: #0ea5e9;
+  color: white;
+  padding: 4px 12px;
   border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
   font-family: 'Courier New', monospace;
 }
 
-.batch-note {
-  color: #059669;
-  font-size: 0.85rem;
-  margin: 6px 0 0;
-  font-weight: 600;
-  font-style: italic;
+.batch-test-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-.batch-test-note {
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  border: 1.5px solid #0ea5e9;
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-top: 12px;
+.test-name-chip {
+  background: white;
   color: #0c4a6e;
-  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
   font-weight: 600;
-  text-align: center;
+  border: 1.5px solid #0ea5e9;
+}
+
+.batch-meta-info {
   display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.batch-meta-item {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.batch-actions-section {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.batch-status-indicator {
+  flex-shrink: 0;
+}
+
+.batch-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-toggle-details {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #64748b, #475569);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-toggle-details:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(100, 116, 139, 0.3);
 }
 
 .btn-download-batch {
-  padding: 12px 20px;
+  padding: 10px 16px;
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 700;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-  font-size: 0.9rem;
-  white-space: nowrap;
 }
 
 .btn-download-batch:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
 }
 
-.batch-tests {
+.batch-details-expanded {
+  background: #f8fafc;
+  padding: 16px 20px;
+  border-top: 2px solid #e0f2fe;
+}
+
+.batch-details-header {
+  margin-bottom: 12px;
+}
+
+.batch-details-header h5 {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.batch-test-item {
+  background: white;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   gap: 12px;
+  transition: all 0.2s ease;
 }
 
-.batch-test-card {
-  background: white !important;
-  border: 1.5px solid #d1ecf1 !important;
-  margin: 0 !important;
+.batch-test-item:hover {
+  border-color: #0ea5e9;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.1);
 }
 
-.batch-test-card:hover {
-  border-color: #2b9edb !important;
+.batch-test-info {
+  flex: 1;
+}
+
+.batch-test-name-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.batch-test-name-status strong {
+  color: #0f172a;
+  font-size: 15px;
+}
+
+.status-badge-small {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.category-tag-small {
+  display: inline-block;
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.test-notes-small {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.batch-test-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.btn-small.btn-progress {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.btn-small.btn-complete {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.btn-small.btn-delete {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.btn-small:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-submit {
@@ -1069,4 +1243,34 @@
   .test-card {
     padding: 14px;
   }
+}
+
+/* View All Button Section */
+.view-all-section {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+  margin-top: 20px;
+}
+
+.btn-view-all {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-view-all:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-view-all:active {
+  transform: translateY(0);
 }

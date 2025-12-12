@@ -5,17 +5,33 @@
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial;
 }
 
+/* PATIENT THEME - Soft, Friendly, Health-focused */
+.dashboard-root.patient-theme .db-header {
+  background: linear-gradient(135deg, #fef3f2 0%, #fae8ff 100%);
+  border: 2px solid rgba(251, 207, 232, 0.5);
+}
+
+/* DOCTOR THEME - Professional, Clinical, Trust-inspiring */
+.dashboard-root.doctor-theme .db-header {
+  background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+  border: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+/* ADMIN THEME - Corporate, Powerful, Data-driven */
+.dashboard-root.admin-theme .db-header {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 2px solid rgba(249, 115, 22, 0.4);
+}
+
 .db-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 28px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   padding: 36px 36px;
   border-radius: 18px;
   box-shadow: 0 16px 48px rgba(15, 23, 42, 0.08),
               0 0 1px rgba(15, 23, 42, 0.04);
-  border: 1px solid rgba(203, 213, 225, 0.4);
   margin-bottom: 40px;
   backdrop-filter: blur(8px);
 }
@@ -29,11 +45,42 @@
   letter-spacing: -0.5px;
 }
 
+/* Patient theme - Pink/Rose gradient */
+.dashboard-root.patient-theme .db-welcome h1 {
+  color: #be123c;
+}
+
+/* Doctor theme - Blue gradient */
+.dashboard-root.doctor-theme .db-welcome h1 {
+  color: #1e40af;
+}
+
+/* Admin theme - White on dark */
+.dashboard-root.admin-theme .db-welcome h1 {
+  color: #f1f5f9;
+}
+
 .db-welcome .accent {
-  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #0369a1;
+  font-weight: 900;
+}
+
+/* Patient accent - Rose to Pink */
+.dashboard-root.patient-theme .db-welcome .accent {
+  color: #be123c;
+  font-weight: 900;
+}
+
+/* Doctor accent - Blue to Cyan */
+.dashboard-root.doctor-theme .db-welcome .accent {
+  color: #1e40af;
+  font-weight: 900;
+}
+
+/* Admin accent - Orange to Amber */
+.dashboard-root.admin-theme .db-welcome .accent {
+  color: #fb923c;
+  font-weight: 900;
 }
 
 .db-welcome .sub {
@@ -42,6 +89,18 @@
   font-size: 15px;
   line-height: 1.6;
   font-weight: 500;
+}
+
+.dashboard-root.patient-theme .db-welcome .sub {
+  color: #9f1239;
+}
+
+.dashboard-root.doctor-theme .db-welcome .sub {
+  color: #1e3a8a;
+}
+
+.dashboard-root.admin-theme .db-welcome .sub {
+  color: #cbd5e1;
 }
 
 .db-actions {
@@ -63,9 +122,38 @@
   letter-spacing: 0.3px;
 }
 
+/* Patient buttons - Rose/Pink */
+.dashboard-root.patient-theme .db-actions .primary {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.3);
+}
+
+.dashboard-root.patient-theme .db-actions .primary:hover {
+  box-shadow: 0 12px 32px rgba(244, 63, 94, 0.4);
+}
+
+/* Doctor buttons - Blue/Teal */
+.dashboard-root.doctor-theme .db-actions .primary {
+  background: linear-gradient(135deg, #3b82f6, #14b8a6);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+}
+
+.dashboard-root.doctor-theme .db-actions .primary:hover {
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+}
+
+/* Admin buttons - Orange/Amber */
+.dashboard-root.admin-theme .db-actions .primary {
+  background: linear-gradient(135deg, #f97316, #f59e0b);
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.35);
+}
+
+.dashboard-root.admin-theme .db-actions .primary:hover {
+  box-shadow: 0 12px 32px rgba(249, 115, 22, 0.45);
+}
+
 .db-actions .primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(14, 165, 233, 0.35);
 }
 
 .db-actions .primary:active {
@@ -85,10 +173,43 @@
   letter-spacing: 0.3px;
 }
 
+/* Patient ghost buttons */
+.dashboard-root.patient-theme .db-actions .ghost {
+  border-color: #f9a8d4;
+  color: #be123c;
+}
+
+.dashboard-root.patient-theme .db-actions .ghost:hover {
+  background: #fdf2f8;
+  border-color: #ec4899;
+  color: #9f1239;
+}
+
+/* Doctor ghost buttons */
+.dashboard-root.doctor-theme .db-actions .ghost {
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+
+.dashboard-root.doctor-theme .db-actions .ghost:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1e3a8a;
+}
+
+/* Admin ghost buttons */
+.dashboard-root.admin-theme .db-actions .ghost {
+  border-color: #fdba74;
+  color: #f1f5f9;
+}
+
+.dashboard-root.admin-theme .db-actions .ghost:hover {
+  background: rgba(249, 115, 22, 0.15);
+  border-color: #f97316;
+  color: #fed7aa;
+}
+
 .db-actions .ghost:hover {
-  background: #f0f9ff;
-  border-color: #0ea5e9;
-  color: #0369a1;
   transform: translateY(-2px);
 }
 
@@ -110,6 +231,24 @@
   overflow: hidden;
 }
 
+/* Patient cards - Soft pink/rose borders */
+.dashboard-root.patient-theme .card {
+  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+  border: 2px solid rgba(251, 113, 133, 0.2);
+}
+
+/* Doctor cards - Professional blue borders */
+.dashboard-root.doctor-theme .card {
+  background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+  border: 2px solid rgba(59, 130, 246, 0.25);
+}
+
+/* Admin cards - Dark with orange accent */
+.dashboard-root.admin-theme .card {
+  background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+  border: 2px solid rgba(249, 115, 22, 0.3);
+}
+
 .card::before {
   content: '';
   position: absolute;
@@ -120,6 +259,21 @@
   background: linear-gradient(90deg, #0ea5e9, #06b6d4);
   opacity: 0;
   transition: opacity 0.3s ease;
+}
+
+/* Patient card accent */
+.dashboard-root.patient-theme .card::before {
+  background: linear-gradient(90deg, #f43f5e, #ec4899);
+}
+
+/* Doctor card accent */
+.dashboard-root.doctor-theme .card::before {
+  background: linear-gradient(90deg, #3b82f6, #14b8a6);
+}
+
+/* Admin card accent */
+.dashboard-root.admin-theme .card::before {
+  background: linear-gradient(90deg, #f97316, #f59e0b);
 }
 
 .card:hover {
@@ -140,6 +294,18 @@
   letter-spacing: -0.3px;
 }
 
+.dashboard-root.patient-theme .card h3 {
+  color: #be123c;
+}
+
+.dashboard-root.doctor-theme .card h3 {
+  color: #1e40af;
+}
+
+.dashboard-root.admin-theme .card h3 {
+  color: #fbbf24;
+}
+
 .stats .stats-row {
   display: flex;
   gap: 24px;
@@ -147,6 +313,18 @@
   justify-content: space-between;
   padding: 16px 0;
   border-bottom: 1px solid #f1f5f9;
+}
+
+.dashboard-root.patient-theme .stats .stats-row {
+  border-color: rgba(251, 113, 133, 0.15);
+}
+
+.dashboard-root.doctor-theme .stats .stats-row {
+  border-color: rgba(59, 130, 246, 0.15);
+}
+
+.dashboard-root.admin-theme .stats .stats-row {
+  border-color: rgba(249, 115, 22, 0.2);
 }
 
 .stats .stats-row:last-child {
@@ -161,6 +339,18 @@
   letter-spacing: -1px;
 }
 
+.dashboard-root.patient-theme .stats .big {
+  color: #f43f5e;
+}
+
+.dashboard-root.doctor-theme .stats .big {
+  color: #3b82f6;
+}
+
+.dashboard-root.admin-theme .stats .big {
+  color: #f97316;
+}
+
 .stats .label {
   margin: 4px 0 0;
   color: #64748b;
@@ -168,6 +358,18 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.dashboard-root.patient-theme .stats .label {
+  color: #9f1239;
+}
+
+.dashboard-root.doctor-theme .stats .label {
+  color: #1e3a8a;
+}
+
+.dashboard-root.admin-theme .stats .label {
+  color: #cbd5e1;
 }
 
 .quick .quick-grid {
@@ -189,12 +391,50 @@
   letter-spacing: 0.3px;
 }
 
+/* Patient quick buttons */
+.dashboard-root.patient-theme .quick button {
+  background: linear-gradient(135deg, #fef2f2, #fdf2f8);
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+.dashboard-root.patient-theme .quick button:hover {
+  background: linear-gradient(135deg, #ffe4e6, #fce7f3);
+  border-color: #fb7185;
+  color: #9f1239;
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.15);
+}
+
+/* Doctor quick buttons */
+.dashboard-root.doctor-theme .quick button {
+  background: linear-gradient(135deg, #eff6ff, #f0fdfa);
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.dashboard-root.doctor-theme .quick button:hover {
+  background: linear-gradient(135deg, #dbeafe, #ccfbf1);
+  border-color: #60a5fa;
+  color: #1e3a8a;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.15);
+}
+
+/* Admin quick buttons */
+.dashboard-root.admin-theme .quick button {
+  background: linear-gradient(135deg, #1e293b, #334155);
+  border-color: #475569;
+  color: #fbbf24;
+}
+
+.dashboard-root.admin-theme .quick button:hover {
+  background: linear-gradient(135deg, #334155, #475569);
+  border-color: #f97316;
+  color: #fcd34d;
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.2);
+}
+
 .quick button:hover {
-  border-color: #0ea5e9;
-  background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
-  color: #0369a1;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.12);
 }
 
 .tips ul {
@@ -209,11 +449,38 @@
   font-weight: 500;
 }
 
+.dashboard-root.patient-theme .tips ul,
+.dashboard-root.patient-theme .tips li {
+  color: #881337;
+}
+
+.dashboard-root.doctor-theme .tips ul,
+.dashboard-root.doctor-theme .tips li {
+  color: #1e3a8a;
+}
+
+.dashboard-root.admin-theme .tips ul,
+.dashboard-root.admin-theme .tips li {
+  color: #cbd5e1;
+}
+
 .promo p {
   color: #64748b;
   margin: 12px 0;
   line-height: 1.7;
   font-weight: 500;
+}
+
+.dashboard-root.patient-theme .promo p {
+  color: #9f1239;
+}
+
+.dashboard-root.doctor-theme .promo p {
+  color: #1e3a8a;
+}
+
+.dashboard-root.admin-theme .promo p {
+  color: #94a3b8;
 }
 
 .card-cta {

@@ -1,6 +1,11 @@
 const LabTest = require('../models/LabTest');
 const labTestCatalog = require('../data/labTestCatalog');
+const bangladeshLabs = require('../data/bangladeshLabs');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
+
+// Track batch notifications to avoid duplicates
+const batchNotificationsSent = new Map();
 
 const scopeFilter = (user) => {
   if (!user) return {};
@@ -10,21 +15,68 @@ const scopeFilter = (user) => {
 
 exports.create = async (req, res) => {
   try {
+    // Only doctors can suggest/create lab tests
+    if (req.user.role !== 'Doctor' && req.user.role !== 'Admin') {
+      return res.status(403).json({ ok: false, msg: 'Only doctors can suggest lab tests' });
+    }
+
     const { patientId, testType, scheduledDate, notes, category, labName, labLocation, batchOrderId } = req.body;
-    const pid = req.user.role === 'Patient' ? req.user._id : (patientId || req.query.patientId);
-    if (!pid) return res.json({ ok: false, msg: 'patientId required' });
-    const docId = req.user.role === 'Doctor' || req.user.role === 'Admin' ? req.user._id : undefined;
+    if (!patientId) return res.json({ ok: false, msg: 'patientId required' });
+    
     const test = await LabTest.create({ 
-      patientId: pid, 
-      doctorId: docId, 
+      patientId, 
+      doctorId: req.user._id, 
       testType, 
       category,
       scheduledDate, 
       labName,
       labLocation,
       notes,
-      batchOrderId 
+      batchOrderId,
+      status: 'ordered'
     });
+
+    // Send notification only once per batch
+    let shouldNotify = false;
+    
+    if (batchOrderId) {
+      // Check if we've already sent notification for this batch
+      if (!batchNotificationsSent.has(batchOrderId)) {
+        batchNotificationsSent.set(batchOrderId, true);
+        shouldNotify = true;
+        
+        // Clean up old batch notifications after 5 minutes
+        setTimeout(() => {
+          batchNotificationsSent.delete(batchOrderId);
+        }, 5 * 60 * 1000);
+      }
+    } else {
+      // Single test (not part of batch), always notify
+      shouldNotify = true;
+    }
+
+    if (shouldNotify) {
+      // Count how many tests are in this batch
+      let testCount = 1;
+      if (batchOrderId) {
+        testCount = await LabTest.countDocuments({ batchOrderId });
+      }
+
+      const patient = await User.findById(patientId);
+      const notification = new Notification({
+        userId: patientId,
+        title: batchOrderId 
+          ? `🔬 New Lab Test Batch Suggested (${testCount} Tests)`
+          : '🔬 New Lab Test Suggested',
+        body: batchOrderId
+          ? `Dr. ${req.user.name} has suggested ${testCount} lab tests for you. Please check your Lab Tests page for details.`
+          : `Dr. ${req.user.name} has suggested a ${testType} test. Please check your Lab Results page for details.`,
+        category: 'lab-test'
+      });
+      await notification.save();
+      console.log(`Lab test notification sent to patient: ${patientId} (${batchOrderId ? 'Batch: ' + testCount + ' tests' : 'Single test'})`);
+    }
+
     res.json({ ok: true, labTest: test });
   } catch (err) {
     res.status(500).json({ ok: false, msg: err.message });
@@ -75,6 +127,15 @@ exports.deleteTest = async (req, res) => {
 exports.getCatalog = async (req, res) => {
   try {
     res.json({ ok: true, catalog: labTestCatalog });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
+};
+
+// Get Bangladesh hospitals and diagnostic centers list
+exports.getBangladeshLabs = async (req, res) => {
+  try {
+    res.json({ ok: true, labs: bangladeshLabs });
   } catch (err) {
     res.status(500).json({ ok: false, msg: err.message });
   }

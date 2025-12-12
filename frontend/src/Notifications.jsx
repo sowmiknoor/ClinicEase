@@ -4,9 +4,6 @@ import './Care.css';
 export default function Notifications() {
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole') || 'Patient';
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [targetUser, setTargetUser] = useState('');
   const [list, setList] = useState([]);
   const [filter, setFilter] = useState('all'); // all, medication, tele-consult, lab-test
   const header = { 'Content-Type': 'application/json', 'x-user-id': userId };
@@ -182,27 +179,6 @@ export default function Notifications() {
     }
   }, []);
 
-  const send = async (e) => {
-    e.preventDefault();
-    const payload = { title, body, userId: targetUser || userId };
-    try {
-      const res = await fetch('/api/notifications', {
-        method: 'POST',
-        headers: header,
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      if (data.ok) {
-        setTitle('');
-        setBody('');
-        setTargetUser('');
-        fetchNotifications();
-      }
-    } catch (err) {
-      console.error('Error sending notification:', err);
-    }
-  };
-
   const markRead = async (id) => {
     try {
       await fetch(`/api/notifications/${id}/read`, { method: 'PATCH', headers: header });
@@ -237,18 +213,6 @@ export default function Notifications() {
         </div>
       </div>
 
-      {userRole !== 'Patient' && (
-        <form className="card" onSubmit={send}>
-          <h4>Send Notification</h4>
-          <div className="row">
-            <input className="input" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required />
-            <input className="input" placeholder="Target User ID (optional)" value={targetUser} onChange={e => setTargetUser(e.target.value)} />
-          </div>
-          <textarea className="input" placeholder="Message" value={body} onChange={e => setBody(e.target.value)} required rows="3" />
-          <button className="btn" type="submit">Send</button>
-        </form>
-      )}
-
       <div className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h4>Your Notifications ({list.filter(n => !n.read).length} unread)</h4>
@@ -275,6 +239,18 @@ export default function Notifications() {
             onClick={() => setFilter('tele-consult')}
           >
             🩺 Tele-Consult
+          </button>
+          <button
+            className={`filter-btn ${filter === 'home-visit' ? 'active' : ''}`}
+            onClick={() => setFilter('home-visit')}
+          >
+            🏠 Home Visits
+          </button>
+          <button
+            className={`filter-btn ${filter === 'message' ? 'active' : ''}`}
+            onClick={() => setFilter('message')}
+          >
+            💬 Messages
           </button>
           <button
             className={`filter-btn ${filter === 'lab-test' ? 'active' : ''}`}

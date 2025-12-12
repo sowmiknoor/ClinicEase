@@ -1,0 +1,475 @@
+/* ============================================
+   CLINICEASE UI FIXES - PROFESSIONAL ENHANCEMENTS
+   This file contains critical UI improvements for
+   accessibility, color contrast, and professional appearance
+   ============================================ */
+
+/* ========== NAVIGATION BAR IMPROVEMENTS ========== */
+
+/* Fix navigation wrapper backgrounds with proper contrast */
+.nav-bar-wrapper {
+  background: var(--color-bg-primary) !important;
+  border-bottom: 2px solid var(--color-border-light) !important;
+  box-shadow: var(--shadow-sm);
+  position: sticky !important;
+  top: 76px !important;
+  z-index: 40 !important;
+  backdrop-filter: blur(8px);
+}
+
+/* Patient Navigation - Soft & Caring */
+.nav-bar-wrapper.patient-nav {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
+  border-bottom: 2px solid #fed7aa !important;
+}
+
+/* Doctor Navigation - Professional & Trustworthy */
+.nav-bar-wrapper.doctor-nav {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+  border-bottom: 2px solid #93c5fd !important;
+}
+
+/* Admin Navigation - Powerful & Corporate */
+.nav-bar-wrapper.admin-nav {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  border-bottom: 2px solid #f97316 !important;
+}
+
+/* Enhanced Navigation Buttons - WCAG AA Compliant */
+.nav-btn {
+  padding: var(--space-3) var(--space-5) !important;
+  border-radius: var(--radius-lg) !important;
+  border: 2px solid transparent !important;
+  background: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  font-size: var(--font-size-sm) !important;
+  transition: all var(--transition-base) !important;
+  cursor: pointer !important;
+  min-height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: var(--space-2) !important;
+  box-shadow: var(--shadow-xs) !important;
+}
+
+.nav-btn:hover {
+  background: var(--color-primary-50) !important;
+  border-color: var(--color-primary-300) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.nav-btn:focus-visible {
+  outline: 3px solid var(--color-primary-300) !important;
+  outline-offset: 2px !important;
+}
+
+/* Active navigation button */
+.nav-btn.active {
+  background: var(--color-primary-600) !important;
+  color: white !important;
+  border-color: var(--color-primary-700) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Patient Nav Buttons - Orange Accent */
+.patient-nav .nav-btn {
+  color: #9a3412 !important;
+}
+
+.patient-nav .nav-btn:hover {
+  background: #ffedd5 !important;
+  border-color: #fb923c !important;
+}
+
+.patient-nav .nav-btn.active {
+  background: #f97316 !important;
+  color: white !important;
+  border-color: #ea580c !important;
+}
+
+/* Doctor Nav Buttons - Blue Accent */
+.doctor-nav .nav-btn {
+  color: #1e40af !important;
+}
+
+.doctor-nav .nav-btn:hover {
+  background: #dbeafe !important;
+  border-color: #60a5fa !important;
+}
+
+.doctor-nav .nav-btn.active {
+  background: #2563eb !important;
+  color: white !important;
+  border-color: #1d4ed8 !important;
+}
+
+/* Admin Nav Buttons - Orange on Dark */
+.admin-nav .nav-btn {
+  background: rgba(248, 250, 252, 0.1) !important;
+  color: #f1f5f9 !important;
+  border-color: transparent !important;
+}
+
+.admin-nav .nav-btn:hover {
+  background: rgba(249, 115, 22, 0.2) !important;
+  border-color: #fb923c !important;
+}
+
+.admin-nav .nav-btn.active {
+  background: #f97316 !important;
+  color: white !important;
+  border-color: #ea580c !important;
+}
+
+/* ========== BUTTON IMPROVEMENTS ========== */
+
+/* Fix all existing buttons to use design system */
+button:not(.nav-btn):not(.btn):not([class*="btn-"]) {
+  min-height: 44px !important;
+  padding: var(--space-3) var(--space-5) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  border-radius: var(--radius-lg) !important;
+  transition: all var(--transition-base) !important;
+  cursor: pointer !important;
+}
+
+/* Fix gradient buttons with text contrast issues */
+button[style*="gradient"],
+.gradient-btn {
+  background: var(--btn-primary-bg) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+button[style*="gradient"]:hover,
+.gradient-btn:hover {
+  background: var(--btn-primary-hover) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Fix submit buttons */
+button[type="submit"],
+.submit-btn {
+  background: var(--btn-primary-bg) !important;
+  color: white !important;
+  font-weight: var(--font-weight-bold) !important;
+  min-height: 48px !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+button[type="submit"]:hover,
+.submit-btn:hover {
+  background: var(--btn-primary-hover) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+button[type="submit"]:disabled,
+.submit-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Fix delete/danger buttons */
+button.delete,
+button.remove,
+button[class*="danger"],
+button[class*="delete"] {
+  background: var(--btn-danger-bg) !important;
+  color: white !important;
+}
+
+button.delete:hover,
+button.remove:hover,
+button[class*="danger"]:hover,
+button[class*="delete"]:hover {
+  background: var(--btn-danger-hover) !important;
+}
+
+/* ========== FORM INPUT IMPROVEMENTS ========== */
+
+/* Fix all input fields for better contrast */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  min-height: 44px !important;
+  padding: var(--space-3) var(--space-4) !important;
+  font-size: var(--font-size-base) !important;
+  color: var(--color-text-primary) !important;
+  background: white !important;
+  border: 2px solid var(--color-border-medium) !important;
+  border-radius: var(--radius-md) !important;
+  transition: all var(--transition-base) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-neutral-400) !important; /* WCAG AA Compliant */
+  opacity: 1 !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--color-primary-500) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+input.error,
+select.error,
+textarea.error {
+  border-color: var(--color-error-500) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Fix label text */
+label {
+  color: var(--color-text-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  font-size: var(--font-size-sm) !important;
+  margin-bottom: var(--space-2) !important;
+  display: block !important;
+}
+
+/* ========== STATUS BADGE IMPROVEMENTS ========== */
+
+/* Fix status badges with proper contrast */
+.status-badge,
+[class*="badge-"],
+[class*="status-"] {
+  padding: var(--space-1) var(--space-3) !important;
+  border-radius: var(--radius-full) !important;
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-bold) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: var(--space-1) !important;
+  border: 1px solid !important;
+}
+
+/* Success status */
+.status-badge.success,
+.status-badge.completed,
+.badge-success,
+[class*="status-completed"],
+[class*="status-success"] {
+  background-color: var(--color-success-100) !important;
+  color: var(--color-success-900) !important;
+  border-color: var(--color-success-200) !important;
+}
+
+/* Warning/Pending status */
+.status-badge.warning,
+.status-badge.pending,
+.badge-warning,
+[class*="status-pending"],
+[class*="status-warning"] {
+  background-color: var(--color-warning-100) !important;
+  color: #78350f !important; /* WCAG AA on warning-100 */
+  border-color: var(--color-warning-200) !important;
+}
+
+/* Error/Cancelled status */
+.status-badge.error,
+.status-badge.cancelled,
+.status-badge.rejected,
+.badge-error,
+[class*="status-cancelled"],
+[class*="status-rejected"],
+[class*="status-error"] {
+  background-color: var(--color-error-100) !important;
+  color: var(--color-error-900) !important;
+  border-color: var(--color-error-200) !important;
+}
+
+/* Info/In Progress status */
+.status-badge.info,
+.status-badge.in-progress,
+.status-badge.in_progress,
+.badge-info,
+[class*="status-in-progress"],
+[class*="status-in_progress"] {
+  background-color: var(--color-primary-100) !important;
+  color: var(--color-primary-900) !important;
+  border-color: var(--color-primary-200) !important;
+}
+
+/* Ordered/Neutral status */
+.status-badge.ordered,
+.status-badge.scheduled,
+.badge-neutral,
+[class*="status-ordered"],
+[class*="status-scheduled"] {
+  background-color: var(--color-neutral-100) !important;
+  color: var(--color-neutral-900) !important;
+  border-color: var(--color-neutral-200) !important;
+}
+
+/* ========== CARD IMPROVEMENTS ========== */
+
+/* Fix all cards with consistent professional styling */
+.card,
+[class*="-card"],
+[class*="card-"] {
+  background: white !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-md) !important;
+  border: 1px solid var(--color-border-light) !important;
+  padding: var(--space-6) !important;
+  transition: all var(--transition-base) !important;
+}
+
+.card:hover,
+[class*="-card"]:hover {
+  box-shadow: var(--shadow-lg) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ========== MODAL/DIALOG IMPROVEMENTS ========== */
+
+.modal,
+.dialog,
+[class*="-modal"],
+[class*="-dialog"] {
+  background: white !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: var(--shadow-2xl) !important;
+  border: 1px solid var(--color-border-light) !important;
+}
+
+.modal-overlay,
+.dialog-overlay,
+[class*="-overlay"] {
+  background: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* ========== TABLE IMPROVEMENTS ========== */
+
+table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+
+th {
+  background: var(--color-neutral-50) !important;
+  color: var(--color-text-primary) !important;
+  font-weight: var(--font-weight-bold) !important;
+  text-align: left !important;
+  padding: var(--space-4) !important;
+  border-bottom: 2px solid var(--color-border-medium) !important;
+}
+
+td {
+  padding: var(--space-4) !important;
+  border-bottom: 1px solid var(--color-border-light) !important;
+  color: var(--color-text-secondary) !important;
+}
+
+tr:hover {
+  background: var(--color-neutral-50) !important;
+}
+
+/* ========== LINK IMPROVEMENTS ========== */
+
+a {
+  color: var(--color-primary-700) !important;
+  text-decoration: none !important;
+  transition: all var(--transition-fast) !important;
+}
+
+a:hover {
+  color: var(--color-primary-800) !important;
+  text-decoration: underline !important;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--color-primary-300) !important;
+  outline-offset: 2px !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ========== LOADING STATES ========== */
+
+.loading,
+.spinner,
+[class*="loading"] {
+  display: inline-block !important;
+  width: 20px !important;
+  height: 20px !important;
+  border: 3px solid var(--color-neutral-200) !important;
+  border-top-color: var(--color-primary-600) !important;
+  border-radius: 50% !important;
+  animation: spin 0.8s linear infinite !important;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========== EMPTY STATES ========== */
+
+.empty-state,
+[class*="empty"] {
+  text-align: center !important;
+  padding: var(--space-16) var(--space-8) !important;
+  color: var(--color-text-muted) !important;
+}
+
+.empty-state h3,
+[class*="empty"] h3 {
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  margin-bottom: var(--space-3) !important;
+}
+
+/* ========== ACCESSIBILITY IMPROVEMENTS ========== */
+
+/* Ensure all interactive elements have proper focus states */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-primary-300) !important;
+  outline-offset: 2px !important;
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  button,
+  a,
+  .nav-btn,
+  [role="button"] {
+    min-height: 48px !important;
+    min-width: 48px !important;
+  }
+}
+
+/* ========== RESPONSIVE IMPROVEMENTS ========== */
+
+/* Ensure proper spacing on mobile */
+@media (max-width: 640px) {
+  .card,
+  [class*="-card"] {
+    padding: var(--space-4) !important;
+  }
+  
+  button,
+  .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  .nav-btn {
+    font-size: var(--font-size-xs) !important;
+    padding: var(--space-2) var(--space-3) !important;
+  }
+}

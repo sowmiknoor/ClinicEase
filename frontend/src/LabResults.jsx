@@ -5,6 +5,7 @@ export default function LabResults() {
   const [labTests, setLabTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [showAllTests, setShowAllTests] = useState(false);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
@@ -14,7 +15,9 @@ export default function LabResults() {
 
   const fetchLabTests = async (userId) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/lab-tests-new/patient/${userId}`);
+      const res = await fetch('/api/lab-tests', {
+        headers: { 'x-user-id': userId }
+      });
       const data = await res.json();
       if (data.ok) {
         setLabTests(data.labTests || []);
@@ -23,6 +26,26 @@ export default function LabResults() {
       console.error('Error fetching lab tests:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownloadPDF = async (testId) => {
+    try {
+      const userId = localStorage.getItem('userId');
+      const response = await fetch(`/api/lab-tests/${testId}/pdf`, {
+        headers: { 'x-user-id': userId }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.ok && data.pdfUrl) {
+          // Open PDF in new tab
+          window.open(data.pdfUrl, '_blank');
+        }
+      }
+    } catch (err) {
+      console.error('Error downloading PDF:', err);
+      alert('Failed to generate PDF. Please try again.');
     }
   };
 
@@ -64,7 +87,7 @@ export default function LabResults() {
         </div>
       ) : (
         <div className="lab-grid">
-          {labTests.map(test => (
+          {(showAllTests ? labTests : labTests.slice(0, 5)).map(test => (
             <div key={test._id} className="lab-card">
               <div className="lab-card-header">
                 <div>
@@ -146,14 +169,46 @@ export default function LabResults() {
                   </div>
                 )}
 
-                {test.resultUrl && (
-                  <a href={test.resultUrl} target="_blank" rel="noopener noreferrer" className="download-btn">
-                    📄 Download Report
-                  </a>
-                )}
+                <div className="lab-actions">
+                  <button 
+                    onClick={() => handleDownloadPDF(test._id)} 
+                    className="download-btn"
+                  >
+                    📄 Download PDF Report
+                  </button>
+                  
+                  {test.resultUrl && (
+                    <a href={test.resultUrl} target="_blank" rel="noopener noreferrer" className="view-btn">
+                      👁️ View Digital Copy
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}
+          
+          {/* View All Button */}
+          {!showAllTests && labTests.length > 5 && (
+            <div className="view-all-section">
+              <button 
+                className="btn-view-all"
+                onClick={() => setShowAllTests(true)}
+              >
+                📋 View All Lab Tests ({labTests.length} total)
+              </button>
+            </div>
+          )}
+          
+          {showAllTests && labTests.length > 5 && (
+            <div className="view-all-section">
+              <button 
+                className="btn-view-all"
+                onClick={() => setShowAllTests(false)}
+              >
+                ▲ Show Recent Only (5 tests)
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
