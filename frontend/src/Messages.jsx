@@ -21,7 +21,7 @@ export default function Messages() {
 
   const fetchDoctors = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/admin/doctors');
+      const res = await fetch('/api/admin/doctors');
       const data = await res.json();
       if (data.ok) {
         setContacts(data.doctors);
@@ -33,7 +33,7 @@ export default function Messages() {
 
   const fetchPatients = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/admin/users/role/patient');
+      const res = await fetch('/api/admin/users/role/patient');
       const data = await res.json();
       if (data.ok) {
         setContacts(data.users);
@@ -45,7 +45,7 @@ export default function Messages() {
 
   const loadConversation = async (otherId) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/messages-new/conversation/${user.userId}/${otherId}`);
+      const res = await fetch(`/api/messages-new/conversation/${user.userId}/${otherId}`);
       const data = await res.json();
       if (data.ok) {
         setMessages(data.messages);
@@ -61,7 +61,7 @@ export default function Messages() {
 
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/messages-new/send', {
+      const res = await fetch('/api/messages-new/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -19,23 +19,23 @@ export default function PatientDashboard() {
   const fetchDashboardStats = async (userId) => {
     try {
       // Fetch appointments
-      const apptRes = await fetch(`http://localhost:5001/api/appointments/patient/${userId}`);
+      const apptRes = await fetch(`/api/appointments/patient/${userId}`);
       const apptData = await apptRes.json();
       const upcoming = apptData.appointments?.filter(a => 
         a.status === 'accepted' && new Date(a.appointmentDate) >= new Date()
       ).length || 0;
 
       // Fetch medications
-      const medRes = await fetch(`http://localhost:5001/api/medications-new/active/${userId}`);
+      const medRes = await fetch(`/api/medications-new/active/${userId}`);
       const medData = await medRes.json();
 
       // Fetch lab tests
-      const labRes = await fetch(`http://localhost:5001/api/lab-tests-new/patient/${userId}`);
+      const labRes = await fetch(`/api/lab-tests-new/patient/${userId}`);
       const labData = await labRes.json();
       const pending = labData.labTests?.filter(t => t.status !== 'completed').length || 0;
 
       // Fetch unread messages
-      const msgRes = await fetch(`http://localhost:5001/api/messages-new/unread-count/${userId}`);
+      const msgRes = await fetch(`/api/messages-new/unread-count/${userId}`);
       const msgData = await msgRes.json();
 
       setStats({

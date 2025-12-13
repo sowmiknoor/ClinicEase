@@ -125,11 +125,12 @@ Source: ${results.source === 'openai' ? 'AI-Powered Analysis (ChatGPT)' : 'Medic
       if (data.ok) {
         alert('✅ Successfully saved to your medical records!\n\nYou can view this analysis in your Medical Records section.');
       } else {
-        alert('⚠️ Could not save to records: ' + (data.msg || 'Unknown error'));
+        console.error('Save error:', data);
+        alert('⚠️ Could not save to records: ' + (data.msg || data.error || 'Please make sure you are logged in'));
       }
     } catch (err) {
       console.error('Error saving to records:', err);
-      alert('❌ Error saving to records. Please try again.');
+      alert('❌ Error saving to records. Please make sure you are logged in and try again.');
     }
   };
 

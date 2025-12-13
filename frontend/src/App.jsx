@@ -1,5 +1,4 @@
-
-
+import { useState, useEffect } from "react";
 import Register from "./Register";
 import Login from "./Login";
 import Home from "./Home";
@@ -10,6 +9,7 @@ import TeleConsultation from "./TeleConsultation";
 import Prescriptions from "./Prescriptions";
 import LabTests from "./LabTests";
 import MedicalRecords from "./MedicalRecords";
+import Records from "./Records";
 import Billing from "./Billing";
 import Messaging from "./Messaging";
 import Notifications from "./Notifications";
@@ -21,7 +21,6 @@ import DoctorsList from "./DoctorsList";
 import DoctorProfileEdit from "./DoctorProfileEdit";
 import DoctorProfileView from "./DoctorProfileView";
 import CommunityForum from "./CommunityForum";
-import { useState, useEffect } from "react";
 
 
 function App() {
@@ -254,7 +253,22 @@ function App() {
                 {getNavItems().map((item) => (
                   <button 
                     key={item.page}
-                    onClick={() => setPage(item.page)} 
+                    onClick={async () => {
+                      setPage(item.page);
+                      // Auto-mark all notifications as read when clicking notification icon
+                      if (item.page === 'notifications' && unreadNotifications > 0) {
+                        const userId = localStorage.getItem('userId');
+                        try {
+                          await fetch('/api/notifications/mark-all-read', {
+                            method: 'PATCH',
+                            headers: { 'x-user-id': userId }
+                          });
+                          setUnreadNotifications(0);
+                        } catch (err) {
+                          console.error('Error marking notifications as read:', err);
+                        }
+                      }
+                    }} 
                     className={`nav-btn ${page === item.page ? "active" : ""} ${item.isIcon ? "notification-btn" : ""}`}
                   >
                     {item.label}
@@ -329,7 +343,7 @@ function App() {
           {page === "prescriptions" && isPageAllowed('prescriptions') && <Prescriptions />}
           {page === "create-medical-record" && isPageAllowed('create-medical-record') && <CreateMedicalRecord />}
           {page === "labtests" && isPageAllowed('labtests') && <LabTests />}
-          {page === "records" && isPageAllowed('records') && <MedicalRecords />}
+          {page === "records" && isPageAllowed('records') && <Records />}
           {page === "billing" && isPageAllowed('billing') && <Billing />}
           {page === "messages" && isPageAllowed('messages') && <Messaging />}
           {page === "notifications" && isPageAllowed('notifications') && <Notifications />}

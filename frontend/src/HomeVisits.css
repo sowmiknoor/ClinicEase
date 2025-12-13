@@ -237,7 +237,7 @@
 
 .visits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
   gap: 24px;
 }
 
@@ -249,6 +249,8 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
   border-left: 4px solid #cbd5e1;
+  display: flex;
+  flex-direction: column;
 }
 
 .visit-card:hover {
@@ -347,12 +349,14 @@
   padding: 16px;
   border-radius: 10px;
   margin-bottom: 16px;
+  flex-grow: 1;
 }
 
 .visit-details p {
   font-size: 14px;
   color: #475569;
   margin: 8px 0;
+  word-wrap: break-word;
 }
 
 .address-text {
@@ -373,6 +377,9 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 2px solid #f1f5f9;
 }
 
 .btn-view,
@@ -380,6 +387,8 @@
 .btn-reject,
 .btn-cancel-visit,
 .btn-complete {
+  flex: 1;
+  min-width: 120px;
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
@@ -387,6 +396,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-align: center;
 }
 
 .btn-view {
@@ -644,4 +654,163 @@
   .modal-content {
     max-width: 95%;
   }
+}
+
+/* Dark Mode Support */
+.dark-mode .home-visits-container {
+  color: #e2e8f0;
+}
+
+.dark-mode .home-visits-header h1 {
+  color: #f1f5f9;
+}
+
+.dark-mode .home-visits-header p {
+  color: #94a3b8;
+}
+
+.dark-mode .create-visit-card {
+  background: #1e293b;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .create-visit-card h2,
+.dark-mode .create-visit-card h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .form-group label {
+  color: #cbd5e1;
+}
+
+.dark-mode .form-group input,
+.dark-mode .form-group select,
+.dark-mode .form-group textarea {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .form-group input:focus,
+.dark-mode .form-group select:focus,
+.dark-mode .form-group textarea:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.dark-mode .visit-card {
+  background: #1e293b;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .visit-header {
+  border-bottom-color: #334155;
+}
+
+.dark-mode .visit-header h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .visit-time {
+  color: #94a3b8;
+}
+
+.dark-mode .visit-info p,
+.dark-mode .visit-details p {
+  color: #cbd5e1;
+}
+
+.dark-mode .address-text {
+  color: #f1f5f9;
+}
+
+.dark-mode .visit-details {
+  background: #0f172a;
+}
+
+.dark-mode .btn-view {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .btn-view:hover {
+  background: #475569;
+}
+
+.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.dark-mode .modal-content {
+  background: #1e293b;
+}
+
+.dark-mode .modal-header {
+  border-bottom-color: #334155;
+}
+
+.dark-mode .modal-header h2 {
+  color: #f1f5f9;
+}
+
+.dark-mode .modal-close {
+  color: #94a3b8;
+}
+
+.dark-mode .modal-close:hover {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+.dark-mode .modal-body {
+  color: #cbd5e1;
+}
+
+.dark-mode .rejection-textarea {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .rejection-textarea:focus {
+  border-color: #ef4444;
+}
+
+.dark-mode .modal-actions {
+  border-top-color: #334155;
+}
+
+.dark-mode .btn-modal-cancel {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.dark-mode .btn-modal-cancel:hover {
+  background: #475569;
+}
+
+.dark-mode .detail-section h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .detail-section p {
+  color: #cbd5e1;
+}
+
+.dark-mode .empty-state h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .empty-state p {
+  color: #94a3b8;
+}
+
+.dark-mode .message-alert.success {
+  background: #065f46;
+  color: #d1fae5;
+}
+
+.dark-mode .message-alert.error {
+  background: #7f1d1d;
+  color: #fecaca;
 }

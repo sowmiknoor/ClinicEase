@@ -154,8 +154,22 @@ export default function Notifications() {
     }
   };
 
+  // Mark all as read on component mount
+  const markAllReadOnMount = async () => {
+    try {
+      await fetch('/api/notifications/mark-all-read', { 
+        method: 'PATCH', 
+        headers: header 
+      });
+    } catch (err) {
+      console.error('Error marking all as read:', err);
+    }
+  };
+
   // Setup automatic checks
   useEffect(() => {
+    // Mark all as read when component loads
+    markAllReadOnMount();
     fetchNotifications();
 
     if (userRole === 'Patient') {
@@ -179,30 +193,9 @@ export default function Notifications() {
     }
   }, []);
 
-  const markRead = async (id) => {
-    try {
-      await fetch(`/api/notifications/${id}/read`, { method: 'PATCH', headers: header });
-      fetchNotifications();
-    } catch (err) {
-      console.error('Error marking notification as read:', err);
-    }
-  };
-
   const filteredList = filter === 'all'
     ? list
     : list.filter(n => n.category === filter);
-
-  const markAllRead = async () => {
-    try {
-      await fetch('/api/notifications/mark-all-read', { 
-        method: 'PATCH', 
-        headers: header 
-      });
-      fetchNotifications();
-    } catch (err) {
-      console.error('Error marking all as read:', err);
-    }
-  };
 
   return (
     <div className="care-section">
@@ -214,12 +207,7 @@ export default function Notifications() {
       </div>
 
       <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h4>Your Notifications ({list.filter(n => !n.read).length} unread)</h4>
-          {list.some(n => !n.read) && (
-            <button className="btn-outline" onClick={markAllRead}>Mark All Read</button>
-          )}
-        </div>
+        <h4 style={{ marginBottom: '16px' }}>Your Notifications</h4>
 
         <div className="notification-filters">
           <button
@@ -262,18 +250,14 @@ export default function Notifications() {
 
         <ul className="list notification-list">
           {filteredList.map(n => (
-            <li key={n._id} className={`list-item notification-item ${n.read ? 'read' : 'unread'}`}>
+            <li key={n._id} className="list-item notification-item">
               <div className="notification-content">
                 <div className="notification-header">
-                  <span className="notification-status">{n.read ? '✓' : '●'}</span>
                   <span className="notification-time">{new Date(n.createdAt).toLocaleString()}</span>
                 </div>
                 <div className="notification-title">{n.title}</div>
                 <div className="notification-body">{n.body}</div>
               </div>
-              {!n.read && (
-                <button className="btn-outline" onClick={() => markRead(n._id)}>Mark Read</button>
-              )}
             </li>
           ))}
           {filteredList.length === 0 && <li className="empty">No notifications in this category.</li>}

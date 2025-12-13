@@ -14,7 +14,7 @@ export default function MyMedications() {
 
   const fetchMedications = async (userId) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/medications-new/patient/${userId}`);
+      const res = await fetch(`/api/medications-new/patient/${userId}`);
       const data = await res.json();
       if (data.ok) {
         setMedications(data.medications || []);

@@ -1,5 +1,6 @@
 const MedicalRecord = require('../models/MedicalRecord');
 const Prescription = require('../models/Prescription');
+const Record = require('../models/Record');
 
 // Doctor: Create medical record for patient
 exports.createMedicalRecord = async (req, res) => {
@@ -24,6 +25,48 @@ exports.createMedicalRecord = async (req, res) => {
 
     await record.save();
     console.log('Medical record created:', record._id);
+
+    // Create a comprehensive description for the Record
+    let recordDescription = `MEDICAL REPORT\n====================\n\n`;
+    recordDescription += `Diagnosis: ${diagnosis}\n\n`;
+    
+    if (prescription) {
+      recordDescription += `Prescription: ${prescription}\n\n`;
+    }
+    
+    if (medications && medications.length > 0) {
+      recordDescription += `Medications:\n`;
+      medications.forEach((med, index) => {
+        recordDescription += `${index + 1}. ${med.name} - ${med.dosage}\n`;
+        if (med.frequency) recordDescription += `   Frequency: ${med.frequency}\n`;
+        if (med.duration) recordDescription += `   Duration: ${med.duration}\n`;
+      });
+      recordDescription += `\n`;
+    }
+    
+    if (labTestsRecommended && labTestsRecommended.length > 0) {
+      recordDescription += `Recommended Lab Tests:\n${labTestsRecommended.map((test, i) => `${i + 1}. ${test}`).join('\n')}\n\n`;
+    }
+    
+    if (followUpDate) {
+      recordDescription += `Follow-up Date: ${new Date(followUpDate).toLocaleDateString()}\n\n`;
+    }
+    
+    if (notes) {
+      recordDescription += `Additional Notes: ${notes}\n`;
+    }
+    
+    recordDescription += `\nIssued by Doctor ID: ${doctorId}\nDate: ${new Date().toLocaleString()}`;
+
+    // Also save to Record collection so it appears in patient's Medical Records page
+    const simpleRecord = await Record.create({
+      patientId,
+      doctorId,
+      title: `Medical Report - ${diagnosis}`,
+      description: recordDescription,
+      attachmentUrl: ''
+    });
+    console.log('Simple record created:', simpleRecord._id);
 
     // If medications are provided, also create a prescription entry
     if (medications && medications.length > 0) {

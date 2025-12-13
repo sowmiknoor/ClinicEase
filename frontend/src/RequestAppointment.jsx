@@ -21,7 +21,7 @@ export default function RequestAppointment() {
 
   const fetchDoctors = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/admin/doctors');
+      const res = await fetch('/api/admin/doctors');
       const data = await res.json();
       if (data.ok) {
         setDoctors(data.doctors);
@@ -39,7 +39,7 @@ export default function RequestAppointment() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     try {
-      const res = await fetch('http://localhost:5001/api/appointments/create', {
+      const res = await fetch('/api/appointments/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
