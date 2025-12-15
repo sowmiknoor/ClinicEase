@@ -21,6 +21,9 @@ import DoctorsList from "./DoctorsList";
 import DoctorProfileEdit from "./DoctorProfileEdit";
 import DoctorProfileView from "./DoctorProfileView";
 import CommunityForum from "./CommunityForum";
+import HealthTips from "./HealthTips";
+import ResearchPapers from "./ResearchPapers";
+import AdminDashboard from "./AdminDashboard";
 
 
 function App() {
@@ -74,9 +77,9 @@ function App() {
 
     // Define role-based access
     const roleAccess = {
-      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'messages', 'notifications', 'doctors', 'forum'],
-      Doctor: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum'],
-      Admin: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum']
+      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers'],
+      Doctor: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum', 'health-tips', 'research-papers'],
+      Admin: ['dashboard', 'admin-dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers']
     };
 
     return roleAccess[userRole]?.includes(pageToCheck) || false;
@@ -97,6 +100,8 @@ function App() {
         { label: 'Lab Tests', page: 'labtests' },
         { label: 'Medical Records', page: 'records' },
         { label: 'Community Forum', page: 'forum' },
+        { label: 'Health Tips', page: 'health-tips' },
+        { label: 'Research Papers', page: 'research-papers' },
         { label: 'Messages', page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ],
@@ -110,11 +115,14 @@ function App() {
         { label: 'Billing', page: 'billing' },
         { label: 'Tele-Consult', page: 'tele' },
         { label: 'Community Forum', page: 'forum' },
+        { label: 'Health Tips', page: 'health-tips' },
+        { label: 'Research Papers', page: 'research-papers' },
         { label: 'Messages', page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ],
       Admin: [
         { label: 'Dashboard', page: 'dashboard' },
+        { label: '🛡️ Admin Control', page: 'admin-dashboard' },
         { label: 'All Doctors', page: 'doctors' },
         { label: 'Prescriptions', page: 'prescriptions' },
         { label: 'Lab Tests', page: 'labtests' },
@@ -122,6 +130,8 @@ function App() {
         { label: 'Billing', page: 'billing' },
         { label: 'Tele-Consult', page: 'tele' },
         { label: 'Community Forum', page: 'forum' },
+        { label: 'Health Tips', page: 'health-tips' },
+        { label: 'Research Papers', page: 'research-papers' },
         { label: 'Messages', page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ]
@@ -135,6 +145,8 @@ function App() {
     if (userRole) {
       const fetchUnreadCount = async () => {
         const userId = localStorage.getItem('userId');
+        if (!userId) return;
+        
         try {
           const res = await fetch('/api/notifications', {
             headers: { 'x-user-id': userId }
@@ -145,7 +157,7 @@ function App() {
             setUnreadNotifications(unread);
           }
         } catch (err) {
-          console.error('Failed to fetch notifications:', err);
+          // Silently fail - non-critical feature
         }
       };
       fetchUnreadCount();
@@ -225,22 +237,16 @@ function App() {
       </header>
       <main className="app-main" style={{ paddingTop: page === 'home' || page === 'login' || page === 'register' ? '0' : '88px' }}>
       {page === "home" && <Home onNavigate={setPage} onLoginSuccess={handleLoginSuccess} />}
-      {(page === "register" || page === "login") && (
+      {page === "register" && <Register onRegistered={handleRegistered} onSwitchToLogin={() => setPage('login')} />}
+      {page === "login" && (
         <div className="flex flex-col items-center justify-start min-h-[calc(100vh-88px)]">
           <div className="w-full max-w-lg">
-            {page === "register" && <Register onRegistered={handleRegistered} />}
-            {page === "login" && <Login onLoginSuccess={handleLoginSuccess} />}
+            <Login onLoginSuccess={handleLoginSuccess} />
           </div>
           <div className="auth-footer">
-            {page === "register" ? (
-              <span>Already have an account?{' '}
-                <button onClick={() => setPage("login")}>Login</button>
-              </span>
-            ) : (
-              <span>Don't have an account?{' '}
-                <button onClick={() => setPage("register")}>Register</button>
-              </span>
-            )}
+            <span>Don't have an account?{' '}
+              <button onClick={() => setPage("register")}>Register</button>
+            </span>
           </div>
         </div>
       )}
@@ -334,6 +340,7 @@ function App() {
 
           {/* Role-based page rendering with access control */}
           {page === "dashboard" && <Dashboard onNavigate={setPage} />}
+          {page === "admin-dashboard" && isPageAllowed('admin-dashboard') && <AdminDashboard />}
           {page === "profile" && <Profile />}
           {page === "settings" && <Settings />}
           {page === "medications" && isPageAllowed('medications') && <MedicationReminder />}
@@ -351,6 +358,8 @@ function App() {
           {page === "doctor-profile-edit" && isPageAllowed('doctor-profile-edit') && <DoctorProfileEdit />}
           {page === "doctor-profile-view" && <DoctorProfileView onBack={() => setPage('doctors')} />}
           {page === "forum" && isPageAllowed('forum') && <CommunityForum />}
+          {page === "health-tips" && isPageAllowed('health-tips') && <HealthTips />}
+          {page === "research-papers" && isPageAllowed('research-papers') && <ResearchPapers />}
 
           {/* Unauthorized access message */}
           {page && !['dashboard', 'home', 'profile', 'settings'].includes(page) && !isPageAllowed(page) && (

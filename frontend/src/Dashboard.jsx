@@ -41,6 +41,7 @@ export default function Dashboard({ onNavigate }) {
     }, 10000);
 
     return () => clearInterval(tipInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userRole]);
 
   const fetchPatientStats = async () => {

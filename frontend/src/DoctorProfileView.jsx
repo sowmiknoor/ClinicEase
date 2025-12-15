@@ -7,17 +7,15 @@ export default function DoctorProfileView({ doctorId, onBack }) {
 
   useEffect(() => {
     fetchDoctorProfile();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doctorId]);
 
   const fetchDoctorProfile = async () => {
     try {
       // Get doctor ID from localStorage if not passed as prop
       const id = doctorId || localStorage.getItem('viewingDoctorId');
       
-      console.log('Fetching doctor profile with ID:', id);
-      
       if (!id) {
-        console.error('No doctor ID provided');
         setLoading(false);
         return;
       }
@@ -25,15 +23,11 @@ export default function DoctorProfileView({ doctorId, onBack }) {
       const res = await fetch(`/api/doctors/profile/${id}`);
       const data = await res.json();
       
-      console.log('Doctor profile response:', data);
-      
       if (data.ok) {
         setDoctor(data.doctor);
-      } else {
-        console.error('Failed to load doctor:', data.msg);
       }
     } catch (err) {
-      console.error('Failed to fetch doctor profile:', err);
+      // Error handled silently
     } finally {
       setLoading(false);
     }

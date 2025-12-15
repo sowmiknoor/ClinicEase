@@ -252,7 +252,7 @@ export default function HomeVisits() {
                   <option value="">-- Select Doctor --</option>
                   {doctors.map(doctor => (
                     <option key={doctor._id} value={doctor._id}>
-                      Dr. {doctor.name} | {doctor.email}
+                      {doctor.name} - {doctor.specialist || 'General Physician'}
                     </option>
                   ))}
                 </select>

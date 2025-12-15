@@ -1,7 +1,7 @@
 import { useState } from "react";
 import './Register.css';
 
-export default function Register({ onRegistered }) {
+export default function Register({ onRegistered, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -113,35 +113,35 @@ export default function Register({ onRegistered }) {
           
           <div className="benefit-list">
             <div className="benefit-item">
-              <span className="benefit-icon">✓</span>
-              <span className="benefit-text">Secure and Private</span>
+              <div className="benefit-check">✓</div>
+              <p>Secure and Private</p>
             </div>
             <div className="benefit-item">
-              <span className="benefit-icon">✓</span>
-              <span className="benefit-text">24/7 Access to Records</span>
+              <div className="benefit-check">✓</div>
+              <p>24/7 Access to Records</p>
             </div>
             <div className="benefit-item">
-              <span className="benefit-icon">✓</span>
-              <span className="benefit-text">Instant Notifications</span>
+              <div className="benefit-check">✓</div>
+              <p>Instant Notifications</p>
             </div>
             <div className="benefit-item">
-              <span className="benefit-icon">✓</span>
-              <span className="benefit-text">Multi-platform Support</span>
+              <div className="benefit-check">✓</div>
+              <p>Multi-platform Support</p>
             </div>
           </div>
 
-          <div className="stats-container">
+          <div className="stats-grid">
             <div className="stat-item">
-              <h3>10K+</h3>
-              <p>Active Users</p>
+              <p className="stat-number">10K+</p>
+              <p className="stat-label">Active Users</p>
             </div>
             <div className="stat-item">
-              <h3>500+</h3>
-              <p>Doctors</p>
+              <p className="stat-number">500+</p>
+              <p className="stat-label">Doctors</p>
             </div>
             <div className="stat-item">
-              <h3>50K+</h3>
-              <p>Consultations</p>
+              <p className="stat-number">50K+</p>
+              <p className="stat-label">Consultations</p>
             </div>
           </div>
         </div>
@@ -199,40 +199,49 @@ export default function Register({ onRegistered }) {
 
             <div className="form-group">
               <label htmlFor="role">I am a</label>
-              <div className="role-selector">
-                <label className={`role-option ${formData.role === 'Patient' ? 'selected' : ''}`}>
+              <div className="role-grid">
+                <div className="role-option">
                   <input 
                     type="radio" 
                     name="role" 
                     value="Patient" 
                     checked={formData.role === 'Patient'}
                     onChange={handleChange}
+                    id="role-patient"
                   />
-                  <span className="role-icon">🏥</span>
-                  <span className="role-label">Patient</span>
-                </label>
-                <label className={`role-option ${formData.role === 'Doctor' ? 'selected' : ''}`}>
+                  <label htmlFor="role-patient" className="role-label">
+                    <span className="role-icon">🏥</span>
+                    <p className="role-name">Patient</p>
+                  </label>
+                </div>
+                <div className="role-option">
                   <input 
                     type="radio" 
                     name="role" 
                     value="Doctor" 
                     checked={formData.role === 'Doctor'}
                     onChange={handleChange}
+                    id="role-doctor"
                   />
-                  <span className="role-icon">👨‍⚕️</span>
-                  <span className="role-label">Doctor</span>
-                </label>
-                <label className={`role-option ${formData.role === 'Admin' ? 'selected' : ''}`}>
+                  <label htmlFor="role-doctor" className="role-label">
+                    <span className="role-icon">👨‍⚕️</span>
+                    <p className="role-name">Doctor</p>
+                  </label>
+                </div>
+                <div className="role-option">
                   <input 
                     type="radio" 
                     name="role" 
                     value="Admin" 
                     checked={formData.role === 'Admin'}
                     onChange={handleChange}
+                    id="role-admin"
                   />
-                  <span className="role-icon">⚙️</span>
-                  <span className="role-label">Admin</span>
-                </label>
+                  <label htmlFor="role-admin" className="role-label">
+                    <span className="role-icon">⚙️</span>
+                    <p className="role-name">Admin</p>
+                  </label>
+                </div>
               </div>
             </div>
 
@@ -252,18 +261,17 @@ export default function Register({ onRegistered }) {
               </div>
               {formData.password && (
                 <div className="password-strength">
-                  <div className="strength-bar">
-                    <div 
-                      className="strength-fill"
-                      style={{ 
-                        width: `${(passwordStrength / 4) * 100}%`,
-                        backgroundColor: getPasswordStrengthColor()
-                      }}
-                    ></div>
+                  <div className="strength-bars">
+                    {[1, 2, 3, 4].map((bar) => (
+                      <div 
+                        key={bar}
+                        className={`strength-bar ${bar <= passwordStrength ? 'active' : ''}`}
+                        style={{ backgroundColor: bar <= passwordStrength ? getPasswordStrengthColor() : '#e2e8f0' }}
+                      ></div>
+                    ))}
                   </div>
                   <span 
-                    className="strength-label"
-                    style={{ color: getPasswordStrengthColor() }}
+                    className={`strength-text strength-${getPasswordStrengthLabel().toLowerCase().replace(' ', '-')}`}
                   >
                     {getPasswordStrengthLabel()}
                   </span>
@@ -288,9 +296,9 @@ export default function Register({ onRegistered }) {
             </div>
 
             <div className="terms-checkbox">
-              <label>
-                <input type="checkbox" required />
-                <span>I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a></span>
+              <input type="checkbox" required id="terms" />
+              <label htmlFor="terms" className="terms-text">
+                I agree to the <a href="#terms" className="terms-link">Terms of Service</a> and <a href="#privacy" className="terms-link">Privacy Policy</a>
               </label>
             </div>
 
@@ -314,7 +322,7 @@ export default function Register({ onRegistered }) {
           </form>
 
           <div className="register-footer">
-            <p>Already have an account? <a href="#login" className="login-link">Sign in here</a></p>
+            <p>Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); onSwitchToLogin && onSwitchToLogin(); }} className="login-link">Sign in here</a></p>
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@
 .register-root {
   min-height: 100vh;
   display: flex;
+  flex-direction: row;
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
@@ -80,6 +81,7 @@
 /* ========== LEFT SIDE - BRANDING ========== */
 .register-left {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +103,7 @@
 }
 
 .logo-icon {
-  font-size: 56px;
+  font-size: 48px;
   background: white;
   width: 80px;
   height: 80px;
@@ -110,6 +112,7 @@
   justify-content: center;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  line-height: 1;
 }
 
 .brand-logo h1 {
@@ -140,7 +143,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-bottom: 48px;
+  margin-top: 48px;
 }
 
 .stat-item {
@@ -177,6 +180,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 32px;
 }
 
 .benefit-item {
@@ -209,6 +213,7 @@
 /* ========== RIGHT SIDE - REGISTER FORM ========== */
 .register-right {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,10 +384,6 @@
   background: #e2e8f0;
   border-radius: 2px;
   transition: all 0.3s ease;
-}
-
-.strength-bar.active {
-  background: currentColor;
 }
 
 .strength-text {
@@ -621,7 +622,16 @@
   }
   
   .register-left {
-    display: none;
+    min-height: 400px;
+    padding: 40px;
+  }
+  
+  .register-branding {
+    max-width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
   
   .register-right {
@@ -635,7 +645,7 @@
   }
   
   .role-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

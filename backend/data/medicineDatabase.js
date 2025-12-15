@@ -1,0 +1,248 @@
+// Bangladesh Medicine Database
+// Comprehensive list of medicines available in Bangladesh
+// Data sources: DGDA (Directorate General of Drug Administration), Major pharmaceutical companies
+const bangladeshMedicines = [
+  // Antibiotics - Penicillins
+  { id: 1, name: 'Amoxicillin 250mg', genericName: 'Amoxicillin', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 2, name: 'Amoxicillin 500mg', genericName: 'Amoxicillin', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 3, name: 'Amoxi 500', genericName: 'Amoxicillin', manufacturer: 'Beximco Pharma', strength: '500mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 4, name: 'Amoxycillin 125mg/5ml', genericName: 'Amoxicillin', manufacturer: 'Renata Limited', strength: '125mg/5ml', form: 'Suspension', category: 'Antibiotic' },
+  { id: 5, name: 'Ampicillin 250mg', genericName: 'Ampicillin', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 6, name: 'Cloxacillin 250mg', genericName: 'Cloxacillin', manufacturer: 'Beximco Pharma', strength: '250mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 7, name: 'Flucloxacillin 250mg', genericName: 'Flucloxacillin', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Capsule', category: 'Antibiotic' },
+  
+  // Antibiotics - Cephalosporins
+  { id: 8, name: 'Cefixime 200mg', genericName: 'Cefixime', manufacturer: 'Square Pharmaceuticals', strength: '200mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 9, name: 'Cefim 200', genericName: 'Cefixime', manufacturer: 'Incepta Pharma', strength: '200mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 10, name: 'Cefixime 400mg', genericName: 'Cefixime', manufacturer: 'Beximco Pharma', strength: '400mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 11, name: 'Cefuroxime 250mg', genericName: 'Cefuroxime', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 12, name: 'Cefuroxime 500mg', genericName: 'Cefuroxime', manufacturer: 'Renata Limited', strength: '500mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 13, name: 'Ceftriaxone 1g', genericName: 'Ceftriaxone', manufacturer: 'Square Pharmaceuticals', strength: '1g', form: 'Injection', category: 'Antibiotic' },
+  { id: 14, name: 'Cefotaxime 1g', genericName: 'Cefotaxime', manufacturer: 'Beximco Pharma', strength: '1g', form: 'Injection', category: 'Antibiotic' },
+  { id: 15, name: 'Cephalexin 250mg', genericName: 'Cephalexin', manufacturer: 'Incepta Pharma', strength: '250mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 16, name: 'Cephalexin 500mg', genericName: 'Cephalexin', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Capsule', category: 'Antibiotic' },
+  
+  // Antibiotics - Macrolides
+  { id: 17, name: 'Azithromycin 250mg', genericName: 'Azithromycin', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 18, name: 'Azithromycin 500mg', genericName: 'Azithromycin', manufacturer: 'Beximco Pharma', strength: '500mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 19, name: 'Azimax 500', genericName: 'Azithromycin', manufacturer: 'Incepta Pharma', strength: '500mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 20, name: 'Erythromycin 250mg', genericName: 'Erythromycin', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 21, name: 'Clarithromycin 250mg', genericName: 'Clarithromycin', manufacturer: 'Renata Limited', strength: '250mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 22, name: 'Clarithromycin 500mg', genericName: 'Clarithromycin', manufacturer: 'Beximco Pharma', strength: '500mg', form: 'Tablet', category: 'Antibiotic' },
+  
+  // Antibiotics - Quinolones
+  { id: 23, name: 'Ciprofloxacin 250mg', genericName: 'Ciprofloxacin', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 24, name: 'Ciprofloxacin 500mg', genericName: 'Ciprofloxacin', manufacturer: 'Incepta Pharma', strength: '500mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 25, name: 'Ciprocin 500', genericName: 'Ciprofloxacin', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 26, name: 'Levofloxacin 250mg', genericName: 'Levofloxacin', manufacturer: 'Beximco Pharma', strength: '250mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 27, name: 'Levofloxacin 500mg', genericName: 'Levofloxacin', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 28, name: 'Moxifloxacin 400mg', genericName: 'Moxifloxacin', manufacturer: 'Incepta Pharma', strength: '400mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 29, name: 'Ofloxacin 200mg', genericName: 'Ofloxacin', manufacturer: 'Renata Limited', strength: '200mg', form: 'Tablet', category: 'Antibiotic' },
+  
+  // Antibiotics - Others
+  { id: 30, name: 'Metronidazole 200mg', genericName: 'Metronidazole', manufacturer: 'Square Pharmaceuticals', strength: '200mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 31, name: 'Metronidazole 400mg', genericName: 'Metronidazole', manufacturer: 'Renata Limited', strength: '400mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 32, name: 'Flagyl 400', genericName: 'Metronidazole', manufacturer: 'Beximco Pharma', strength: '400mg', form: 'Tablet', category: 'Antibiotic' },
+  { id: 33, name: 'Doxycycline 100mg', genericName: 'Doxycycline', manufacturer: 'Square Pharmaceuticals', strength: '100mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 34, name: 'Tetracycline 250mg', genericName: 'Tetracycline', manufacturer: 'Beximco Pharma', strength: '250mg', form: 'Capsule', category: 'Antibiotic' },
+  { id: 35, name: 'Gentamicin 80mg', genericName: 'Gentamicin', manufacturer: 'Renata Limited', strength: '80mg', form: 'Injection', category: 'Antibiotic' },
+  { id: 36, name: 'Cotrimoxazole 480mg', genericName: 'Sulfamethoxazole + Trimethoprim', manufacturer: 'Square Pharmaceuticals', strength: '480mg', form: 'Tablet', category: 'Antibiotic' },
+  
+  // Pain Relievers & Analgesics
+  { id: 37, name: 'Paracetamol 500mg', genericName: 'Paracetamol', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'Analgesic' },
+  { id: 38, name: 'Napa 500mg', genericName: 'Paracetamol', manufacturer: 'Beximco Pharma', strength: '500mg', form: 'Tablet', category: 'Analgesic' },
+  { id: 39, name: 'Napa Extend 665mg', genericName: 'Paracetamol', manufacturer: 'Beximco Pharma', strength: '665mg', form: 'Tablet', category: 'Analgesic' },
+  { id: 40, name: 'Ace 500', genericName: 'Paracetamol', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'Analgesic' },
+  { id: 41, name: 'Fast 500', genericName: 'Paracetamol', manufacturer: 'Healthcare Pharma', strength: '500mg', form: 'Tablet', category: 'Analgesic' },
+  { id: 42, name: 'Paracetamol 120mg/5ml', genericName: 'Paracetamol', manufacturer: 'Beximco Pharma', strength: '120mg/5ml', form: 'Syrup', category: 'Analgesic' },
+  { id: 43, name: 'Ibuprofen 200mg', genericName: 'Ibuprofen', manufacturer: 'Square Pharmaceuticals', strength: '200mg', form: 'Tablet', category: 'NSAID' },
+  { id: 44, name: 'Ibuprofen 400mg', genericName: 'Ibuprofen', manufacturer: 'Incepta Pharma', strength: '400mg', form: 'Tablet', category: 'NSAID' },
+  { id: 45, name: 'Naproxen 250mg', genericName: 'Naproxen', manufacturer: 'Renata Limited', strength: '250mg', form: 'Tablet', category: 'NSAID' },
+  { id: 46, name: 'Naproxen 500mg', genericName: 'Naproxen', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'NSAID' },
+  { id: 47, name: 'Diclofenac 50mg', genericName: 'Diclofenac Sodium', manufacturer: 'Incepta Pharma', strength: '50mg', form: 'Tablet', category: 'NSAID' },
+  { id: 48, name: 'Diclofenac 100mg SR', genericName: 'Diclofenac Sodium', manufacturer: 'Beximco Pharma', strength: '100mg', form: 'Tablet SR', category: 'NSAID' },
+  { id: 49, name: 'Ketorolac 10mg', genericName: 'Ketorolac', manufacturer: 'Square Pharmaceuticals', strength: '10mg', form: 'Tablet', category: 'NSAID' },
+  { id: 50, name: 'Indomethacin 25mg', genericName: 'Indomethacin', manufacturer: 'Renata Limited', strength: '25mg', form: 'Capsule', category: 'NSAID' },
+  { id: 51, name: 'Aspirin 75mg', genericName: 'Aspirin', manufacturer: 'Square Pharmaceuticals', strength: '75mg', form: 'Tablet', category: 'Antiplatelet' },
+  { id: 52, name: 'Aspirin 300mg', genericName: 'Aspirin', manufacturer: 'Beximco Pharma', strength: '300mg', form: 'Tablet', category: 'Antiplatelet' },
+  { id: 53, name: 'Tramadol 50mg', genericName: 'Tramadol HCl', manufacturer: 'Renata Limited', strength: '50mg', form: 'Capsule', category: 'Analgesic' },
+  { id: 54, name: 'Tramadol 100mg', genericName: 'Tramadol HCl', manufacturer: 'Square Pharmaceuticals', strength: '100mg', form: 'Capsule', category: 'Analgesic' },
+  
+  // Antacids & GI Medications
+  { id: 55, name: 'Omeprazole 20mg', genericName: 'Omeprazole', manufacturer: 'Square Pharmaceuticals', strength: '20mg', form: 'Capsule', category: 'PPI' },
+  { id: 56, name: 'Seclo 20mg', genericName: 'Omeprazole', manufacturer: 'Square Pharmaceuticals', strength: '20mg', form: 'Capsule', category: 'PPI' },
+  { id: 57, name: 'Omeprazole 40mg', genericName: 'Omeprazole', manufacturer: 'Beximco Pharma', strength: '40mg', form: 'Capsule', category: 'PPI' },
+  { id: 58, name: 'Pantoprazole 20mg', genericName: 'Pantoprazole', manufacturer: 'Incepta Pharma', strength: '20mg', form: 'Tablet', category: 'PPI' },
+  { id: 59, name: 'Pantoprazole 40mg', genericName: 'Pantoprazole', manufacturer: 'Square Pharmaceuticals', strength: '40mg', form: 'Tablet', category: 'PPI' },
+  { id: 60, name: 'Esomeprazole 20mg', genericName: 'Esomeprazole', manufacturer: 'Square Pharmaceuticals', strength: '20mg', form: 'Tablet', category: 'PPI' },
+  { id: 61, name: 'Esomeprazole 40mg', genericName: 'Esomeprazole', manufacturer: 'Incepta Pharma', strength: '40mg', form: 'Tablet', category: 'PPI' },
+  { id: 62, name: 'Lansoprazole 30mg', genericName: 'Lansoprazole', manufacturer: 'Renata Limited', strength: '30mg', form: 'Capsule', category: 'PPI' },
+  { id: 63, name: 'Rabeprazole 20mg', genericName: 'Rabeprazole', manufacturer: 'Beximco Pharma', strength: '20mg', form: 'Tablet', category: 'PPI' },
+  { id: 64, name: 'Ranitidine 150mg', genericName: 'Ranitidine', manufacturer: 'Square Pharmaceuticals', strength: '150mg', form: 'Tablet', category: 'H2 Blocker' },
+  { id: 65, name: 'Ranitidine 300mg', genericName: 'Ranitidine', manufacturer: 'Beximco Pharma', strength: '300mg', form: 'Tablet', category: 'H2 Blocker' },
+  { id: 66, name: 'Famotidine 20mg', genericName: 'Famotidine', manufacturer: 'Incepta Pharma', strength: '20mg', form: 'Tablet', category: 'H2 Blocker' },
+  { id: 67, name: 'Domperidone 10mg', genericName: 'Domperidone', manufacturer: 'Renata Limited', strength: '10mg', form: 'Tablet', category: 'Antiemetic' },
+  { id: 68, name: 'Ondansetron 4mg', genericName: 'Ondansetron', manufacturer: 'Square Pharmaceuticals', strength: '4mg', form: 'Tablet', category: 'Antiemetic' },
+  { id: 69, name: 'Ondansetron 8mg', genericName: 'Ondansetron', manufacturer: 'Beximco Pharma', strength: '8mg', form: 'Tablet', category: 'Antiemetic' },
+  { id: 70, name: 'Metoclopramide 10mg', genericName: 'Metoclopramide', manufacturer: 'Square Pharmaceuticals', strength: '10mg', form: 'Tablet', category: 'Antiemetic' },
+  { id: 71, name: 'Loperamide 2mg', genericName: 'Loperamide', manufacturer: 'Incepta Pharma', strength: '2mg', form: 'Capsule', category: 'Antidiarrheal' },
+  { id: 72, name: 'Lactulose Syrup', genericName: 'Lactulose', manufacturer: 'Square Pharmaceuticals', strength: '10g/15ml', form: 'Syrup', category: 'Laxative' },
+  
+  // Antihistamines & Allergy
+  { id: 73, name: 'Cetirizine 10mg', genericName: 'Cetirizine', manufacturer: 'Square Pharmaceuticals', strength: '10mg', form: 'Tablet', category: 'Antihistamine' },
+  { id: 74, name: 'Cetirizine 5mg/5ml', genericName: 'Cetirizine', manufacturer: 'Beximco Pharma', strength: '5mg/5ml', form: 'Syrup', category: 'Antihistamine' },
+  { id: 75, name: 'Fexofenadine 120mg', genericName: 'Fexofenadine', manufacturer: 'Square Pharmaceuticals', strength: '120mg', form: 'Tablet', category: 'Antihistamine' },
+  { id: 76, name: 'Fexofenadine 180mg', genericName: 'Fexofenadine', manufacturer: 'Incepta Pharma', strength: '180mg', form: 'Tablet', category: 'Antihistamine' },
+  { id: 77, name: 'Loratadine 10mg', genericName: 'Loratadine', manufacturer: 'Renata Limited', strength: '10mg', form: 'Tablet', category: 'Antihistamine' },
+  { id: 78, name: 'Desloratadine 5mg', genericName: 'Desloratadine', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Antihistamine' },
+  { id: 79, name: 'Chlorpheniramine 4mg', genericName: 'Chlorpheniramine Maleate', manufacturer: 'Beximco Pharma', strength: '4mg', form: 'Tablet', category: 'Antihistamine' },
+  { id: 80, name: 'Promethazine 25mg', genericName: 'Promethazine', manufacturer: 'Square Pharmaceuticals', strength: '25mg', form: 'Tablet', category: 'Antihistamine' },
+  
+  // Antidiabetic Medications
+  { id: 81, name: 'Metformin 500mg', genericName: 'Metformin HCl', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 82, name: 'Metformin 850mg', genericName: 'Metformin HCl', manufacturer: 'Beximco Pharma', strength: '850mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 83, name: 'Metformin 1000mg XR', genericName: 'Metformin HCl', manufacturer: 'Incepta Pharma', strength: '1000mg', form: 'Tablet XR', category: 'Antidiabetic' },
+  { id: 84, name: 'Glimepiride 1mg', genericName: 'Glimepiride', manufacturer: 'Square Pharmaceuticals', strength: '1mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 85, name: 'Glimepiride 2mg', genericName: 'Glimepiride', manufacturer: 'Beximco Pharma', strength: '2mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 86, name: 'Glimepiride 4mg', genericName: 'Glimepiride', manufacturer: 'Renata Limited', strength: '4mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 87, name: 'Gliclazide 80mg', genericName: 'Gliclazide', manufacturer: 'Square Pharmaceuticals', strength: '80mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 88, name: 'Gliclazide 30mg MR', genericName: 'Gliclazide', manufacturer: 'Incepta Pharma', strength: '30mg', form: 'Tablet MR', category: 'Antidiabetic' },
+  { id: 89, name: 'Glibenclamide 5mg', genericName: 'Glibenclamide', manufacturer: 'Beximco Pharma', strength: '5mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 90, name: 'Sitagliptin 50mg', genericName: 'Sitagliptin', manufacturer: 'Square Pharmaceuticals', strength: '50mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 91, name: 'Sitagliptin 100mg', genericName: 'Sitagliptin', manufacturer: 'Incepta Pharma', strength: '100mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 92, name: 'Vildagliptin 50mg', genericName: 'Vildagliptin', manufacturer: 'Renata Limited', strength: '50mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 93, name: 'Pioglitazone 15mg', genericName: 'Pioglitazone', manufacturer: 'Square Pharmaceuticals', strength: '15mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 94, name: 'Pioglitazone 30mg', genericName: 'Pioglitazone', manufacturer: 'Beximco Pharma', strength: '30mg', form: 'Tablet', category: 'Antidiabetic' },
+  { id: 95, name: 'Insulin Actrapid 100IU/ml', genericName: 'Human Insulin', manufacturer: 'Novo Nordisk', strength: '100IU/ml', form: 'Injection', category: 'Antidiabetic' },
+  { id: 96, name: 'Insulin Mixtard 30/70', genericName: 'Biphasic Isophane Insulin', manufacturer: 'Novo Nordisk', strength: '100IU/ml', form: 'Injection', category: 'Antidiabetic' },
+  
+  // Antihypertensive Medications
+  { id: 97, name: 'Amlodipine 5mg', genericName: 'Amlodipine', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Antihypertensive' },
+  { id: 98, name: 'Amlodipine 10mg', genericName: 'Amlodipine', manufacturer: 'Beximco Pharma', strength: '10mg', form: 'Tablet', category: 'Antihypertensive' },
+  { id: 99, name: 'Losartan 25mg', genericName: 'Losartan Potassium', manufacturer: 'Incepta Pharma', strength: '25mg', form: 'Tablet', category: 'Antihypertensive' },
+  { id: 100, name: 'Losartan 50mg', genericName: 'Losartan Potassium', manufacturer: 'Square Pharmaceuticals', strength: '50mg', form: 'Tablet', category: 'Antihypertensive' },
+  { id: 101, name: 'Losartan 100mg', genericName: 'Losartan Potassium', manufacturer: 'Beximco Pharma', strength: '100mg', form: 'Tablet', category: 'Antihypertensive' },
+  { id: 102, name: 'Telmisartan 40mg', genericName: 'Telmisartan', manufacturer: 'Renata Limited', strength: '40mg', form: 'Tablet', category: 'Antihypertensive' },
+  { id: 103, name: 'Telmisartan 80mg', genericName: 'Telmisartan', manufacturer: 'Square Pharmaceuticals', strength: '80mg', form: 'Tablet', category: 'Antihypertensive' },
+  { id: 104, name: 'Atenolol 25mg', genericName: 'Atenolol', manufacturer: 'Beximco Pharma', strength: '25mg', form: 'Tablet', category: 'Beta Blocker' },
+  { id: 105, name: 'Atenolol 50mg', genericName: 'Atenolol', manufacturer: 'Square Pharmaceuticals', strength: '50mg', form: 'Tablet', category: 'Beta Blocker' },
+  { id: 106, name: 'Atenolol 100mg', genericName: 'Atenolol', manufacturer: 'Renata Limited', strength: '100mg', form: 'Tablet', category: 'Beta Blocker' },
+  { id: 107, name: 'Bisoprolol 2.5mg', genericName: 'Bisoprolol', manufacturer: 'Incepta Pharma', strength: '2.5mg', form: 'Tablet', category: 'Beta Blocker' },
+  { id: 108, name: 'Bisoprolol 5mg', genericName: 'Bisoprolol', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Beta Blocker' },
+  { id: 109, name: 'Carvedilol 6.25mg', genericName: 'Carvedilol', manufacturer: 'Beximco Pharma', strength: '6.25mg', form: 'Tablet', category: 'Beta Blocker' },
+  { id: 110, name: 'Carvedilol 12.5mg', genericName: 'Carvedilol', manufacturer: 'Renata Limited', strength: '12.5mg', form: 'Tablet', category: 'Beta Blocker' },
+  { id: 111, name: 'Enalapril 5mg', genericName: 'Enalapril Maleate', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'ACE Inhibitor' },
+  { id: 112, name: 'Enalapril 10mg', genericName: 'Enalapril Maleate', manufacturer: 'Incepta Pharma', strength: '10mg', form: 'Tablet', category: 'ACE Inhibitor' },
+  { id: 113, name: 'Lisinopril 5mg', genericName: 'Lisinopril', manufacturer: 'Beximco Pharma', strength: '5mg', form: 'Tablet', category: 'ACE Inhibitor' },
+  { id: 114, name: 'Lisinopril 10mg', genericName: 'Lisinopril', manufacturer: 'Square Pharmaceuticals', strength: '10mg', form: 'Tablet', category: 'ACE Inhibitor' },
+  { id: 115, name: 'Ramipril 2.5mg', genericName: 'Ramipril', manufacturer: 'Renata Limited', strength: '2.5mg', form: 'Tablet', category: 'ACE Inhibitor' },
+  { id: 116, name: 'Ramipril 5mg', genericName: 'Ramipril', manufacturer: 'Incepta Pharma', strength: '5mg', form: 'Tablet', category: 'ACE Inhibitor' },
+  { id: 117, name: 'Hydrochlorothiazide 25mg', genericName: 'Hydrochlorothiazide', manufacturer: 'Square Pharmaceuticals', strength: '25mg', form: 'Tablet', category: 'Diuretic' },
+  { id: 118, name: 'Furosemide 40mg', genericName: 'Furosemide', manufacturer: 'Beximco Pharma', strength: '40mg', form: 'Tablet', category: 'Diuretic' },
+  { id: 119, name: 'Spironolactone 25mg', genericName: 'Spironolactone', manufacturer: 'Renata Limited', strength: '25mg', form: 'Tablet', category: 'Diuretic' },
+  { id: 120, name: 'Indapamide 2.5mg', genericName: 'Indapamide', manufacturer: 'Square Pharmaceuticals', strength: '2.5mg', form: 'Tablet', category: 'Diuretic' },
+  
+  // Cholesterol & Lipid Medications
+  { id: 121, name: 'Atorvastatin 10mg', genericName: 'Atorvastatin', manufacturer: 'Square Pharmaceuticals', strength: '10mg', form: 'Tablet', category: 'Statin' },
+  { id: 122, name: 'Atorvastatin 20mg', genericName: 'Atorvastatin', manufacturer: 'Beximco Pharma', strength: '20mg', form: 'Tablet', category: 'Statin' },
+  { id: 123, name: 'Atorvastatin 40mg', genericName: 'Atorvastatin', manufacturer: 'Incepta Pharma', strength: '40mg', form: 'Tablet', category: 'Statin' },
+  { id: 124, name: 'Rosuvastatin 5mg', genericName: 'Rosuvastatin', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Statin' },
+  { id: 125, name: 'Rosuvastatin 10mg', genericName: 'Rosuvastatin', manufacturer: 'Renata Limited', strength: '10mg', form: 'Tablet', category: 'Statin' },
+  { id: 126, name: 'Rosuvastatin 20mg', genericName: 'Rosuvastatin', manufacturer: 'Beximco Pharma', strength: '20mg', form: 'Tablet', category: 'Statin' },
+  { id: 127, name: 'Simvastatin 20mg', genericName: 'Simvastatin', manufacturer: 'Incepta Pharma', strength: '20mg', form: 'Tablet', category: 'Statin' },
+  { id: 128, name: 'Fenofibrate 160mg', genericName: 'Fenofibrate', manufacturer: 'Square Pharmaceuticals', strength: '160mg', form: 'Tablet', category: 'Fibrate' },
+  
+  // Anticoagulants & Antiplatelets
+  { id: 129, name: 'Clopidogrel 75mg', genericName: 'Clopidogrel', manufacturer: 'Square Pharmaceuticals', strength: '75mg', form: 'Tablet', category: 'Antiplatelet' },
+  { id: 130, name: 'Warfarin 5mg', genericName: 'Warfarin Sodium', manufacturer: 'Beximco Pharma', strength: '5mg', form: 'Tablet', category: 'Anticoagulant' },
+  { id: 131, name: 'Rivaroxaban 10mg', genericName: 'Rivaroxaban', manufacturer: 'Renata Limited', strength: '10mg', form: 'Tablet', category: 'Anticoagulant' },
+  { id: 132, name: 'Rivaroxaban 20mg', genericName: 'Rivaroxaban', manufacturer: 'Square Pharmaceuticals', strength: '20mg', form: 'Tablet', category: 'Anticoagulant' },
+  
+  // Vitamins & Supplements
+  { id: 133, name: 'Calcium Carbonate 500mg', genericName: 'Calcium Carbonate', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'Supplement' },
+  { id: 134, name: 'Calcium + Vitamin D3', genericName: 'Calcium + Cholecalciferol', manufacturer: 'Beximco Pharma', strength: '500mg+200IU', form: 'Tablet', category: 'Supplement' },
+  { id: 135, name: 'Vitamin D3 60000 IU', genericName: 'Cholecalciferol', manufacturer: 'Renata Limited', strength: '60000IU', form: 'Capsule', category: 'Supplement' },
+  { id: 136, name: 'Multivitamin', genericName: 'Multivitamin & Minerals', manufacturer: 'Square Pharmaceuticals', strength: 'Various', form: 'Tablet', category: 'Supplement' },
+  { id: 137, name: 'Vitamin B Complex', genericName: 'B Complex', manufacturer: 'Beximco Pharma', strength: 'Various', form: 'Tablet', category: 'Supplement' },
+  { id: 138, name: 'Vitamin B12 500mcg', genericName: 'Cyanocobalamin', manufacturer: 'Incepta Pharma', strength: '500mcg', form: 'Tablet', category: 'Supplement' },
+  { id: 139, name: 'Folic Acid 5mg', genericName: 'Folic Acid', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Supplement' },
+  { id: 140, name: 'Iron + Folic Acid', genericName: 'Ferrous Sulfate + Folic Acid', manufacturer: 'Renata Limited', strength: '150mg+0.5mg', form: 'Tablet', category: 'Supplement' },
+  { id: 141, name: 'Vitamin C 500mg', genericName: 'Ascorbic Acid', manufacturer: 'Beximco Pharma', strength: '500mg', form: 'Tablet', category: 'Supplement' },
+  { id: 142, name: 'Vitamin E 400 IU', genericName: 'Tocopherol', manufacturer: 'Square Pharmaceuticals', strength: '400IU', form: 'Capsule', category: 'Supplement' },
+  { id: 143, name: 'Omega-3 Fish Oil', genericName: 'Omega-3 Fatty Acids', manufacturer: 'Incepta Pharma', strength: '1000mg', form: 'Capsule', category: 'Supplement' },
+  { id: 144, name: 'Zinc Sulfate 20mg', genericName: 'Zinc Sulfate', manufacturer: 'Renata Limited', strength: '20mg', form: 'Tablet', category: 'Supplement' },
+  
+  // Respiratory Medications
+  { id: 145, name: 'Salbutamol 2mg', genericName: 'Salbutamol', manufacturer: 'Square Pharmaceuticals', strength: '2mg', form: 'Tablet', category: 'Bronchodilator' },
+  { id: 146, name: 'Salbutamol 4mg', genericName: 'Salbutamol', manufacturer: 'Beximco Pharma', strength: '4mg', form: 'Tablet', category: 'Bronchodilator' },
+  { id: 147, name: 'Salbutamol Inhaler', genericName: 'Salbutamol', manufacturer: 'Incepta Pharma', strength: '100mcg/dose', form: 'Inhaler', category: 'Bronchodilator' },
+  { id: 148, name: 'Montelukast 5mg', genericName: 'Montelukast', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Respiratory' },
+  { id: 149, name: 'Montelukast 10mg', genericName: 'Montelukast', manufacturer: 'Renata Limited', strength: '10mg', form: 'Tablet', category: 'Respiratory' },
+  { id: 150, name: 'Theophylline 200mg SR', genericName: 'Theophylline', manufacturer: 'Beximco Pharma', strength: '200mg', form: 'Tablet SR', category: 'Bronchodilator' },
+  { id: 151, name: 'Ambroxol 30mg', genericName: 'Ambroxol', manufacturer: 'Square Pharmaceuticals', strength: '30mg', form: 'Tablet', category: 'Mucolytic' },
+  { id: 152, name: 'Carbocisteine 375mg', genericName: 'Carbocisteine', manufacturer: 'Incepta Pharma', strength: '375mg', form: 'Capsule', category: 'Mucolytic' },
+  
+  // Antidepressants & Psychiatric Medications
+  { id: 153, name: 'Fluoxetine 20mg', genericName: 'Fluoxetine', manufacturer: 'Square Pharmaceuticals', strength: '20mg', form: 'Capsule', category: 'Antidepressant' },
+  { id: 154, name: 'Sertraline 50mg', genericName: 'Sertraline', manufacturer: 'Beximco Pharma', strength: '50mg', form: 'Tablet', category: 'Antidepressant' },
+  { id: 155, name: 'Sertraline 100mg', genericName: 'Sertraline', manufacturer: 'Incepta Pharma', strength: '100mg', form: 'Tablet', category: 'Antidepressant' },
+  { id: 156, name: 'Escitalopram 10mg', genericName: 'Escitalopram', manufacturer: 'Square Pharmaceuticals', strength: '10mg', form: 'Tablet', category: 'Antidepressant' },
+  { id: 157, name: 'Escitalopram 20mg', genericName: 'Escitalopram', manufacturer: 'Renata Limited', strength: '20mg', form: 'Tablet', category: 'Antidepressant' },
+  { id: 158, name: 'Amitriptyline 25mg', genericName: 'Amitriptyline', manufacturer: 'Beximco Pharma', strength: '25mg', form: 'Tablet', category: 'Antidepressant' },
+  { id: 159, name: 'Clonazepam 0.25mg', genericName: 'Clonazepam', manufacturer: 'Square Pharmaceuticals', strength: '0.25mg', form: 'Tablet', category: 'Anxiolytic' },
+  { id: 160, name: 'Clonazepam 0.5mg', genericName: 'Clonazepam', manufacturer: 'Incepta Pharma', strength: '0.5mg', form: 'Tablet', category: 'Anxiolytic' },
+  { id: 161, name: 'Alprazolam 0.25mg', genericName: 'Alprazolam', manufacturer: 'Beximco Pharma', strength: '0.25mg', form: 'Tablet', category: 'Anxiolytic' },
+  { id: 162, name: 'Alprazolam 0.5mg', genericName: 'Alprazolam', manufacturer: 'Renata Limited', strength: '0.5mg', form: 'Tablet', category: 'Anxiolytic' },
+  { id: 163, name: 'Risperidone 2mg', genericName: 'Risperidone', manufacturer: 'Square Pharmaceuticals', strength: '2mg', form: 'Tablet', category: 'Antipsychotic' },
+  { id: 164, name: 'Olanzapine 5mg', genericName: 'Olanzapine', manufacturer: 'Incepta Pharma', strength: '5mg', form: 'Tablet', category: 'Antipsychotic' },
+  
+  // Anticonvulsants
+  { id: 165, name: 'Gabapentin 300mg', genericName: 'Gabapentin', manufacturer: 'Square Pharmaceuticals', strength: '300mg', form: 'Capsule', category: 'Anticonvulsant' },
+  { id: 166, name: 'Pregabalin 75mg', genericName: 'Pregabalin', manufacturer: 'Beximco Pharma', strength: '75mg', form: 'Capsule', category: 'Anticonvulsant' },
+  { id: 167, name: 'Carbamazepine 200mg', genericName: 'Carbamazepine', manufacturer: 'Renata Limited', strength: '200mg', form: 'Tablet', category: 'Anticonvulsant' },
+  { id: 168, name: 'Valproic Acid 500mg', genericName: 'Valproic Acid', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Tablet', category: 'Anticonvulsant' },
+  { id: 169, name: 'Levetiracetam 500mg', genericName: 'Levetiracetam', manufacturer: 'Incepta Pharma', strength: '500mg', form: 'Tablet', category: 'Anticonvulsant' },
+  
+  // Antifungal Medications
+  { id: 170, name: 'Fluconazole 50mg', genericName: 'Fluconazole', manufacturer: 'Square Pharmaceuticals', strength: '50mg', form: 'Capsule', category: 'Antifungal' },
+  { id: 171, name: 'Fluconazole 150mg', genericName: 'Fluconazole', manufacturer: 'Beximco Pharma', strength: '150mg', form: 'Capsule', category: 'Antifungal' },
+  { id: 172, name: 'Itraconazole 100mg', genericName: 'Itraconazole', manufacturer: 'Renata Limited', strength: '100mg', form: 'Capsule', category: 'Antifungal' },
+  { id: 173, name: 'Terbinafine 250mg', genericName: 'Terbinafine', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Tablet', category: 'Antifungal' },
+  { id: 174, name: 'Ketoconazole 200mg', genericName: 'Ketoconazole', manufacturer: 'Incepta Pharma', strength: '200mg', form: 'Tablet', category: 'Antifungal' },
+  
+  // Antiviral Medications
+  { id: 175, name: 'Acyclovir 200mg', genericName: 'Acyclovir', manufacturer: 'Square Pharmaceuticals', strength: '200mg', form: 'Tablet', category: 'Antiviral' },
+  { id: 176, name: 'Acyclovir 400mg', genericName: 'Acyclovir', manufacturer: 'Beximco Pharma', strength: '400mg', form: 'Tablet', category: 'Antiviral' },
+  { id: 177, name: 'Valacyclovir 500mg', genericName: 'Valacyclovir', manufacturer: 'Renata Limited', strength: '500mg', form: 'Tablet', category: 'Antiviral' },
+  
+  // Thyroid Medications
+  { id: 178, name: 'Levothyroxine 25mcg', genericName: 'Levothyroxine', manufacturer: 'Square Pharmaceuticals', strength: '25mcg', form: 'Tablet', category: 'Thyroid' },
+  { id: 179, name: 'Levothyroxine 50mcg', genericName: 'Levothyroxine', manufacturer: 'Beximco Pharma', strength: '50mcg', form: 'Tablet', category: 'Thyroid' },
+  { id: 180, name: 'Levothyroxine 100mcg', genericName: 'Levothyroxine', manufacturer: 'Incepta Pharma', strength: '100mcg', form: 'Tablet', category: 'Thyroid' },
+  { id: 181, name: 'Carbimazole 5mg', genericName: 'Carbimazole', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Thyroid' },
+  
+  // Steroids
+  { id: 182, name: 'Prednisolone 5mg', genericName: 'Prednisolone', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Steroid' },
+  { id: 183, name: 'Prednisolone 10mg', genericName: 'Prednisolone', manufacturer: 'Beximco Pharma', strength: '10mg', form: 'Tablet', category: 'Steroid' },
+  { id: 184, name: 'Dexamethasone 0.5mg', genericName: 'Dexamethasone', manufacturer: 'Renata Limited', strength: '0.5mg', form: 'Tablet', category: 'Steroid' },
+  { id: 185, name: 'Methylprednisolone 4mg', genericName: 'Methylprednisolone', manufacturer: 'Square Pharmaceuticals', strength: '4mg', form: 'Tablet', category: 'Steroid' },
+  
+  // Miscellaneous Common Medicines
+  { id: 186, name: 'Hydroxychloroquine 200mg', genericName: 'Hydroxychloroquine', manufacturer: 'Beximco Pharma', strength: '200mg', form: 'Tablet', category: 'Antimalarial' },
+  { id: 187, name: 'Chloroquine 250mg', genericName: 'Chloroquine Phosphate', manufacturer: 'Square Pharmaceuticals', strength: '250mg', form: 'Tablet', category: 'Antimalarial' },
+  { id: 188, name: 'Allopurinol 100mg', genericName: 'Allopurinol', manufacturer: 'Incepta Pharma', strength: '100mg', form: 'Tablet', category: 'Antigout' },
+  { id: 189, name: 'Allopurinol 300mg', genericName: 'Allopurinol', manufacturer: 'Square Pharmaceuticals', strength: '300mg', form: 'Tablet', category: 'Antigout' },
+  { id: 190, name: 'Sildenafil 50mg', genericName: 'Sildenafil Citrate', manufacturer: 'Square Pharmaceuticals', strength: '50mg', form: 'Tablet', category: 'ED Treatment' },
+  { id: 191, name: 'Tamsulosin 0.4mg', genericName: 'Tamsulosin', manufacturer: 'Beximco Pharma', strength: '0.4mg', form: 'Capsule', category: 'BPH Treatment' },
+  { id: 192, name: 'Finasteride 5mg', genericName: 'Finasteride', manufacturer: 'Renata Limited', strength: '5mg', form: 'Tablet', category: 'BPH Treatment' },
+  { id: 193, name: 'Mebendazole 100mg', genericName: 'Mebendazole', manufacturer: 'Square Pharmaceuticals', strength: '100mg', form: 'Tablet', category: 'Anthelmintic' },
+  { id: 194, name: 'Albendazole 400mg', genericName: 'Albendazole', manufacturer: 'Beximco Pharma', strength: '400mg', form: 'Tablet', category: 'Anthelmintic' },
+  { id: 195, name: 'Oxybutynin 5mg', genericName: 'Oxybutynin', manufacturer: 'Square Pharmaceuticals', strength: '5mg', form: 'Tablet', category: 'Urological' },
+  { id: 196, name: 'Baclofen 10mg', genericName: 'Baclofen', manufacturer: 'Incepta Pharma', strength: '10mg', form: 'Tablet', category: 'Muscle Relaxant' },
+  { id: 197, name: 'Tizanidine 2mg', genericName: 'Tizanidine', manufacturer: 'Beximco Pharma', strength: '2mg', form: 'Tablet', category: 'Muscle Relaxant' },
+  { id: 198, name: 'Cyclobenzaprine 10mg', genericName: 'Cyclobenzaprine', manufacturer: 'Square Pharmaceuticals', strength: '10mg', form: 'Tablet', category: 'Muscle Relaxant' },
+  { id: 199, name: 'Mefenamic Acid 250mg', genericName: 'Mefenamic Acid', manufacturer: 'Renata Limited', strength: '250mg', form: 'Capsule', category: 'NSAID' },
+  { id: 200, name: 'Mefenamic Acid 500mg', genericName: 'Mefenamic Acid', manufacturer: 'Square Pharmaceuticals', strength: '500mg', form: 'Capsule', category: 'NSAID' },
+];
+
+module.exports = bangladeshMedicines;

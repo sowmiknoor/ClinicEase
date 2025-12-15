@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import MedicineAutocomplete from './components/MedicineAutocomplete';
 import './CreateMedicalRecord.css';
 
 export default function CreateMedicalRecord() {
@@ -68,8 +69,6 @@ export default function CreateMedicalRecord() {
         notes: formData.notes || ''
       };
 
-      console.log('Submitting medical record:', payload);
-      
       const response = await fetch('/api/medical-records/create', {
         method: 'POST',
         headers: { 
@@ -120,6 +119,17 @@ export default function CreateMedicalRecord() {
   const updateMedication = (index, field, value) => {
     const newMedications = [...formData.medications];
     newMedications[index][field] = value;
+    setFormData({ ...formData, medications: newMedications });
+  };
+
+  const handleMedicineSelect = (index, medicine) => {
+    const newMedications = [...formData.medications];
+    newMedications[index] = {
+      ...newMedications[index],
+      name: medicine.name,
+      // Auto-fill strength as dosage if available
+      dosage: medicine.strength || newMedications[index].dosage
+    };
     setFormData({ ...formData, medications: newMedications });
   };
 
@@ -240,11 +250,12 @@ export default function CreateMedicalRecord() {
               <div className="medication-fields">
                 <div className="form-group">
                   <label>Medicine Name</label>
-                  <input
-                    type="text"
+                  <MedicineAutocomplete
                     value={med.name}
-                    onChange={(e) => updateMedication(index, 'name', e.target.value)}
-                    placeholder="e.g., Amoxicillin"
+                    onChange={(value) => updateMedication(index, 'name', value)}
+                    onSelect={(medicine) => handleMedicineSelect(index, medicine)}
+                    placeholder="Start typing medicine name..."
+                    index={index}
                   />
                 </div>
 

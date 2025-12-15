@@ -32,6 +32,9 @@ app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/home-visits", require("./routes/homeVisitRoutes"));
 app.use("/api/doctors", require("./routes/doctorRoutes"));
 app.use("/api/forum", require("./routes/forumRoutes"));
+app.use("/api/medicines", require("./routes/medicineRoutes"));
+app.use("/api/health-tips", require("./routes/healthTipRoutes"));
+app.use("/api/research-papers", require("./routes/researchPaperRoutes"));
 
 // Example router
 const exampleRouter = require('./routes/example');
