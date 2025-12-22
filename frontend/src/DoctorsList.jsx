@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './DoctorsList.css';
 
 export default function DoctorsList({ onViewProfile }) {
+  const { t } = useLanguage();
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [specialists, setSpecialists] = useState([]);

@@ -1,33 +1,65 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './MedicationReminder.css';
 
 export default function MedicationReminder() {
+  const { t } = useLanguage();
   const [medications, setMedications] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('active');
-  const [adherenceReport, setAdherenceReport] = useState(null);
-  const [selectedMedication, setSelectedMedication] = useState(null);
+  const [medicineSearch, setMedicineSearch] = useState('');
+  const [medicineResults, setMedicineResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   const [formData, setFormData] = useState({
     medicationName: '',
     dosage: '',
     frequency: 'Once daily',
+    timesPerDay: 1,
     reminderTimes: ['08:00'],
     startDate: '',
     endDate: '',
     prescribedBy: '',
     reason: '',
-    sideEffects: [],
     notes: ''
   });
 
   const userId = localStorage.getItem('userId');
 
-  // Fetch medications
   useEffect(() => {
     fetchMedications();
   }, []);
+
+  // Search medicines from database
+  const searchMedicines = async (query) => {
+    if (query.length < 2) {
+      setMedicineResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/medicines/search?q=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      if (data.ok && data.medicines) {
+        setMedicineResults(data.medicines.slice(0, 10)); // Show top 10 results
+        setShowSearchResults(true);
+      }
+    } catch (err) {
+      console.error('Error searching medicines:', err);
+    }
+  };
+
+  const selectMedicine = (medicine) => {
+    setFormData(prev => ({
+      ...prev,
+      medicationName: medicine.name,
+      dosage: medicine.strength || ''
+    }));
+    setMedicineSearch(medicine.name);
+    setShowSearchResults(false);
+  };
 
   const fetchMedications = async () => {
     try {
@@ -46,27 +78,32 @@ export default function MedicationReminder() {
     }
   };
 
-  const fetchAdherenceReport = async () => {
-    try {
-      const response = await fetch('/api/medications/report/adherence', {
-        headers: { 'x-user-id': userId }
-      });
-      const data = await response.json();
-      if (data.ok) {
-        setAdherenceReport(data.report);
-        setActiveTab('report');
-      }
-    } catch (err) {
-      console.error('Error fetching report:', err);
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+
+    // Update reminder times based on frequency
+    if (name === 'timesPerDay') {
+      const times = parseInt(value) || 1;
+      const defaultTimes = generateDefaultTimes(times);
+      setFormData(prev => ({
+        ...prev,
+        reminderTimes: defaultTimes
+      }));
+    }
+  };
+
+  const generateDefaultTimes = (count) => {
+    const times = [];
+    const hoursGap = Math.floor(24 / count);
+    for (let i = 0; i < count; i++) {
+      const hour = (8 + (i * hoursGap)) % 24;
+      times.push(`${hour.toString().padStart(2, '0')}:00`);
+    }
+    return times;
   };
 
   const handleRemindersChange = (index, value) => {
@@ -81,19 +118,29 @@ export default function MedicationReminder() {
   const addReminderTime = () => {
     setFormData(prev => ({
       ...prev,
-      reminderTimes: [...prev.reminderTimes, '12:00']
+      reminderTimes: [...prev.reminderTimes, '12:00'],
+      timesPerDay: prev.reminderTimes.length + 1
     }));
   };
 
   const removeReminderTime = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      reminderTimes: prev.reminderTimes.filter((_, i) => i !== index)
-    }));
+    if (formData.reminderTimes.length > 1) {
+      setFormData(prev => ({
+        ...prev,
+        reminderTimes: prev.reminderTimes.filter((_, i) => i !== index),
+        timesPerDay: prev.reminderTimes.length - 1
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!formData.medicationName || !formData.startDate || !formData.endDate) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
     try {
       const response = await fetch('/api/medications/add', {
         method: 'POST',
@@ -101,7 +148,12 @@ export default function MedicationReminder() {
           'Content-Type': 'application/json',
           'x-user-id': userId
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          taken: 0,
+          missed: 0,
+          isActive: true
+        })
       });
       const data = await response.json();
       if (data.ok) {
@@ -110,14 +162,15 @@ export default function MedicationReminder() {
           medicationName: '',
           dosage: '',
           frequency: 'Once daily',
+          timesPerDay: 1,
           reminderTimes: ['08:00'],
           startDate: '',
           endDate: '',
           prescribedBy: '',
           reason: '',
-          sideEffects: [],
           notes: ''
         });
+        setMedicineSearch('');
         setShowForm(false);
         fetchMedications();
       } else {
@@ -137,11 +190,10 @@ export default function MedicationReminder() {
           'Content-Type': 'application/json',
           'x-user-id': userId
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({ timestamp: new Date() })
       });
       const data = await response.json();
       if (data.ok) {
-        alert('Marked as taken!');
         fetchMedications();
       }
     } catch (err) {
@@ -157,11 +209,10 @@ export default function MedicationReminder() {
           'Content-Type': 'application/json',
           'x-user-id': userId
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({ timestamp: new Date() })
       });
       const data = await response.json();
       if (data.ok) {
-        alert('Marked as missed!');
         fetchMedications();
       }
     } catch (err) {
@@ -190,22 +241,29 @@ export default function MedicationReminder() {
     }
   };
 
-  const deleteMedication = async (medicationId) => {
-    if (window.confirm('Are you sure you want to delete this medication?')) {
-      try {
-        const response = await fetch(`/api/medications/${medicationId}`, {
-          method: 'DELETE',
-          headers: { 'x-user-id': userId }
-        });
-        const data = await response.json();
-        if (data.ok) {
-          alert('Medication deleted!');
-          fetchMedications();
-        }
-      } catch (err) {
-        console.error('Error:', err);
-      }
-    }
+  // Calculate adherence percentage
+  const calculateAdherence = (med) => {
+    const total = (med.taken || 0) + (med.missed || 0);
+    if (total === 0) return 0;
+    return Math.round((med.taken / total) * 100);
+  };
+
+  // Calculate expected doses
+  const calculateExpectedDoses = (med) => {
+    const start = new Date(med.startDate);
+    const now = new Date();
+    const end = new Date(med.endDate);
+    
+    const currentDate = now < end ? now : end;
+    const daysPassed = Math.ceil((currentDate - start) / (1000 * 60 * 60 * 24)) + 1;
+    
+    return daysPassed * (med.timesPerDay || med.reminderTimes?.length || 1);
+  };
+
+  const getAdherenceColor = (percentage) => {
+    if (percentage >= 90) return '#10b981'; // Green
+    if (percentage >= 70) return '#f59e0b'; // Yellow
+    return '#ef4444'; // Red
   };
 
   const activeMeds = medications.filter(m => m.isActive);
@@ -213,137 +271,108 @@ export default function MedicationReminder() {
 
   return (
     <div className="medication-reminder-container">
-      <h1>💊 Medication Reminder System</h1>
+      <div className="medication-header">
+        <h1>💊 Medication Tracker</h1>
+        <button 
+          className="add-medication-btn"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? '✕ Cancel' : '+ Add Medication'}
+        </button>
+      </div>
 
       <div className="tabs">
         <button
           className={`tab-btn ${activeTab === 'active' ? 'active' : ''}`}
           onClick={() => setActiveTab('active')}
         >
-          Active Medications
+          Active Medications ({activeMeds.length})
         </button>
         <button
           className={`tab-btn ${activeTab === 'inactive' ? 'active' : ''}`}
           onClick={() => setActiveTab('inactive')}
         >
-          Inactive ({inactiveMeds.length})
-        </button>
-        <button
-          className={`tab-btn ${activeTab === 'report' ? 'active' : ''}`}
-          onClick={fetchAdherenceReport}
-        >
-          Adherence Report
+          Deactivated ({inactiveMeds.length})
         </button>
       </div>
 
-      {/* Online Medicine Store Banner */}
-      <div style={{
-        backgroundColor: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        padding: '20px',
-        borderRadius: '12px',
-        marginBottom: '24px',
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
-        flexWrap: 'wrap',
-        gap: '16px'
-      }}>
-        <div style={{ flex: '1', minWidth: '250px' }}>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', fontWeight: '700' }}>
-            🛒 Order Your Medicines Online
-          </h3>
-          <p style={{ margin: '0', opacity: '0.95', fontSize: '14px' }}>
-            Get your prescribed medications delivered to your doorstep with Arogga - Bangladesh's trusted online pharmacy
-          </p>
-        </div>
-        <a 
-          href="https://www.arogga.com/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          style={{
-            backgroundColor: 'white',
-            color: '#059669',
-            padding: '12px 28px',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            fontWeight: '700',
-            fontSize: '15px',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-            whiteSpace: 'nowrap'
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = 'scale(1.05)';
-            e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = 'scale(1)';
-            e.target.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
-          }}
-        >
-          Visit Arogga Store →
-        </a>
-      </div>
-
-      {activeTab === 'active' && (
-        <div className="tab-content">
-          <button className="add-btn" onClick={() => setShowForm(!showForm)}>
-            {showForm ? '✕ Cancel' : '+ Add Medication'}
-          </button>
-
-          {showForm && (
-            <form className="medication-form" onSubmit={handleSubmit}>
-              <div className="form-row">
+      {/* Add Medication Form */}
+      {showForm && (
+        <div className="medication-form-card">
+          <h2>Add New Medication</h2>
+          <form onSubmit={handleSubmit} className="medication-form">
+            {/* Medicine Search with Autocomplete */}
+            <div className="form-group-full">
+              <label>Medicine Name *</label>
+              <div className="medicine-search-wrapper">
                 <input
                   type="text"
-                  name="medicationName"
-                  placeholder="Medication Name *"
-                  value={formData.medicationName}
-                  onChange={handleInputChange}
+                  value={medicineSearch}
+                  onChange={(e) => {
+                    setMedicineSearch(e.target.value);
+                    searchMedicines(e.target.value);
+                    setFormData(prev => ({ ...prev, medicationName: e.target.value }));
+                  }}
+                  placeholder="Search medicine (e.g., Napa, Paracetamol)"
                   required
+                  autoComplete="off"
                 />
+                {showSearchResults && medicineResults.length > 0 && (
+                  <div className="medicine-search-results">
+                    {medicineResults.map((medicine, index) => (
+                      <div
+                        key={index}
+                        className="medicine-result-item"
+                        onClick={() => selectMedicine(medicine)}
+                      >
+                        <div className="medicine-result-name">{medicine.name}</div>
+                        <div className="medicine-result-details">
+                          {medicine.strength && <span>{medicine.strength}</span>}
+                          {medicine.genericName && <span className="generic">({medicine.genericName})</span>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Dosage (e.g., 500mg) *</label>
                 <input
                   type="text"
                   name="dosage"
-                  placeholder="Dosage (e.g., 500mg) *"
                   value={formData.dosage}
                   onChange={handleInputChange}
+                  placeholder="500mg"
                   required
                 />
               </div>
 
-              <div className="form-row">
+              <div className="form-group">
+                <label>Times Per Day *</label>
                 <select
-                  name="frequency"
-                  value={formData.frequency}
+                  name="timesPerDay"
+                  value={formData.timesPerDay}
                   onChange={handleInputChange}
                   required
                 >
-                  <option>Once daily</option>
-                  <option>Twice daily</option>
-                  <option>Thrice daily</option>
-                  <option>Every 4 hours</option>
-                  <option>Every 6 hours</option>
-                  <option>Every 8 hours</option>
-                  <option>Every 12 hours</option>
-                  <option>As needed</option>
+                  <option value="1">Once daily</option>
+                  <option value="2">Twice daily</option>
+                  <option value="3">Three times daily</option>
+                  <option value="4">Four times daily</option>
+                  <option value="6">Six times daily</option>
                 </select>
-                <input
-                  type="date"
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleInputChange}
-                  required
-                />
               </div>
+            </div>
 
-              <div className="reminder-times">
-                <label>Reminder Times *</label>
+            {/* Reminder Times */}
+            <div className="form-group-full">
+              <label>Reminder Times *</label>
+              <div className="reminder-times-list">
                 {formData.reminderTimes.map((time, index) => (
-                  <div key={index} className="time-input-group">
+                  <div key={index} className="reminder-time-input">
                     <input
                       type="time"
                       value={time}
@@ -353,8 +382,8 @@ export default function MedicationReminder() {
                     {formData.reminderTimes.length > 1 && (
                       <button
                         type="button"
-                        className="remove-time-btn"
                         onClick={() => removeReminderTime(index)}
+                        className="remove-time-btn"
                       >
                         ✕
                       </button>
@@ -363,187 +392,244 @@ export default function MedicationReminder() {
                 ))}
                 <button
                   type="button"
-                  className="add-time-btn"
                   onClick={addReminderTime}
+                  className="add-time-btn"
                 >
                   + Add Time
                 </button>
               </div>
+            </div>
 
-              <div className="form-row">
+            <div className="form-row">
+              <div className="form-group">
+                <label>Start Date *</label>
                 <input
                   type="date"
-                  name="endDate"
-                  placeholder="End Date (Optional)"
-                  value={formData.endDate}
+                  name="startDate"
+                  value={formData.startDate}
                   onChange={handleInputChange}
-                />
-                <input
-                  type="text"
-                  name="prescribedBy"
-                  placeholder="Prescribed By"
-                  value={formData.prescribedBy}
-                  onChange={handleInputChange}
+                  required
                 />
               </div>
 
-              <textarea
-                name="reason"
-                placeholder="Reason for medication"
-                value={formData.reason}
-                onChange={handleInputChange}
-                rows="2"
-              />
+              <div className="form-group">
+                <label>End Date *</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            </div>
 
+            <div className="form-row">
+              <div className="form-group">
+                <label>Prescribed By</label>
+                <input
+                  type="text"
+                  name="prescribedBy"
+                  value={formData.prescribedBy}
+                  onChange={handleInputChange}
+                  placeholder="Dr. Smith"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Reason for medication</label>
+                <input
+                  type="text"
+                  name="reason"
+                  value={formData.reason}
+                  onChange={handleInputChange}
+                  placeholder="Fever, Pain, etc."
+                />
+              </div>
+            </div>
+
+            <div className="form-group-full">
+              <label>Additional notes</label>
               <textarea
                 name="notes"
-                placeholder="Additional notes"
                 value={formData.notes}
                 onChange={handleInputChange}
-                rows="2"
+                placeholder="Take with food, avoid alcohol, etc."
+                rows="3"
               />
+            </div>
 
-              <button type="submit" className="submit-btn">
-                Save Medication
-              </button>
-            </form>
-          )}
+            <button type="submit" className="save-medication-btn">
+              💾 Save Medication
+            </button>
+          </form>
+        </div>
+      )}
 
+      {/* Active Medications List */}
+      {activeTab === 'active' && (
+        <div className="medications-grid">
           {loading ? (
-            <p className="loading">Loading medications...</p>
-          ) : activeMeds.length > 0 ? (
-            <div className="medications-grid">
-              {activeMeds.map(med => (
+            <p>Loading medications...</p>
+          ) : activeMeds.length === 0 ? (
+            <div className="empty-state">
+              <p>No active medications found.</p>
+              <p>Click "Add Medication" to get started!</p>
+            </div>
+          ) : (
+            activeMeds.map((med) => {
+              const adherence = calculateAdherence(med);
+              const expected = calculateExpectedDoses(med);
+              const actual = (med.taken || 0) + (med.missed || 0);
+              
+              return (
                 <div key={med._id} className="medication-card">
-                  <div className="med-header">
+                  <div className="medication-card-header">
                     <h3>{med.medicationName}</h3>
-                    <span className="badge">{med.frequency}</span>
+                    <span className="dosage-badge">{med.dosage}</span>
                   </div>
-                  <div className="med-details">
-                    <p><strong>Dosage:</strong> {med.dosage}</p>
-                    <p><strong>Times:</strong> {med.reminderTimes.join(', ')}</p>
+
+                  <div className="medication-details">
+                    <div className="detail-row">
+                      <span className="label">Schedule:</span>
+                      <span className="value">{med.timesPerDay || med.reminderTimes?.length} times/day</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="label">Times:</span>
+                      <span className="value">{med.reminderTimes?.join(', ')}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="label">Duration:</span>
+                      <span className="value">
+                        {new Date(med.startDate).toLocaleDateString()} - {new Date(med.endDate).toLocaleDateString()}
+                      </span>
+                    </div>
                     {med.prescribedBy && (
-                      <p><strong>Prescribed by:</strong> {med.prescribedBy}</p>
+                      <div className="detail-row">
+                        <span className="label">Prescribed by:</span>
+                        <span className="value">{med.prescribedBy}</span>
+                      </div>
                     )}
                     {med.reason && (
-                      <p><strong>Reason:</strong> {med.reason}</p>
+                      <div className="detail-row">
+                        <span className="label">Reason:</span>
+                        <span className="value">{med.reason}</span>
+                      </div>
                     )}
-                    <p className="start-date">
-                      <strong>Started:</strong> {new Date(med.startDate).toLocaleDateString()}
-                    </p>
                   </div>
-                  <div className="med-actions">
-                    <button
-                      className="action-btn taken"
+
+                  {/* Tracking Stats */}
+                  <div className="tracking-stats">
+                    <div className="stat-box taken">
+                      <div className="stat-value">{med.taken || 0}</div>
+                      <div className="stat-label">Taken</div>
+                    </div>
+                    <div className="stat-box missed">
+                      <div className="stat-value">{med.missed || 0}</div>
+                      <div className="stat-label">Missed</div>
+                    </div>
+                    <div className="stat-box expected">
+                      <div className="stat-value">{expected}</div>
+                      <div className="stat-label">Expected</div>
+                    </div>
+                  </div>
+
+                  {/* Adherence Progress */}
+                  <div className="adherence-section">
+                    <div className="adherence-header">
+                      <span>Adherence Rate</span>
+                      <span className="adherence-percentage" style={{ color: getAdherenceColor(adherence) }}>
+                        {adherence}%
+                      </span>
+                    </div>
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill"
+                        style={{ 
+                          width: `${adherence}%`,
+                          backgroundColor: getAdherenceColor(adherence)
+                        }}
+                      />
+                    </div>
+                    <div className="adherence-message">
+                      {adherence >= 90 && <span className="excellent">🎉 Excellent adherence!</span>}
+                      {adherence >= 70 && adherence < 90 && <span className="good">👍 Good adherence</span>}
+                      {adherence < 70 && <span className="needs-improvement">⚠️ Needs improvement</span>}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="medication-actions">
+                    <button 
+                      className="action-btn taken-btn"
                       onClick={() => markAsTaken(med._id)}
                     >
                       ✓ Taken
                     </button>
-                    <button
-                      className="action-btn missed"
+                    <button 
+                      className="action-btn missed-btn"
                       onClick={() => markAsMissed(med._id)}
                     >
                       ✗ Missed
                     </button>
-                    <a
-                      href={`https://www.arogga.com/search?q=${encodeURIComponent(med.medicationName)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="action-btn order-online"
-                      style={{
-                        backgroundColor: '#10b981',
-                        color: 'white',
-                        textDecoration: 'none',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '4px'
-                      }}
-                    >
-                      🛒 Order
-                    </a>
-                    <button
-                      className="action-btn deactivate"
+                    <button 
+                      className="action-btn deactivate-btn"
                       onClick={() => deactivateMedication(med._id)}
                     >
-                      Deactivate
+                      🚫 Deactivate
                     </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="no-data">No active medications. Add one to get started!</p>
+              );
+            })
           )}
         </div>
       )}
 
+      {/* Inactive Medications */}
       {activeTab === 'inactive' && (
-        <div className="tab-content">
-          {inactiveMeds.length > 0 ? (
-            <div className="medications-grid">
-              {inactiveMeds.map(med => (
-                <div key={med._id} className="medication-card inactive">
-                  <div className="med-header">
-                    <h3>{med.medicationName}</h3>
-                    <span className="badge inactive">Inactive</span>
-                  </div>
-                  <div className="med-details">
-                    <p><strong>Dosage:</strong> {med.dosage}</p>
-                    <p><strong>Frequency:</strong> {med.frequency}</p>
-                  </div>
-                  <div className="med-actions">
-                    <button
-                      className="action-btn delete"
-                      onClick={() => deleteMedication(med._id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+        <div className="medications-grid">
+          {inactiveMeds.length === 0 ? (
+            <div className="empty-state">
+              <p>No deactivated medications.</p>
             </div>
           ) : (
-            <p className="no-data">No inactive medications.</p>
-          )}
-        </div>
-      )}
-
-      {activeTab === 'report' && adherenceReport && (
-        <div className="tab-content">
-          <div className="adherence-report">
-            <h2>Medication Adherence Report</h2>
-            <div className="report-grid">
-              {adherenceReport.map(med => (
-                <div key={med.medicationId} className="report-card">
-                  <h3>{med.medicationName}</h3>
-                  <p className="dosage">{med.dosage}</p>
-                  <div className="adherence-stats">
-                    <div className="stat">
-                      <span className="label">Total Records:</span>
-                      <span className="value">{med.totalRecords}</span>
-                    </div>
-                    <div className="stat taken">
-                      <span className="label">✓ Taken:</span>
-                      <span className="value">{med.taken}</span>
-                    </div>
-                    <div className="stat missed">
-                      <span className="label">✗ Missed:</span>
-                      <span className="value">{med.missed}</span>
-                    </div>
-                    <div className="stat skipped">
-                      <span className="label">⊘ Skipped:</span>
-                      <span className="value">{med.skipped}</span>
-                    </div>
+            inactiveMeds.map((med) => {
+              const adherence = calculateAdherence(med);
+              
+              return (
+                <div key={med._id} className="medication-card inactive">
+                  <div className="medication-card-header">
+                    <h3>{med.medicationName}</h3>
+                    <span className="status-badge inactive">Deactivated</span>
                   </div>
-                  <div className="adherence-rate">
-                    <span className="rate">{med.adherenceRate}</span>
-                    <span className="label">Adherence Rate</span>
+
+                  <div className="medication-details">
+                    <div className="detail-row">
+                      <span className="label">Dosage:</span>
+                      <span className="value">{med.dosage}</span>
+                    </div>
+                    <div className="detail-row">
+                      <span className="label">Final Adherence:</span>
+                      <span className="value" style={{ color: getAdherenceColor(adherence) }}>
+                        {adherence}%
+                      </span>
+                    </div>
+                    <div className="tracking-stats small">
+                      <div className="stat-box">
+                        <span className="stat-value">{med.taken || 0}</span>
+                        <span className="stat-label">Taken</span>
+                      </div>
+                      <div className="stat-box">
+                        <span className="stat-value">{med.missed || 0}</span>
+                        <span className="stat-label">Missed</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              );
+            })
+          )}
         </div>
       )}
     </div>

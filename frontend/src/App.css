@@ -1,2 +1,36 @@
 /* App.css is minimal - layout handled by App.jsx */
 
+/* Bengali language support */
+html[lang="bn"] {
+  font-family: 'Noto Sans Bengali', 'Kalpurush', 'SolaimanLipi', system-ui, sans-serif;
+}
+
+html[lang="bn"] body {
+  font-family: 'Noto Sans Bengali', 'Kalpurush', 'SolaimanLipi', system-ui, sans-serif;
+  line-height: 1.7;
+}
+
+/* Ensure proper rendering for Bengali text */
+html[lang="bn"] * {
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* Adjust spacing for Bengali characters */
+html[lang="bn"] h1, 
+html[lang="bn"] h2, 
+html[lang="bn"] h3, 
+html[lang="bn"] h4 {
+  letter-spacing: 0.02em;
+}
+
+/* Sidebar language toggle positioning */
+.sidebar-content .language-toggle {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-content .language-toggle .language-toggle-btn {
+  width: 100%;
+  justify-content: center;
+}

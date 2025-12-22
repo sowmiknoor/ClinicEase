@@ -282,22 +282,23 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   padding-bottom: 16px;
   border-bottom: 2px solid #f1f5f9;
 }
 
-.visit-header h3 {
-  font-size: 18px;
+.visit-date-time h3 {
+  font-size: 20px;
   font-weight: 800;
   color: #0f172a;
-  margin: 0 0 4px 0;
+  margin: 0 0 6px 0;
 }
 
 .visit-time {
   font-size: 14px;
   color: #64748b;
   margin: 0;
+  font-weight: 500;
 }
 
 .status-badge {
@@ -334,14 +335,86 @@
   color: #1e40af;
 }
 
-.visit-info {
-  margin-bottom: 16px;
+.visit-person-info {
+  margin-bottom: 20px;
 }
 
-.visit-info p {
+.person-card {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #bae6fd;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.person-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+
+.person-icon {
+  font-size: 48px;
+  background: white;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+
+.person-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.person-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person-email,
+.person-phone,
+.person-specialty {
   font-size: 14px;
   color: #475569;
-  margin: 6px 0;
+  margin: 4px 0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.person-email {
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.person-phone {
+  color: #059669;
+  font-weight: 600;
+}
+
+.person-specialty {
+  color: #7c3aed;
+  font-weight: 600;
+  font-size: 13px;
+  margin-top: 6px;
+  padding: 4px 10px;
+  background: #f5f3ff;
+  border-radius: 6px;
+  display: inline-flex;
+  width: fit-content;
 }
 
 .visit-details {

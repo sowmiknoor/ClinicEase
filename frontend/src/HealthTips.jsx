@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './HealthTips.css';
 
 export default function HealthTips() {
+  const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [healthTips, setHealthTips] = useState([]);

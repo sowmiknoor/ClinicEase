@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from './LanguageContext';
 import './TeleConsultation.css';
 
 export default function TeleConsultation() {
+  const { t } = useLanguage();
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole') || 'Patient';
   const [form, setForm] = useState({ doctorId: '', scheduledAt: '', durationMinutes: 30, mobileNumber: '', notes: '' });

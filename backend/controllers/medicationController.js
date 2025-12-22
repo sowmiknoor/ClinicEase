@@ -130,6 +130,9 @@ exports.markAsTaken = async (req, res) => {
       status: 'taken'
     });
 
+    // Increment taken counter
+    medication.taken = (medication.taken || 0) + 1;
+
     const updated = await medication.save();
     res.json({ ok: true, medication: updated, message: 'Marked as taken' });
   } catch (err) {
@@ -157,6 +160,9 @@ exports.markAsMissed = async (req, res) => {
       takenTime: missedTime || 'Not recorded',
       status: 'missed'
     });
+
+    // Increment missed counter
+    medication.missed = (medication.missed || 0) + 1;
 
     const updated = await medication.save();
     res.json({ ok: true, medication: updated, message: 'Marked as missed' });

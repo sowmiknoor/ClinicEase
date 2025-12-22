@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './ResearchPapers.css';
 
 export default function ResearchPapers() {
+  const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPaper, setSelectedPaper] = useState(null);

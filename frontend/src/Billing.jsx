@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from './LanguageContext';
 import './Care.css';
 
 export default function Billing() {
+  const { t } = useLanguage();
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole') || 'Patient';
   const [patientId, setPatientId] = useState('');

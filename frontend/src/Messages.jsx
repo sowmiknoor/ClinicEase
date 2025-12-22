@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './Messages.css';
 
 export default function Messages() {
+  const { t } = useLanguage();
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const [messages, setMessages] = useState([]);

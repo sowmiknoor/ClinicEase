@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
+import LanguageToggle from './LanguageToggle';
 import './Dashboard.css';
 
 export default function Dashboard({ onNavigate }) {
+  const { t } = useLanguage();
   const userName = localStorage.getItem('userName') || 'User';
   const userRole = localStorage.getItem('userRole') || 'Patient';
   const userId = localStorage.getItem('userId');
@@ -13,21 +16,8 @@ export default function Dashboard({ onNavigate }) {
   const [currentHealthTip, setCurrentHealthTip] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Dynamic health tips
-  const healthTips = [
-    "💧 Drink water regularly — aim for 8 glasses/day to stay hydrated.",
-    "💊 Take medications on time for best results and optimal health.",
-    "📝 Keep a log of symptoms for better consultations with your doctor.",
-    "🏃 Exercise for at least 30 minutes daily to boost immunity.",
-    "🥗 Eat a balanced diet with plenty of fruits and vegetables.",
-    "😴 Get 7-8 hours of quality sleep every night for better recovery.",
-    "🧘 Practice meditation or deep breathing to reduce stress.",
-    "🚭 Avoid smoking and limit alcohol consumption for better health.",
-    "🌞 Get some sunlight daily for Vitamin D and better mood.",
-    "🩺 Schedule regular health check-ups and screenings.",
-    "🧼 Wash your hands frequently to prevent infections.",
-    "📱 Limit screen time before bed for better sleep quality."
-  ];
+  // Get dynamic health tips from translations
+  const healthTips = t('healthTips');
 
   // Fetch patient statistics
   useEffect(() => {
@@ -115,22 +105,22 @@ export default function Dashboard({ onNavigate }) {
   const getWelcomeMessage = () => {
     switch(userRole) {
       case 'Doctor':
-        return `Welcome back, Dr. ${userName}`;
+        return `${t('welcomeMessage')}, ${t('doctor')} ${userName}`;
       case 'Admin':
-        return `Welcome, Administrator ${userName}`;
+        return `${t('welcome')}, ${t('admin')} ${userName}`;
       default:
-        return `Welcome back, ${userName}`;
+        return `${t('welcomeMessage')}, ${userName}`;
     }
   };
 
   const getSubtitle = () => {
     switch(userRole) {
       case 'Doctor':
-        return 'Manage patient care, prescriptions, and consultations.';
+        return t('doctorSubtitle') || 'Manage patient care, prescriptions, and consultations.';
       case 'Admin':
-        return 'System overview and management dashboard.';
+        return t('adminSubtitle') || 'System overview and management dashboard.';
       default:
-        return 'Your health at a glance — smart, simple, and secure.';
+        return t('patientSubtitle') || 'Your health at a glance — smart, simple, and secure.';
     }
   };
 
@@ -154,22 +144,23 @@ export default function Dashboard({ onNavigate }) {
           <p className="sub">{getSubtitle()}</p>
         </div>
         <div className="db-actions">
+          <LanguageToggle />
           {userRole === 'Patient' && (
             <>
-              <button className="primary" onClick={() => onNavigate('medications')}>Manage Medications</button>
-              <button className="ghost" onClick={() => onNavigate('visits')}>Request Home Visit</button>
+              <button className="primary" onClick={() => onNavigate('medications')}>{t('medications')}</button>
+              <button className="ghost" onClick={() => onNavigate('visits')}>{t('requestHomeVisit')}</button>
             </>
           )}
           {userRole === 'Doctor' && (
             <>
-              <button className="primary" onClick={() => onNavigate('prescriptions')}>Manage Prescriptions</button>
-              <button className="ghost" onClick={() => onNavigate('labtests')}>View Lab Tests</button>
+              <button className="primary" onClick={() => onNavigate('prescriptions')}>{t('prescriptions')}</button>
+              <button className="ghost" onClick={() => onNavigate('labtests')}>{t('labTests')}</button>
             </>
           )}
           {userRole === 'Admin' && (
             <>
-              <button className="primary" onClick={() => onNavigate('prescriptions')}>All Prescriptions</button>
-              <button className="ghost" onClick={() => onNavigate('billing')}>View Billing</button>
+              <button className="primary" onClick={() => onNavigate('prescriptions')}>{t('prescriptions')}</button>
+              <button className="ghost" onClick={() => onNavigate('billing')}>{t('billing')}</button>
             </>
           )}
         </div>
@@ -179,40 +170,40 @@ export default function Dashboard({ onNavigate }) {
         {userRole === 'Patient' && (
           <>
             <div className="card stats">
-              <h3>Today</h3>
+              <h3>{t('today')}</h3>
               {loading ? (
-                <p style={{ textAlign: 'center', padding: '20px', color: '#666' }}>Loading stats...</p>
+                <p style={{ textAlign: 'center', padding: '20px', color: '#666' }}>{t('loadingData')}</p>
               ) : (
                 <div className="stats-row">
                   <div>
                     <p className="big">{upcomingReminders}</p>
-                    <p className="label">Upcoming Reminders</p>
+                    <p className="label">{t('upcomingReminders')}</p>
                   </div>
                   <div>
                     <p className="big">{scheduledVisits}</p>
-                    <p className="label">Scheduled Visits</p>
+                    <p className="label">{t('scheduledVisits')}</p>
                   </div>
                   <div>
                     <p className="big">{adherenceRate}%</p>
-                    <p className="label">Adherence Rate</p>
+                    <p className="label">{t('adherenceRate')}</p>
                   </div>
                 </div>
               )}
             </div>
 
             <div className="card quick">
-              <h3>Quick Actions</h3>
+              <h3>{t('quickActions')}</h3>
               <div className="quick-grid">
-                <button onClick={() => onNavigate('medications')}>Add Medication</button>
-                <button onClick={() => onNavigate('symptom')}>Symptom Check</button>
-                <button onClick={() => onNavigate('home-visits')}>Home Visit</button>
-                <button onClick={() => onNavigate('tele')}>Tele-Consult</button>
+                <button onClick={() => onNavigate('medications')}>{t('addMedication')}</button>
+                <button onClick={() => onNavigate('symptom')}>{t('checkSymptoms')}</button>
+                <button onClick={() => onNavigate('home-visits')}>{t('requestHomeVisit')}</button>
+                <button onClick={() => onNavigate('tele')}>{t('teleConsult')}</button>
               </div>
             </div>
 
             <div className="card tips">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <h3>Health Tips</h3>
+                <h3>{t('healthTip')}</h3>
                 <span style={{ fontSize: '12px', color: '#666' }}>Auto-rotating every 10s</span>
               </div>
               <div style={{ 
@@ -264,39 +255,39 @@ export default function Dashboard({ onNavigate }) {
         {userRole === 'Doctor' && (
           <>
             <div className="card stats">
-              <h3>Patient Stats</h3>
+              <h3>{t('recentPatients')}</h3>
               <div className="stats-row">
                 <div>
                   <p className="big">12</p>
-                  <p className="label">Active Patients</p>
+                  <p className="label">{t('totalPatients')}</p>
                 </div>
                 <div>
                   <p className="big">8</p>
-                  <p className="label">Pending Prescriptions</p>
+                  <p className="label">{t('pendingConsultations')}</p>
                 </div>
                 <div>
                   <p className="big">3</p>
-                  <p className="label">Consultations Today</p>
+                  <p className="label">{t('todaysAppointments')}</p>
                 </div>
               </div>
             </div>
 
             <div className="card quick">
-              <h3>Quick Management</h3>
+              <h3>{t('quickActions')}</h3>
               <div className="quick-grid">
-                <button onClick={() => onNavigate('prescriptions')}>New Prescription</button>
-                <button onClick={() => onNavigate('labtests')}>Order Lab Test</button>
-                <button onClick={() => onNavigate('billing')}>Create Invoice</button>
-                <button onClick={() => onNavigate('messages')}>View Messages</button>
+                <button onClick={() => onNavigate('prescriptions')}>{t('prescriptions')}</button>
+                <button onClick={() => onNavigate('labtests')}>{t('bookLabTest')}</button>
+                <button onClick={() => onNavigate('billing')}>{t('billing')}</button>
+                <button onClick={() => onNavigate('messages')}>{t('messages')}</button>
               </div>
             </div>
 
             <div className="card tips">
-              <h3>Doctor Tools</h3>
+              <h3>{t('doctor')} {t('quickActions')}</h3>
               <ul>
-                <li>Review patient medical records and history.</li>
-                <li>Create prescriptions and manage medications.</li>
-                <li>Schedule and conduct tele-consultations.</li>
+                <li>{t('medicalHistory')}</li>
+                <li>{t('prescriptions')}</li>
+                <li>{t('teleConsult')}</li>
               </ul>
             </div>
           </>
@@ -305,39 +296,39 @@ export default function Dashboard({ onNavigate }) {
         {userRole === 'Admin' && (
           <>
             <div className="card stats">
-              <h3>System Overview</h3>
+              <h3>{t('systemHealth')}</h3>
               <div className="stats-row">
                 <div>
                   <p className="big">156</p>
-                  <p className="label">Total Users</p>
+                  <p className="label">{t('totalUsers')}</p>
                 </div>
                 <div>
                   <p className="big">42</p>
-                  <p className="label">Active Doctors</p>
+                  <p className="label">{t('totalDoctors')}</p>
                 </div>
                 <div>
                   <p className="big">₹1.2L</p>
-                  <p className="label">Monthly Revenue</p>
+                  <p className="label">{t('amount')}</p>
                 </div>
               </div>
             </div>
 
             <div className="card quick">
-              <h3>Admin Actions</h3>
+              <h3>{t('adminDashboard')}</h3>
               <div className="quick-grid">
-                <button onClick={() => onNavigate('prescriptions')}>All Prescriptions</button>
-                <button onClick={() => onNavigate('billing')}>Billing Reports</button>
-                <button onClick={() => onNavigate('records')}>Medical Records</button>
-                <button onClick={() => onNavigate('messages')}>System Messages</button>
+                <button onClick={() => onNavigate('prescriptions')}>{t('prescriptions')}</button>
+                <button onClick={() => onNavigate('billing')}>{t('reports')}</button>
+                <button onClick={() => onNavigate('records')}>{t('medicalRecords')}</button>
+                <button onClick={() => onNavigate('messages')}>{t('messages')}</button>
               </div>
             </div>
 
             <div className="card tips">
-              <h3>System Health</h3>
+              <h3>{t('systemHealth')}</h3>
               <ul>
-                <li>Database: Healthy ✓</li>
-                <li>API Servers: All Online ✓</li>
-                <li>User Sessions: 24 Active ✓</li>
+                <li>Database: {t('active')} ✓</li>
+                <li>API Servers: {t('active')} ✓</li>
+                <li>User Sessions: 24 {t('active')} ✓</li>
               </ul>
             </div>
           </>

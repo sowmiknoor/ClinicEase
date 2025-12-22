@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useLanguage } from "./LanguageContext";
+import LanguageToggle from "./LanguageToggle";
 import Register from "./Register";
 import Login from "./Login";
 import Home from "./Home";
@@ -27,13 +29,24 @@ import AdminDashboard from "./AdminDashboard";
 
 
 function App() {
+  const { t } = useLanguage();
   const [page, setPage] = useState("home");
   const [userRole, setUserRole] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   
-  // Handler to switch to login after registration
-  const handleRegistered = () => setPage("login");
+  // Handler to switch to login or dashboard after registration
+  const handleRegistered = () => {
+    // Check if user was auto-logged in during registration
+    const role = localStorage.getItem('userRole');
+    if (role) {
+      setUserRole(role);
+      setPage("dashboard");
+    } else {
+      setPage("login");
+    }
+  };
+  
   const handleLoginSuccess = () => {
     const role = localStorage.getItem('userRole') || 'Patient';
     setUserRole(role);
@@ -41,12 +54,23 @@ function App() {
   };
 
   const handleLogout = () => {
+    const userId = localStorage.getItem('userId');
+    
+    // Remove user-specific data
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('user');
+    if (userId) {
+      localStorage.removeItem(`userLanguage_${userId}`);
+    }
+    
     setUserRole(null);
     setPage("home");
     setSidebarOpen(false);
+    
+    // Trigger storage event to reset language to default
+    window.dispatchEvent(new Event('storage'));
   };
 
   // Initialize dark mode from user settings on mount
@@ -91,48 +115,48 @@ function App() {
 
     const navItems = {
       Patient: [
-        { label: 'Dashboard', page: 'dashboard' },
-        { label: 'Find Doctors', page: 'doctors' },
-        { label: 'Medications', page: 'medications' },
-        { label: 'Symptom Check', page: 'symptom' },
-        { label: 'Home Visit Requests', page: 'home-visits' },
-        { label: 'Tele-Consult', page: 'tele' },
-        { label: 'Lab Tests', page: 'labtests' },
-        { label: 'Medical Records', page: 'records' },
-        { label: 'Community Forum', page: 'forum' },
-        { label: 'Health Tips', page: 'health-tips' },
-        { label: 'Research Papers', page: 'research-papers' },
-        { label: 'Messages', page: 'messages' },
+        { label: t('dashboard'), page: 'dashboard' },
+        { label: t('findDoctors'), page: 'doctors' },
+        { label: t('medications'), page: 'medications' },
+        { label: t('symptomCheck'), page: 'symptom' },
+        { label: t('homeVisitRequests'), page: 'home-visits' },
+        { label: t('teleConsult'), page: 'tele' },
+        { label: t('labTests'), page: 'labtests' },
+        { label: t('medicalRecords'), page: 'records' },
+        { label: t('communityForum'), page: 'forum' },
+        { label: t('healthTipsLabel'), page: 'health-tips' },
+        { label: t('researchPapers'), page: 'research-papers' },
+        { label: t('messages'), page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ],
       Doctor: [
-        { label: 'Dashboard', page: 'dashboard' },
-        { label: 'Prescriptions', page: 'prescriptions' },
-        { label: 'Create Medical Record', page: 'create-medical-record' },
-        { label: 'Home Visit Requests', page: 'home-visits' },
-        { label: 'Lab Tests', page: 'labtests' },
-        { label: 'Medical Records', page: 'records' },
-        { label: 'Billing', page: 'billing' },
-        { label: 'Tele-Consult', page: 'tele' },
-        { label: 'Community Forum', page: 'forum' },
-        { label: 'Health Tips', page: 'health-tips' },
-        { label: 'Research Papers', page: 'research-papers' },
-        { label: 'Messages', page: 'messages' },
+        { label: t('dashboard'), page: 'dashboard' },
+        { label: t('prescriptions'), page: 'prescriptions' },
+        { label: t('createMedicalRecord'), page: 'create-medical-record' },
+        { label: t('homeVisitRequests'), page: 'home-visits' },
+        { label: t('labTests'), page: 'labtests' },
+        { label: t('medicalRecords'), page: 'records' },
+        { label: t('billing'), page: 'billing' },
+        { label: t('teleConsult'), page: 'tele' },
+        { label: t('communityForum'), page: 'forum' },
+        { label: t('healthTipsLabel'), page: 'health-tips' },
+        { label: t('researchPapers'), page: 'research-papers' },
+        { label: t('messages'), page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ],
       Admin: [
-        { label: 'Dashboard', page: 'dashboard' },
-        { label: '🛡️ Admin Control', page: 'admin-dashboard' },
-        { label: 'All Doctors', page: 'doctors' },
-        { label: 'Prescriptions', page: 'prescriptions' },
-        { label: 'Lab Tests', page: 'labtests' },
-        { label: 'Medical Records', page: 'records' },
-        { label: 'Billing', page: 'billing' },
-        { label: 'Tele-Consult', page: 'tele' },
-        { label: 'Community Forum', page: 'forum' },
-        { label: 'Health Tips', page: 'health-tips' },
-        { label: 'Research Papers', page: 'research-papers' },
-        { label: 'Messages', page: 'messages' },
+        { label: t('dashboard'), page: 'dashboard' },
+        { label: '🛡️ ' + t('adminDashboard'), page: 'admin-dashboard' },
+        { label: t('findDoctors'), page: 'doctors' },
+        { label: t('prescriptions'), page: 'prescriptions' },
+        { label: t('labTests'), page: 'labtests' },
+        { label: t('medicalRecords'), page: 'records' },
+        { label: t('billing'), page: 'billing' },
+        { label: t('teleConsult'), page: 'tele' },
+        { label: t('communityForum'), page: 'forum' },
+        { label: t('healthTipsLabel'), page: 'health-tips' },
+        { label: t('researchPapers'), page: 'research-papers' },
+        { label: t('messages'), page: 'messages' },
         { label: '🔔', page: 'notifications', isIcon: true }
       ]
     };
@@ -206,21 +230,22 @@ function App() {
         <>
           <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
             <div className="sidebar-header">
-              <h3>Menu</h3>
+              <h3>{t('menu') || 'Menu'}</h3>
               <button className="close-btn" onClick={() => setSidebarOpen(false)}>×</button>
             </div>
             <div className="sidebar-content">
+              <LanguageToggle />
               <button className="sidebar-btn profile-btn" onClick={() => { setPage(userRole === 'Doctor' ? 'doctor-profile-edit' : 'profile'); setSidebarOpen(false); }}>
                 <span className="icon">👤</span>
-                <span>Profile</span>
+                <span>{t('profile')}</span>
               </button>
               <button className="sidebar-btn settings-btn" onClick={() => { setPage('settings'); setSidebarOpen(false); }}>
                 <span className="icon">⚙️</span>
-                <span>Settings</span>
+                <span>{t('settings')}</span>
               </button>
               <button className="sidebar-btn logout-btn" onClick={handleLogout}>
                 <span className="icon">🚪</span>
-                <span>Logout</span>
+                <span>{t('logout')}</span>
               </button>
             </div>
           </div>
@@ -244,8 +269,8 @@ function App() {
             <Login onLoginSuccess={handleLoginSuccess} />
           </div>
           <div className="auth-footer">
-            <span>Don't have an account?{' '}
-              <button onClick={() => setPage("register")}>Register</button>
+            <span>{t('dontHaveAccount')}{' '}
+              <button onClick={() => setPage("register")}>{t('register')}</button>
             </span>
           </div>
         </div>

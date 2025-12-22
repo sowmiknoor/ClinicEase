@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useLanguage } from './LanguageContext';
 import './Register.css';
 
 export default function Register({ onRegistered, onSwitchToLogin }) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,13 +42,13 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
 
     if (formData.password !== formData.confirmPassword) {
       setStatus('error');
-      setMessage('Passwords do not match');
+      setMessage(t('passwordMismatch') || 'Passwords do not match');
       return;
     }
 
     if (formData.password.length < 6) {
       setStatus('error');
-      setMessage('Password must be at least 6 characters long');
+      setMessage(t('passwordTooShort') || 'Password must be at least 6 characters long');
       return;
     }
 
@@ -61,11 +63,57 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
       const data = await res.json();
       if (data.ok) {
         setStatus('success');
-        setMessage('Account created successfully! Redirecting to login...');
-        setTimeout(() => {
-          setMessage(null);
-          if (onRegistered) onRegistered();
-        }, 1500);
+        setMessage(t('accountCreatedSuccess') || 'Account created successfully! Logging you in...');
+        
+        // Auto-login after successful registration
+        try {
+          const loginRes = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: formData.email, password: formData.password }),
+          });
+          const loginData = await loginRes.json();
+          
+          if (loginData.ok) {
+            // Store user data
+            const userLanguage = loginData.user.language || 'en';
+            localStorage.setItem('userId', loginData.user.id);
+            localStorage.setItem('userName', loginData.user.name);
+            localStorage.setItem('userRole', loginData.user.role || 'Patient');
+            localStorage.setItem(`userLanguage_${loginData.user.id}`, userLanguage);
+            localStorage.setItem('user', JSON.stringify({
+              id: loginData.user.id,
+              userId: loginData.user.id,
+              _id: loginData.user.id,
+              name: loginData.user.name,
+              email: loginData.user.email,
+              role: loginData.user.role || 'Patient',
+              darkMode: loginData.user.darkMode || false,
+              language: userLanguage
+            }));
+            
+            // Trigger storage event to update language context
+            window.dispatchEvent(new Event('storage'));
+            
+            setTimeout(() => {
+              setMessage(null);
+              if (onRegistered) onRegistered();
+            }, 1000);
+          } else {
+            // If auto-login fails, just redirect to login page
+            setTimeout(() => {
+              setMessage(null);
+              if (onRegistered) onRegistered();
+            }, 1500);
+          }
+        } catch (loginErr) {
+          // If auto-login fails, just redirect to login page
+          setTimeout(() => {
+            setMessage(null);
+            if (onRegistered) onRegistered();
+          }, 1500);
+        }
+        
         setFormData({ name: '', email: '', password: '', confirmPassword: '', role: 'Patient' });
       } else {
         setStatus('error');
@@ -80,7 +128,13 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
   };
 
   const getPasswordStrengthLabel = () => {
-    const labels = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+    const labels = [
+      t('weak') || 'Weak',
+      t('fair') || 'Fair', 
+      t('good') || 'Good',
+      t('strong') || 'Strong',
+      t('veryStrong') || 'Very Strong'
+    ];
     return labels[passwordStrength];
   };
 
@@ -105,43 +159,42 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
             <div className="logo-icon">⚕️</div>
             <h1>ClinicEase</h1>
           </div>
-          <h2 className="brand-tagline">Join Thousands of Users</h2>
+          <h2 className="brand-tagline">{t('joinThousands') || 'Join Thousands of Users'}</h2>
           <p className="brand-description">
-            Create your account today and experience the future of healthcare management.
-            Join patients, doctors, and healthcare professionals already using ClinicEase.
+            {t('registerDescription') || 'Create your account today and experience the future of healthcare management. Join patients, doctors, and healthcare professionals already using ClinicEase.'}
           </p>
           
           <div className="benefit-list">
             <div className="benefit-item">
               <div className="benefit-check">✓</div>
-              <p>Secure and Private</p>
+              <p>{t('secureAndPrivate') || 'Secure and Private'}</p>
             </div>
             <div className="benefit-item">
               <div className="benefit-check">✓</div>
-              <p>24/7 Access to Records</p>
+              <p>{t('access247') || '24/7 Access to Records'}</p>
             </div>
             <div className="benefit-item">
               <div className="benefit-check">✓</div>
-              <p>Instant Notifications</p>
+              <p>{t('instantNotifications') || 'Instant Notifications'}</p>
             </div>
             <div className="benefit-item">
               <div className="benefit-check">✓</div>
-              <p>Multi-platform Support</p>
+              <p>{t('multiPlatform') || 'Multi-platform Support'}</p>
             </div>
           </div>
 
           <div className="stats-grid">
             <div className="stat-item">
               <p className="stat-number">10K+</p>
-              <p className="stat-label">Active Users</p>
+              <p className="stat-label">{t('activeUsers') || 'Active Users'}</p>
             </div>
             <div className="stat-item">
               <p className="stat-number">500+</p>
-              <p className="stat-label">Doctors</p>
+              <p className="stat-label">{t('doctors') || 'Doctors'}</p>
             </div>
             <div className="stat-item">
               <p className="stat-number">50K+</p>
-              <p className="stat-label">Consultations</p>
+              <p className="stat-label">{t('consultations') || 'Consultations'}</p>
             </div>
           </div>
         </div>
@@ -151,8 +204,8 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
       <div className="register-right">
         <div className="register-card">
           <div className="register-header">
-            <h2>Create Account</h2>
-            <p>Start your healthcare journey today</p>
+            <h2>{t('createAccount') || 'Create Account'}</h2>
+            <p>{t('startYourJourney') || 'Start your healthcare journey today'}</p>
           </div>
 
           {message && (
@@ -166,39 +219,41 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
 
           <form onSubmit={handleSubmit} autoComplete="off" className="register-form">
             <div className="form-group">
-              <label htmlFor="name">Full Name</label>
+              <label htmlFor="name">{t('fullName') || 'Full Name'}</label>
               <div className="input-wrapper">
                 <span className="input-icon">👤</span>
                 <input 
                   id="name"
                   name="name" 
                   type="text"
-                  placeholder="John Doe" 
+                  placeholder={t('fullNamePlaceholder') || 'John Doe'}
                   value={formData.name} 
                   onChange={handleChange}
                   required
+                  autoComplete="off"
                 />
               </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email">{t('email') || 'Email Address'}</label>
               <div className="input-wrapper">
                 <span className="input-icon">📧</span>
                 <input 
                   id="email"
                   name="email" 
                   type="email"
-                  placeholder="you@example.com" 
+                  placeholder={t('emailPlaceholder') || 'you@example.com'}
                   value={formData.email} 
                   onChange={handleChange}
                   required
+                  autoComplete="off"
                 />
               </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="role">I am a</label>
+              <label htmlFor="role">{t('iAmA') || 'I am a'}</label>
               <div className="role-grid">
                 <div className="role-option">
                   <input 
@@ -211,7 +266,7 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
                   />
                   <label htmlFor="role-patient" className="role-label">
                     <span className="role-icon">🏥</span>
-                    <p className="role-name">Patient</p>
+                    <p className="role-name">{t('patient') || 'Patient'}</p>
                   </label>
                 </div>
                 <div className="role-option">
@@ -225,7 +280,7 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
                   />
                   <label htmlFor="role-doctor" className="role-label">
                     <span className="role-icon">👨‍⚕️</span>
-                    <p className="role-name">Doctor</p>
+                    <p className="role-name">{t('doctor') || 'Doctor'}</p>
                   </label>
                 </div>
                 <div className="role-option">
@@ -239,21 +294,21 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
                   />
                   <label htmlFor="role-admin" className="role-label">
                     <span className="role-icon">⚙️</span>
-                    <p className="role-name">Admin</p>
+                    <p className="role-name">{t('admin') || 'Admin'}</p>
                   </label>
                 </div>
               </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('password') || 'Password'}</label>
               <div className="input-wrapper">
                 <span className="input-icon">🔒</span>
                 <input 
                   id="password"
                   name="password" 
                   type="password" 
-                  placeholder="Create a strong password" 
+                  placeholder={t('createStrongPassword') || 'Create a strong password'}
                   value={formData.password} 
                   onChange={handleChange}
                   required
@@ -280,14 +335,14 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
+              <label htmlFor="confirmPassword">{t('confirmPassword') || 'Confirm Password'}</label>
               <div className="input-wrapper">
                 <span className="input-icon">🔒</span>
                 <input 
                   id="confirmPassword"
                   name="confirmPassword" 
                   type="password" 
-                  placeholder="Re-enter your password" 
+                  placeholder={t('reEnterPassword') || 'Re-enter your password'}
                   value={formData.confirmPassword} 
                   onChange={handleChange}
                   required
@@ -298,7 +353,7 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
             <div className="terms-checkbox">
               <input type="checkbox" required id="terms" />
               <label htmlFor="terms" className="terms-text">
-                I agree to the <a href="#terms" className="terms-link">Terms of Service</a> and <a href="#privacy" className="terms-link">Privacy Policy</a>
+                {t('agreeToTerms') || 'I agree to the'} <a href="#terms" className="terms-link">{t('termsOfService') || 'Terms of Service'}</a> {t('and') || 'and'} <a href="#privacy" className="terms-link">{t('privacyPolicy') || 'Privacy Policy'}</a>
               </label>
             </div>
 
@@ -310,11 +365,11 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
               {isLoading ? (
                 <>
                   <span className="btn-spinner"></span>
-                  Creating Account...
+                  {t('creatingAccount') || 'Creating Account...'}
                 </>
               ) : (
                 <>
-                  Create Account
+                  {t('createAccount') || 'Create Account'}
                   <span className="btn-arrow">→</span>
                 </>
               )}
@@ -322,7 +377,7 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
           </form>
 
           <div className="register-footer">
-            <p>Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); onSwitchToLogin && onSwitchToLogin(); }} className="login-link">Sign in here</a></p>
+            <p>{t('alreadyHaveAccount') || 'Already have an account?'} <a href="#" onClick={(e) => { e.preventDefault(); onSwitchToLogin && onSwitchToLogin(); }} className="login-link">{t('signInHere') || 'Sign in here'}</a></p>
           </div>
         </div>
       </div>

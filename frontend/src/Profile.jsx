@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './Profile.css';
 
 function Profile() {
+  const { t } = useLanguage();
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',

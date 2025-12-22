@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     password: String,  // plain text (unsafe, but as you requested)
     role: { type: String, enum: ['Patient', 'Doctor', 'Admin'], default: 'Patient' },
     darkMode: { type: Boolean, default: false },
+    language: { type: String, enum: ['en', 'bn'], default: 'en' }, // User-specific language preference
     
     // Doctor-specific fields
     designation: String,  // e.g., "Senior Consultant", "Chief Physician"

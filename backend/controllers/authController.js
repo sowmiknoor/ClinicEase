@@ -52,6 +52,7 @@ exports.login = async (req, res) => {
       phone: user.phone,
       role: user.role,
       darkMode: user.darkMode || false,
+      language: user.language || 'en',
       createdAt: user.createdAt
     };
 
@@ -93,18 +94,27 @@ exports.requireRoles = (roles) => (req, res, next) => {
   next();
 };
 
-// UPDATE USER SETTINGS (including dark mode)
+// UPDATE USER SETTINGS (including dark mode and language)
 exports.updateSettings = async (req, res) => {
   try {
-    const { userId, darkMode } = req.body;
+    const { userId, darkMode, language } = req.body;
     
     if (!userId) {
       return res.status(400).json({ ok: false, msg: 'User ID required' });
     }
 
+    // Build update object with only provided fields
+    const updateData = {};
+    if (typeof darkMode !== 'undefined') {
+      updateData.darkMode = darkMode;
+    }
+    if (language) {
+      updateData.language = language;
+    }
+
     const user = await User.findByIdAndUpdate(
       userId,
-      { darkMode },
+      updateData,
       { new: true }
     );
 
@@ -112,7 +122,12 @@ exports.updateSettings = async (req, res) => {
       return res.status(404).json({ ok: false, msg: 'User not found' });
     }
 
-    res.json({ ok: true, msg: 'Settings updated', darkMode: user.darkMode });
+    res.json({ 
+      ok: true, 
+      msg: 'Settings updated', 
+      darkMode: user.darkMode,
+      language: user.language 
+    });
   } catch (err) {
     res.status(500).json({ ok: false, msg: err.message });
   }

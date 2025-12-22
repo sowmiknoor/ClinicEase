@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './CommunityForum.css';
 import CreatePostModal from './CreatePostModal';
 import PostDetailModal from './PostDetailModal';
 
 export default function CommunityForum() {
+  const { t } = useLanguage();
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);

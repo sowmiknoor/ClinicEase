@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './HomeVisits.css';
 
 export default function HomeVisits() {
+  const { t } = useLanguage();
   const [homeVisits, setHomeVisits] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -401,7 +403,7 @@ export default function HomeVisits() {
             {homeVisits.map(visit => (
               <div key={visit._id} className={`visit-card ${getStatusBadgeClass(visit.status)}`}>
                 <div className="visit-header">
-                  <div>
+                  <div className="visit-date-time">
                     <h3>{formatDate(visit.visitDate)}</h3>
                     <p className="visit-time">⏰ {visit.visitTime}</p>
                   </div>
@@ -411,16 +413,27 @@ export default function HomeVisits() {
                 </div>
 
                 {userRole === 'Patient' ? (
-                  <div className="visit-info">
-                    <p><strong>👨‍⚕️ Doctor:</strong> Dr. {visit.doctorId?.name}</p>
-                    <p><strong>📧 Email:</strong> {visit.doctorId?.email}</p>
-                    {visit.doctorId?.phone && <p><strong>📞 Phone:</strong> {visit.doctorId.phone}</p>}
+                  <div className="visit-person-info">
+                    <div className="person-card">
+                      <div className="person-icon">👨‍⚕️</div>
+                      <div className="person-details">
+                        <h4 className="person-name">Dr. {visit.doctorId?.name || 'Not Assigned'}</h4>
+                        <p className="person-email">📧 {visit.doctorId?.email || 'N/A'}</p>
+                        {visit.doctorId?.phone && <p className="person-phone">📞 {visit.doctorId.phone}</p>}
+                        {visit.doctorId?.specialist && <p className="person-specialty">🩺 {visit.doctorId.specialist}</p>}
+                      </div>
+                    </div>
                   </div>
                 ) : (
-                  <div className="visit-info">
-                    <p><strong>👤 Patient:</strong> {visit.patientId?.name}</p>
-                    <p><strong>📧 Email:</strong> {visit.patientId?.email}</p>
-                    {visit.patientId?.phone && <p><strong>📞 Phone:</strong> {visit.patientId.phone}</p>}
+                  <div className="visit-person-info">
+                    <div className="person-card">
+                      <div className="person-icon">👤</div>
+                      <div className="person-details">
+                        <h4 className="person-name">{visit.patientId?.name || 'Unknown Patient'}</h4>
+                        <p className="person-email">📧 {visit.patientId?.email || 'N/A'}</p>
+                        {visit.patientId?.phone && <p className="person-phone">📞 {visit.patientId.phone}</p>}
+                      </div>
+                    </div>
                   </div>
                 )}
 

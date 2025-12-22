@@ -20,6 +20,10 @@ const medicationSchema = new mongoose.Schema(
       enum: ['Once daily', 'Twice daily', 'Thrice daily', 'Every 4 hours', 'Every 6 hours', 'Every 8 hours', 'Every 12 hours', 'As needed'],
       required: true
     },
+    timesPerDay: {
+      type: Number,
+      default: 1
+    },
     reminderTimes: {
       type: [String], // Array of times in HH:MM format (e.g., ["08:00", "20:00"])
       required: true
@@ -38,6 +42,14 @@ const medicationSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true
+    },
+    taken: {
+      type: Number,
+      default: 0
+    },
+    missed: {
+      type: Number,
+      default: 0
     },
     takenDates: [
       {

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from './LanguageContext';
 import './MedicalRecords.css';
 import { generatePrescriptionPDF } from './utils/generatePrescriptionPDF';
 
 export default function MedicalRecords() {
+  const { t } = useLanguage();
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);

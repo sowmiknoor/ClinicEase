@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from './LanguageContext';
 import './Care.css';
 
 export default function Notifications() {
+  const { t } = useLanguage();
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole') || 'Patient';
   const [list, setList] = useState([]);
@@ -154,22 +156,53 @@ export default function Notifications() {
     }
   };
 
-  // Mark all as read on component mount
-  const markAllReadOnMount = async () => {
+  // Mark notification as read
+  const markAsRead = async (notificationId) => {
+    try {
+      await fetch(`/api/notifications/${notificationId}/read`, { 
+        method: 'PATCH', 
+        headers: header 
+      });
+      // Update local state
+      setList(prev => prev.map(n => 
+        n._id === notificationId ? { ...n, read: true } : n
+      ));
+    } catch (err) {
+      console.error('Error marking as read:', err);
+    }
+  };
+
+  // Mark all as read
+  const markAllAsRead = async () => {
     try {
       await fetch('/api/notifications/mark-all-read', { 
         method: 'PATCH', 
         headers: header 
       });
+      // Update local state
+      setList(prev => prev.map(n => ({ ...n, read: true })));
     } catch (err) {
       console.error('Error marking all as read:', err);
     }
   };
 
+  // Delete notification
+  const deleteNotification = async (notificationId) => {
+    try {
+      await fetch(`/api/notifications/${notificationId}`, { 
+        method: 'DELETE', 
+        headers: header 
+      });
+      // Update local state
+      setList(prev => prev.filter(n => n._id !== notificationId));
+    } catch (err) {
+      console.error('Error deleting notification:', err);
+    }
+  };
+
   // Setup automatic checks
   useEffect(() => {
-    // Mark all as read when component loads
-    markAllReadOnMount();
+    // Initial fetch
     fetchNotifications();
 
     if (userRole === 'Patient') {
@@ -207,7 +240,26 @@ export default function Notifications() {
       </div>
 
       <div className="card">
-        <h4 style={{ marginBottom: '16px' }}>Your Notifications</h4>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h4>Your Notifications</h4>
+          {filteredList.some(n => !n.read) && (
+            <button 
+              onClick={markAllAsRead}
+              style={{
+                padding: '8px 16px',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}
+            >
+              Mark All as Read
+            </button>
+          )}
+        </div>
 
         <div className="notification-filters">
           <button
@@ -250,13 +302,71 @@ export default function Notifications() {
 
         <ul className="list notification-list">
           {filteredList.map(n => (
-            <li key={n._id} className="list-item notification-item">
-              <div className="notification-content">
-                <div className="notification-header">
-                  <span className="notification-time">{new Date(n.createdAt).toLocaleString()}</span>
+            <li 
+              key={n._id} 
+              className={`list-item notification-item ${!n.read ? 'unread' : ''}`}
+              style={{
+                backgroundColor: !n.read ? '#f0f9ff' : 'transparent',
+                borderLeft: !n.read ? '4px solid #3b82f6' : '4px solid transparent',
+                position: 'relative'
+              }}
+            >
+              <div className="notification-content" style={{ flex: 1 }}>
+                <div className="notification-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="notification-time" style={{ fontSize: '13px', color: '#64748b' }}>
+                    {new Date(n.createdAt).toLocaleString()}
+                  </span>
+                  {!n.read && (
+                    <span style={{
+                      display: 'inline-block',
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      backgroundColor: '#3b82f6',
+                      marginLeft: '8px'
+                    }}></span>
+                  )}
                 </div>
-                <div className="notification-title">{n.title}</div>
-                <div className="notification-body">{n.body}</div>
+                <div className="notification-title" style={{ fontWeight: '700', color: '#0f172a', margin: '8px 0 4px 0' }}>
+                  {n.title}
+                </div>
+                <div className="notification-body" style={{ color: '#475569', fontSize: '14px', lineHeight: '1.5' }}>
+                  {n.body}
+                </div>
+                <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                  {!n.read && (
+                    <button
+                      onClick={() => markAsRead(n._id)}
+                      style={{
+                        padding: '6px 12px',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      ✓ Mark as Read
+                    </button>
+                  )}
+                  <button
+                    onClick={() => deleteNotification(n._id)}
+                    style={{
+                      padding: '6px 12px',
+                      background: '#ef4444',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
               </div>
             </li>
           ))}

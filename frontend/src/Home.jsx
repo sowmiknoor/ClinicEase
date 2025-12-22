@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useLanguage } from './LanguageContext';
 import './Home.css';
 
 export default function Home({ onNavigate, onLoginSuccess }) {
+  const { t } = useLanguage();
   const [form, setForm] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState(null);
   const [status, setStatus] = useState(null);

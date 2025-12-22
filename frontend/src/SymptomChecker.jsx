@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useLanguage } from './LanguageContext';
 import jsPDF from 'jspdf';
 import './SymptomChecker.css';
 
 export default function SymptomChecker() {
+  const { t } = useLanguage();
   const [input, setInput] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");

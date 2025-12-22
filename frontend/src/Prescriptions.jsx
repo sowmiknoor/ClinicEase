@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from './LanguageContext';
 import './Prescriptions.css';
 import { generatePrescriptionPDF } from './utils/generatePrescriptionPDF';
 
 export default function Prescriptions() {
+  const { t } = useLanguage();
   // Read from localStorage - supports both formats (individual items and JSON object)
   const userRole = localStorage.getItem('userRole') || 'Patient';
   const userId = localStorage.getItem('userId');

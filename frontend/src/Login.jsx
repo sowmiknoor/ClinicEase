@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useLanguage } from './LanguageContext';
 import './Login.css';
 
 export default function Login({ onLoginSuccess }) {
+  const { t } = useLanguage();
   const [form, setForm] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState(null);
   const [status, setStatus] = useState(null);
@@ -30,6 +32,11 @@ export default function Login({ onLoginSuccess }) {
           localStorage.setItem('userId', data.user.id);
           localStorage.setItem('userName', data.user.name);
           localStorage.setItem('userRole', data.user.role || 'Patient');
+          
+          // Get user's language preference if exists
+          const userLanguage = data.user.language || 'en';
+          localStorage.setItem(`userLanguage_${data.user.id}`, userLanguage);
+          
           // Also store as JSON object for components that expect it
           localStorage.setItem('user', JSON.stringify({
             id: data.user.id,
@@ -38,7 +45,8 @@ export default function Login({ onLoginSuccess }) {
             name: data.user.name,
             email: data.user.email,
             role: data.user.role || 'Patient',
-            darkMode: data.user.darkMode || false
+            darkMode: data.user.darkMode || false,
+            language: userLanguage
           }));
           
           // Apply dark mode immediately if enabled
@@ -47,6 +55,9 @@ export default function Login({ onLoginSuccess }) {
           } else {
             document.body.classList.remove('dark-mode');
           }
+          
+          // Trigger storage event to update language context
+          window.dispatchEvent(new Event('storage'));
         } catch (e) {}
         setStatus('success');
         setMsg(`Login successful! Welcome ${data.user.name}`);
@@ -119,8 +130,8 @@ export default function Login({ onLoginSuccess }) {
       <div className="login-right">
         <div className="login-card">
           <div className="login-header">
-            <h2>Welcome Back!</h2>
-            <p>Sign in to your account to continue</p>
+            <h2>{t('welcomeBack') || 'Welcome Back!'}</h2>
+            <p>{t('signInToContinue') || 'Sign in to your account to continue'}</p>
           </div>
 
           {msg && (
@@ -134,14 +145,14 @@ export default function Login({ onLoginSuccess }) {
 
           <form onSubmit={handleSubmit} autoComplete="off" className="login-form">
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email">{t('email')}</label>
               <div className="input-wrapper">
                 <span className="input-icon">📧</span>
                 <input 
                   id="email"
                   name="email" 
                   type="email"
-                  placeholder="you@example.com" 
+                  placeholder={t('emailPlaceholder') || "you@example.com"}
                   value={form.email} 
                   onChange={handleChange} 
                   autoComplete="username"
@@ -151,14 +162,14 @@ export default function Login({ onLoginSuccess }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('password')}</label>
               <div className="input-wrapper">
                 <span className="input-icon">🔒</span>
                 <input 
                   id="password"
                   name="password" 
                   type="password" 
-                  placeholder="Enter your password" 
+                  placeholder={t('passwordPlaceholder') || "Enter your password"}
                   value={form.password} 
                   onChange={handleChange} 
                   autoComplete="current-password"
@@ -170,14 +181,14 @@ export default function Login({ onLoginSuccess }) {
             <div className="form-options">
               <label className="remember-me">
                 <input type="checkbox" />
-                <span>Remember me</span>
+                <span>{t('rememberMe')}</span>
               </label>
               <button 
                 type="button" 
                 className="forgot-password"
-                onClick={() => alert('Password reset feature coming soon!')}
+                onClick={() => alert(t('passwordResetSoon') || 'Password reset feature coming soon!')}
               >
-                Forgot password?
+                {t('forgotPassword')}
               </button>
             </div>
 
@@ -189,11 +200,11 @@ export default function Login({ onLoginSuccess }) {
               {isLoading ? (
                 <>
                   <span className="btn-spinner"></span>
-                  Signing in...
+                  {t('signingIn') || 'Signing in...'}
                 </>
               ) : (
                 <>
-                  Sign In
+                  {t('signIn')}
                   <span className="btn-arrow">→</span>
                 </>
               )}
@@ -201,7 +212,10 @@ export default function Login({ onLoginSuccess }) {
           </form>
 
           <div className="login-footer">
-            <p>Don't have an account? <a href="#register" className="register-link">Create one now</a></p>
+            <p>{t('dontHaveAccount')} <a href="#register" className="register-link">{t('createAccount') || 'Create one now'}</a></p>
+            <p className="help-text">
+              {t('needHelp') || 'Need help?'} <a href="#support" className="support-link">{t('contactSupport') || 'Contact Support'}</a>
+            </p>
           </div>
         </div>
       </div>
