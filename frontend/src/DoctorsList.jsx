@@ -70,7 +70,6 @@ export default function DoctorsList({ onViewProfile }) {
 
   const handleViewProfile = (doctorId) => {
     // Store the doctor ID in localStorage and navigate to profile view
-    console.log('Viewing profile for doctor ID:', doctorId);
     localStorage.setItem('viewingDoctorId', doctorId);
     if (onViewProfile) {
       onViewProfile('doctor-profile-view');

@@ -13,24 +13,19 @@ export default function MedicalRecords() {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
     const userId = localStorage.getItem('userId');
-    console.log('MedicalRecords - userData:', userData);
-    console.log('MedicalRecords - userId:', userId);
     setUser(userData);
     fetchPrescriptions(userId || userData.userId);
   }, []);
 
   const fetchPrescriptions = async (userId) => {
     setLoading(true);
-    console.log('Fetching prescriptions for userId:', userId);
     try {
       const res = await fetch(`/api/prescriptions`, {
         headers: { 'x-user-id': userId }
       });
       const data = await res.json();
-      console.log('Prescriptions response:', data);
       if (data.ok) {
         setPrescriptions(data.prescriptions || []);
-        console.log('Prescriptions set:', data.prescriptions);
       } else {
         console.error('Failed to fetch prescriptions:', data);
       }

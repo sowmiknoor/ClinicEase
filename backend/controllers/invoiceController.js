@@ -11,7 +11,8 @@ exports.create = async (req, res) => {
     const { patientId, amount, description, dueDate } = req.body;
     const pid = req.user.role === 'Patient' ? req.user._id : (patientId || req.query.patientId);
     if (!pid) return res.json({ ok: false, msg: 'patientId required' });
-    const inv = await Invoice.create({ patientId: pid, amount, description, dueDate });
+    const doctorId = req.user.role === 'Doctor' ? req.user._id : null;
+    const inv = await Invoice.create({ patientId: pid, doctorId, amount, description, dueDate });
     res.json({ ok: true, invoice: inv });
   } catch (err) {
     res.status(500).json({ ok: false, msg: err.message });
@@ -22,7 +23,10 @@ exports.list = async (req, res) => {
   try {
     const filter = scopeFilter(req.user);
     if (req.query.patientId && req.user.role !== 'Patient') filter.patientId = req.query.patientId;
-    const data = await Invoice.find(filter).sort('-createdAt');
+    const data = await Invoice.find(filter)
+      .populate('doctorId', 'name email phone')
+      .populate('patientId', 'name email phone')
+      .sort('-createdAt');
     res.json({ ok: true, invoices: data });
   } catch (err) {
     res.status(500).json({ ok: false, msg: err.message });
@@ -32,9 +36,17 @@ exports.list = async (req, res) => {
 exports.updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, paymentMethod, transactionId } = req.body;
     const filter = { _id: id, ...scopeFilter(req.user) };
-    const updated = await Invoice.findOneAndUpdate(filter, { status }, { new: true });
+    const updateData = { status };
+    
+    if (status === 'paid') {
+      updateData.paymentDate = new Date();
+      if (paymentMethod) updateData.paymentMethod = paymentMethod;
+      if (transactionId) updateData.transactionId = transactionId;
+    }
+    
+    const updated = await Invoice.findOneAndUpdate(filter, updateData, { new: true });
     if (!updated) return res.status(404).json({ ok: false, msg: 'Not found' });
     res.json({ ok: true, invoice: updated });
   } catch (err) {

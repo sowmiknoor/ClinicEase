@@ -200,9 +200,10 @@
   --btn-ghost-text: var(--color-primary-400);
 }
 
-/* Dark mode body styling */
-.dark-mode body {
-  background: var(--color-bg-primary);
+/* Dark mode body styling - FIXED SELECTOR */
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  background-attachment: fixed;
   color: var(--color-text-primary);
 }
 

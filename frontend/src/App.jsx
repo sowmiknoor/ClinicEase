@@ -101,7 +101,7 @@ function App() {
 
     // Define role-based access
     const roleAccess = {
-      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers'],
+      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers'],
       Doctor: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum', 'health-tips', 'research-papers'],
       Admin: ['dashboard', 'admin-dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers']
     };
@@ -123,6 +123,7 @@ function App() {
         { label: t('teleConsult'), page: 'tele' },
         { label: t('labTests'), page: 'labtests' },
         { label: t('medicalRecords'), page: 'records' },
+        { label: t('billing'), page: 'billing' },
         { label: t('communityForum'), page: 'forum' },
         { label: t('healthTipsLabel'), page: 'health-tips' },
         { label: t('researchPapers'), page: 'research-papers' },

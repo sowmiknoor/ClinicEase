@@ -11,5 +11,6 @@ router.get('/profile/:id', controller.getDoctorProfile);
 
 // Protected routes (for doctors only)
 router.put('/profile', authMiddleware, controller.updateDoctorProfile);
+router.get('/my-patients', authMiddleware, controller.getDoctorPatients);
 
 module.exports = router;

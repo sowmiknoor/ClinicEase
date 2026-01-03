@@ -79,7 +79,7 @@ export default function CreateMedicalRecord() {
       });
 
       const data = await response.json();
-      console.log('Response:', data);
+      // Record created successfully
 
       if (data.ok) {
         setMessage({ type: 'success', text: 'Medical record created successfully!' });

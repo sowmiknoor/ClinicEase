@@ -115,3 +115,37 @@ exports.getSpecialistCategories = async (req, res) => {
     res.status(500).json({ ok: false, msg: 'Failed to fetch specialists' });
   }
 };
+
+// Get patients treated by a specific doctor
+exports.getDoctorPatients = async (req, res) => {
+  try {
+    const doctorId = req.user._id;
+    const Appointment = require('../models/Appointment');
+    const Prescription = require('../models/Prescription');
+    const Consultation = require('../models/Consultation');
+    
+    // Get unique patient IDs from appointments, prescriptions, and consultations
+    const appointmentPatients = await Appointment.find({ doctorId }).distinct('patientId');
+    const prescriptionPatients = await Prescription.find({ doctorId }).distinct('patientId');
+    const consultationPatients = await Consultation.find({ doctorId }).distinct('patientId');
+    
+    // Combine and get unique patient IDs
+    const patientIds = [...new Set([
+      ...appointmentPatients.map(id => id.toString()),
+      ...prescriptionPatients.map(id => id.toString()),
+      ...consultationPatients.map(id => id.toString())
+    ])];
+    
+    // Fetch patient details
+    const patients = await User.find({ 
+      _id: { $in: patientIds },
+      role: 'Patient'
+    }).select('_id name email phone');
+    
+    console.log(`Fetched ${patients.length} patients for doctor ${doctorId}`);
+    res.json({ ok: true, patients });
+  } catch (err) {
+    console.error('Error fetching doctor patients:', err);
+    res.status(500).json({ ok: false, msg: 'Failed to fetch patients' });
+  }
+};
