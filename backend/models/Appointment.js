@@ -13,8 +13,8 @@ const appointmentSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['teleconsultation', 'home-visit'],
-    required: true
+    enum: ['teleconsultation', 'home-visit', 'general'],
+    default: 'general'
   },
   status: {
     type: String,
@@ -35,7 +35,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: function() { return this.type === 'home-visit'; }
+    required: false
   },
   notes: String,
   rejectionReason: String,

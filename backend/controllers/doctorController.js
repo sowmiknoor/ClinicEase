@@ -124,8 +124,12 @@ exports.getDoctorPatients = async (req, res) => {
     const Prescription = require('../models/Prescription');
     const Consultation = require('../models/Consultation');
     
-    // Get unique patient IDs from appointments, prescriptions, and consultations
-    const appointmentPatients = await Appointment.find({ doctorId }).distinct('patientId');
+    // Get unique patient IDs only from ACCEPTED or COMPLETED appointments, prescriptions, and consultations
+    const appointmentPatients = await Appointment.find({ 
+      doctorId, 
+      status: { $in: ['accepted', 'completed'] }
+    }).distinct('patientId');
+    
     const prescriptionPatients = await Prescription.find({ doctorId }).distinct('patientId');
     const consultationPatients = await Consultation.find({ doctorId }).distinct('patientId');
     

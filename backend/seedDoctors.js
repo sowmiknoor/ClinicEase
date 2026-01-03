@@ -135,7 +135,7 @@ function generateDoctors() {
     const designation = randomItem(designations);
     const degrees = degreesBySpecialization[specialization] || ['MBBS', 'MD'];
     const experience = Math.floor(Math.random() * 25) + 5; // 5-30 years
-    const consultationFee = Math.floor(Math.random() * 1500) + 500; // 500-2000 BDT
+    const consultationFee = 0; // Doctors will set their own fees
     const availableDays = randomItems(allDays, Math.floor(Math.random() * 4) + 3); // 3-6 days
     const hours = randomItem(consultationHours);
     
@@ -186,7 +186,7 @@ async function seedDoctors() {
       console.log(`   ${spec}: ${count}`);
     });
     
-    console.log('\n💰 Fee Range: ৳500 - ৳2000');
+    console.log('\n💰 Consultation Fee: ৳0 (Doctors will set their own fees)');
     console.log('⏰ Various consultation hours available');
     console.log('📅 Doctors available 3-6 days per week');
     

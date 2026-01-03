@@ -210,51 +210,58 @@
 
 /* Info Cards */
 .info-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 16px;
 }
 
 .info-card {
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  background: white;
   padding: 24px;
   border-radius: 16px;
-  border: 2px solid #bae6fd;
+  border: 2px solid #e2e8f0;
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.1);
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .info-icon {
-  font-size: 36px;
-  width: 56px;
-  height: 56px;
+  font-size: 48px;
+  width: 64px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 12px;
 }
 
 .info-content {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .info-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  color: #0369a1;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  color: #64748b;
+  letter-spacing: 0.8px;
 }
 
 .info-value {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
-  color: #0c4a6e;
+  color: #0f172a;
 }
 
 /* Availability */
@@ -336,7 +343,7 @@
   }
 
   .info-cards {
-    grid-template-columns: 1fr;
+    flex-direction: row;
   }
 }
 
@@ -369,9 +376,8 @@
     padding: 20px;
   }
 
-  .info-card {
+  .info-cards {
     flex-direction: column;
-    text-align: center;
   }
 
   .available-days {
@@ -417,12 +423,16 @@
 }
 
 .dark-mode .info-card {
-  background: linear-gradient(135deg, #1e293b, #334155);
-  border-color: #0ea5e9;
+  background: #1e293b;
+  border-color: #334155;
 }
 
-.dark-mode .info-icon {
-  background: #0f172a;
+.dark-mode .info-value {
+  color: #f1f5f9;
+}
+
+.dark-mode .info-label {
+  color: #94a3b8;
 }
 
 .dark-mode .consultation-hours {

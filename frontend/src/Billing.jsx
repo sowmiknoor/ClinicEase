@@ -499,7 +499,12 @@ export default function Billing() {
                   <label className={`payment-option ${paymentMethod === 'bKash' ? 'selected' : ''}`}>
                     <input type="radio" name="payment" value="bKash" checked={paymentMethod === 'bKash'} onChange={(e) => setPaymentMethod(e.target.value)} />
                     <div className="option-content">
-                      <span className="option-icon" style={{color: '#E2136E'}}>📱</span>
+                      <div className="payment-logo bkash-logo">
+                        <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                          <rect fill="#E2136E" width="200" height="60" rx="8"/>
+                          <text x="100" y="38" fontFamily="Arial, sans-serif" fontSize="28" fontWeight="bold" fill="white" textAnchor="middle">bKash</text>
+                        </svg>
+                      </div>
                       <span className="option-name">bKash</span>
                       <span className="option-badge">Mobile Wallet</span>
                     </div>
@@ -507,7 +512,12 @@ export default function Billing() {
                   <label className={`payment-option ${paymentMethod === 'Nagad' ? 'selected' : ''}`}>
                     <input type="radio" name="payment" value="Nagad" checked={paymentMethod === 'Nagad'} onChange={(e) => setPaymentMethod(e.target.value)} />
                     <div className="option-content">
-                      <span className="option-icon" style={{color: '#EE4024'}}>💸</span>
+                      <div className="payment-logo nagad-logo">
+                        <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                          <rect fill="#EE4023" width="200" height="60" rx="8"/>
+                          <text x="100" y="38" fontFamily="Arial, sans-serif" fontSize="28" fontWeight="bold" fill="white" textAnchor="middle">Nagad</text>
+                        </svg>
+                      </div>
                       <span className="option-name">Nagad</span>
                       <span className="option-badge">Mobile Wallet</span>
                     </div>
@@ -515,7 +525,12 @@ export default function Billing() {
                   <label className={`payment-option ${paymentMethod === 'Rocket' ? 'selected' : ''}`}>
                     <input type="radio" name="payment" value="Rocket" checked={paymentMethod === 'Rocket'} onChange={(e) => setPaymentMethod(e.target.value)} />
                     <div className="option-content">
-                      <span className="option-icon" style={{color: '#8B3A9C'}}>🚀</span>
+                      <div className="payment-logo rocket-logo">
+                        <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                          <rect fill="#8B3A9C" width="200" height="60" rx="8"/>
+                          <text x="100" y="38" fontFamily="Arial, sans-serif" fontSize="28" fontWeight="bold" fill="white" textAnchor="middle">Rocket</text>
+                        </svg>
+                      </div>
                       <span className="option-name">Rocket</span>
                       <span className="option-badge">Mobile Wallet</span>
                     </div>

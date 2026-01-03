@@ -26,6 +26,7 @@ import CommunityForum from "./CommunityForum";
 import HealthTips from "./HealthTips";
 import ResearchPapers from "./ResearchPapers";
 import AdminDashboard from "./AdminDashboard";
+import Appointments from "./Appointments";
 
 
 function App() {
@@ -101,9 +102,9 @@ function App() {
 
     // Define role-based access
     const roleAccess = {
-      Patient: ['dashboard', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers'],
-      Doctor: ['dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum', 'health-tips', 'research-papers'],
-      Admin: ['dashboard', 'admin-dashboard', 'medications', 'home-visits', 'tele', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers']
+      Patient: ['dashboard', 'appointments', 'medications', 'symptom', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers'],
+      Doctor: ['dashboard', 'appointments', 'medications', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum', 'health-tips', 'research-papers'],
+      Admin: ['dashboard', 'admin-dashboard', 'appointments', 'medications', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers']
     };
 
     return roleAccess[userRole]?.includes(pageToCheck) || false;
@@ -117,10 +118,9 @@ function App() {
       Patient: [
         { label: t('dashboard'), page: 'dashboard' },
         { label: t('findDoctors'), page: 'doctors' },
+        { label: '📅 Appointments', page: 'appointments' },
         { label: t('medications'), page: 'medications' },
         { label: t('symptomCheck'), page: 'symptom' },
-        { label: t('homeVisitRequests'), page: 'home-visits' },
-        { label: t('teleConsult'), page: 'tele' },
         { label: t('labTests'), page: 'labtests' },
         { label: t('medicalRecords'), page: 'records' },
         { label: t('billing'), page: 'billing' },
@@ -132,13 +132,12 @@ function App() {
       ],
       Doctor: [
         { label: t('dashboard'), page: 'dashboard' },
+        { label: '📅 Appointments', page: 'appointments' },
         { label: t('prescriptions'), page: 'prescriptions' },
         { label: t('createMedicalRecord'), page: 'create-medical-record' },
-        { label: t('homeVisitRequests'), page: 'home-visits' },
         { label: t('labTests'), page: 'labtests' },
         { label: t('medicalRecords'), page: 'records' },
         { label: t('billing'), page: 'billing' },
-        { label: t('teleConsult'), page: 'tele' },
         { label: t('communityForum'), page: 'forum' },
         { label: t('healthTipsLabel'), page: 'health-tips' },
         { label: t('researchPapers'), page: 'research-papers' },
@@ -153,7 +152,6 @@ function App() {
         { label: t('labTests'), page: 'labtests' },
         { label: t('medicalRecords'), page: 'records' },
         { label: t('billing'), page: 'billing' },
-        { label: t('teleConsult'), page: 'tele' },
         { label: t('communityForum'), page: 'forum' },
         { label: t('healthTipsLabel'), page: 'health-tips' },
         { label: t('researchPapers'), page: 'research-papers' },
@@ -369,6 +367,7 @@ function App() {
           {page === "admin-dashboard" && isPageAllowed('admin-dashboard') && <AdminDashboard />}
           {page === "profile" && <Profile />}
           {page === "settings" && <Settings />}
+          {page === "appointments" && isPageAllowed('appointments') && <Appointments />}
           {page === "medications" && isPageAllowed('medications') && <MedicationReminder />}
           {page === "symptom" && isPageAllowed('symptom') && <SymptomChecker />}
           {page === "home-visits" && isPageAllowed('home-visits') && <HomeVisits />}
@@ -380,6 +379,7 @@ function App() {
           {page === "billing" && isPageAllowed('billing') && <Billing />}
           {page === "messages" && isPageAllowed('messages') && <Messaging />}
           {page === "notifications" && isPageAllowed('notifications') && <Notifications />}
+          {page === "appointments" && isPageAllowed('appointments') && <Appointments />}
           {page === "doctors" && isPageAllowed('doctors') && <DoctorsList onViewProfile={setPage} />}
           {page === "doctor-profile-edit" && isPageAllowed('doctor-profile-edit') && <DoctorProfileEdit />}
           {page === "doctor-profile-view" && <DoctorProfileView onBack={() => setPage('doctors')} />}
