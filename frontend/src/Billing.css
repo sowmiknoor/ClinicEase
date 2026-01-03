@@ -570,10 +570,12 @@ body.dark-mode .form-input::placeholder {
 
 body.dark-mode .btn-submit {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff !important;
 }
 
 body.dark-mode .btn-submit:hover {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff !important;
 }
 
 body.dark-mode .empty-state {
@@ -635,36 +637,44 @@ body.dark-mode .status-badge.cancelled {
 
 body.dark-mode .btn-pay {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff !important;
 }
 
 body.dark-mode .btn-pay:hover {
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff !important;
 }
 
 body.dark-mode .btn-secondary {
   background: #334155;
-  color: #e2e8f0;
+  color: #60a5fa !important;
+  border: 2px solid #60a5fa;
 }
 
 body.dark-mode .btn-secondary:hover {
-  background: #475569;
+  background: rgba(96, 165, 250, 0.15);
+  color: #93c5fd !important;
+  border-color: #93c5fd;
 }
 
 body.dark-mode .btn-cancel {
-  background: #450a0a;
-  color: #fca5a5;
+  background: #ef4444;
+  color: #ffffff !important;
 }
 
 body.dark-mode .btn-cancel:hover {
-  background: #7f1d1d;
+  background: #dc2626;
+  color: #ffffff !important;
 }
 
 body.dark-mode .btn-download {
   background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: #ffffff !important;
 }
 
 body.dark-mode .btn-download:hover {
   background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: #ffffff !important;
 }
 
 body.dark-mode .modal-overlay {

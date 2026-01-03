@@ -66,6 +66,9 @@ function App() {
       localStorage.removeItem(`userLanguage_${userId}`);
     }
     
+    // Remove dark mode when logging out (user-specific setting)
+    document.body.classList.remove('dark-mode');
+    
     setUserRole(null);
     setPage("home");
     setSidebarOpen(false);
@@ -262,18 +265,7 @@ function App() {
       <main className="app-main" style={{ paddingTop: page === 'home' || page === 'login' || page === 'register' ? '0' : '88px' }}>
       {page === "home" && <Home onNavigate={setPage} onLoginSuccess={handleLoginSuccess} />}
       {page === "register" && <Register onRegistered={handleRegistered} onSwitchToLogin={() => setPage('login')} />}
-      {page === "login" && (
-        <div className="flex flex-col items-center justify-start min-h-[calc(100vh-88px)]">
-          <div className="w-full max-w-lg">
-            <Login onLoginSuccess={handleLoginSuccess} />
-          </div>
-          <div className="auth-footer">
-            <span>{t('dontHaveAccount')}{' '}
-              <button onClick={() => setPage("register")}>{t('register')}</button>
-            </span>
-          </div>
-        </div>
-      )}
+      {page === "login" && <Login onLoginSuccess={handleLoginSuccess} onSwitchToRegister={() => setPage('register')} />}
       {page !== "home" && page !== "register" && page !== "login" && (
         <div className="w-full">
           <div className={`bg-white shadow-md border-b border-gray-200 mb-6 nav-bar-wrapper ${userRole ? userRole.toLowerCase() + '-nav' : ''}`}>

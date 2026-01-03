@@ -41,7 +41,14 @@ export default function Appointments() {
       });
       const data = await response.json();
       if (data.ok) {
-        setAppointments(data.appointments || []);
+        // Remove duplicates based on _id
+        const uniqueAppointments = Array.from(
+          new Map(data.appointments?.map(app => [app._id, app])).values()
+        );
+        console.log('Total appointments from API:', data.appointments?.length);
+        console.log('Unique appointments:', uniqueAppointments.length);
+        console.log('Appointments:', uniqueAppointments);
+        setAppointments(uniqueAppointments || []);
       }
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -69,7 +76,7 @@ export default function Appointments() {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('/api/appointments', {
+      const response = await fetch('/api/appointments/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,7 +117,7 @@ export default function Appointments() {
     if (!confirm('Are you sure you want to cancel this appointment?')) return;
 
     try {
-      const response = await fetch(`/api/appointments/${appointmentId}/cancel`, {
+      const response = await fetch(`/api/appointments/cancel/${appointmentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +137,7 @@ export default function Appointments() {
 
   const handleAcceptReject = async (appointmentId, status, reason = '') => {
     try {
-      const response = await fetch(`/api/appointments/${appointmentId}/status`, {
+      const response = await fetch(`/api/appointments/update-status/${appointmentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -157,11 +164,11 @@ export default function Appointments() {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: { class: 'status-pending', text: '⏳ Pending', icon: '⏳' },
-      accepted: { class: 'status-accepted', text: '✅ Accepted', icon: '✅' },
-      rejected: { class: 'status-rejected', text: '❌ Rejected', icon: '❌' },
-      completed: { class: 'status-completed', text: '✓ Completed', icon: '✓' },
-      cancelled: { class: 'status-cancelled', text: '🚫 Cancelled', icon: '🚫' }
+      pending: { class: 'status-pending', text: `⏳ ${t('pending')}`, icon: '⏳' },
+      accepted: { class: 'status-accepted', text: `✅ ${t('accepted')}`, icon: '✅' },
+      rejected: { class: 'status-rejected', text: `❌ ${t('rejected')}`, icon: '❌' },
+      completed: { class: 'status-completed', text: `✓ ${t('completed')}`, icon: '✓' },
+      cancelled: { class: 'status-cancelled', text: `🚫 ${t('cancelled')}`, icon: '🚫' }
     };
     return badges[status] || badges.pending;
   };
@@ -173,10 +180,10 @@ export default function Appointments() {
   return (
     <div className="appointments-container">
       <div className="appointments-header">
-        <h2>📅 {userRole === 'Doctor' ? 'Appointment Requests' : 'My Appointments'}</h2>
+        <h2>📅 {userRole === 'Doctor' ? t('appointmentRequests') : t('myAppointmentsPage')}</h2>
         {userRole === 'Patient' && (
           <button onClick={() => setShowModal(true)} className="btn-primary">
-            + Book New Appointment
+            + {t('bookNewAppointment')}
           </button>
         )}
       </div>
@@ -192,7 +199,7 @@ export default function Appointments() {
           <div className="stat-icon">📊</div>
           <div className="stat-content">
             <div className="stat-value">{appointments.length}</div>
-            <div className="stat-label">Total Appointments</div>
+            <div className="stat-label">{t('totalAppointments')}</div>
           </div>
         </div>
         <div className="stat-card">
@@ -201,7 +208,7 @@ export default function Appointments() {
             <div className="stat-value">
               {appointments.filter(a => a.status === 'pending').length}
             </div>
-            <div className="stat-label">Pending</div>
+            <div className="stat-label">{t('pending')}</div>
           </div>
         </div>
         <div className="stat-card">
@@ -210,7 +217,7 @@ export default function Appointments() {
             <div className="stat-value">
               {appointments.filter(a => a.status === 'accepted').length}
             </div>
-            <div className="stat-label">Accepted</div>
+            <div className="stat-label">{t('accepted')}</div>
           </div>
         </div>
         <div className="stat-card">
@@ -219,7 +226,7 @@ export default function Appointments() {
             <div className="stat-value">
               {appointments.filter(a => a.status === 'completed').length}
             </div>
-            <div className="stat-label">Completed</div>
+            <div className="stat-label">{t('completed')}</div>
           </div>
         </div>
       </div>
@@ -228,10 +235,10 @@ export default function Appointments() {
         {appointments.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">📅</div>
-            <h3>No Appointments Yet</h3>
-            <p>Book your first appointment with a doctor</p>
+            <h3>{t('noAppointmentsYet')}</h3>
+            <p>{t('bookFirstAppointment')}</p>
             <button onClick={() => setShowModal(true)} className="btn-primary">
-              Book Appointment
+              {t('booking')}
             </button>
           </div>
         ) : (
@@ -240,7 +247,7 @@ export default function Appointments() {
               <div className="appointment-header-section">
                 <div className="appointment-type">
                   <span className="type-icon">📅</span>
-                  <span className="type-text">Doctor Appointment</span>
+                  <span className="type-text">{t('doctorAppointment')}</span>
                 </div>
                 <span className={`status-badge ${getStatusBadge(appointment.status).class}`}>
                   {getStatusBadge(appointment.status).text}
@@ -250,7 +257,7 @@ export default function Appointments() {
               <div className="appointment-body">
                 <div className="appointment-info-row">
                   <div className="info-item">
-                    <span className="info-label">{userRole === 'Doctor' ? '👤 Patient:' : '👨‍⚕️ Doctor:'}</span>
+                    <span className="info-label">{userRole === 'Doctor' ? `👤 ${t('patient')}:` : `👨‍⚕️ ${t('doctor')}:`}</span>
                     <span className="info-value">
                       {userRole === 'Doctor' 
                         ? (appointment.patientId?.name || 'N/A')
@@ -258,7 +265,7 @@ export default function Appointments() {
                     </span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">📞 Phone:</span>
+                    <span className="info-label">📞 {t('phone')}:</span>
                     <span className="info-value">
                       {userRole === 'Doctor'
                         ? (appointment.patientId?.phone || 'N/A')
@@ -269,40 +276,40 @@ export default function Appointments() {
 
                 <div className="appointment-info-row">
                   <div className="info-item">
-                    <span className="info-label">📅 Date:</span>
+                    <span className="info-label">📅 {t('date')}:</span>
                     <span className="info-value">
                       {new Date(appointment.appointmentDate).toLocaleDateString()}
                     </span>
                   </div>
                   <div className="info-item">
-                    <span className="info-label">🕐 Time:</span>
+                    <span className="info-label">🕐 {t('time')}:</span>
                     <span className="info-value">{appointment.appointmentTime}</span>
                   </div>
                 </div>
 
                 <div className="appointment-details">
                   <div className="detail-item">
-                    <strong>😷 Reason for Visit:</strong>
+                    <strong>😷 {t('reasonForVisit')}:</strong>
                     <p>{appointment.symptoms}</p>
                   </div>
 
                   {appointment.notes && (
                     <div className="detail-item">
-                      <strong>📝 Notes:</strong>
+                      <strong>📝 {t('notes')}:</strong>
                       <p>{appointment.notes}</p>
                     </div>
                   )}
 
                   {appointment.status === 'rejected' && appointment.rejectionReason && (
                     <div className="detail-item rejection-reason">
-                      <strong>❌ Rejection Reason:</strong>
+                      <strong>❌ {t('rejectionReason')}:</strong>
                       <p>{appointment.rejectionReason}</p>
                     </div>
                   )}
 
                   {appointment.status === 'completed' && appointment.completionNotes && (
                     <div className="detail-item completion-notes">
-                      <strong>✅ Completion Notes:</strong>
+                      <strong>✅ {t('completionNotes')}:</strong>
                       <p>{appointment.completionNotes}</p>
                     </div>
                   )}
@@ -311,14 +318,14 @@ export default function Appointments() {
 
               <div className="appointment-footer">
                 <div className="appointment-date">
-                  Requested: {new Date(appointment.createdAt).toLocaleString()}
+                  {t('requested')}: {new Date(appointment.createdAt).toLocaleString()}
                 </div>
                 {userRole === 'Patient' && appointment.status === 'pending' && (
                   <button 
                     onClick={() => handleCancel(appointment._id)}
                     className="btn-cancel"
                   >
-                    Cancel Appointment
+                    {t('cancel')}
                   </button>
                 )}
                 {userRole === 'Doctor' && appointment.status === 'pending' && (
@@ -327,16 +334,16 @@ export default function Appointments() {
                       onClick={() => handleAcceptReject(appointment._id, 'accepted')}
                       className="btn-accept"
                     >
-                      ✅ Accept
+                      ✅ {t('accept')}
                     </button>
                     <button 
                       onClick={() => {
-                        const reason = prompt('Enter rejection reason (optional):');
+                        const reason = prompt(t('enterRejectionReason'));
                         handleAcceptReject(appointment._id, 'rejected', reason || '');
                       }}
                       className="btn-reject"
                     >
-                      ❌ Reject
+                      ❌ {t('reject')}
                     </button>
                   </div>
                 )}
@@ -350,16 +357,16 @@ export default function Appointments() {
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>📅 Book New Appointment</h3>
+              <h3>📅 {t('bookNewAppointment')}</h3>
               <button onClick={() => setShowModal(false)} className="close-btn">&times;</button>
             </div>
 
             <form onSubmit={handleSubmit} className="appointment-form">
               <div className="form-group">
-                <label>Select Doctor *</label>
+                <label>{t('selectDoctor')} *</label>
                 <input
                   type="text"
-                  placeholder="Search doctor by name or specialty..."
+                  placeholder={t('searchDoctor')}
                   value={doctorSearch}
                   onChange={(e) => setDoctorSearch(e.target.value)}
                   className="doctor-search-input"
@@ -395,7 +402,7 @@ export default function Appointments() {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label>Appointment Date *</label>
+                  <label>{t('date')} *</label>
                   <input
                     type="date"
                     value={formData.appointmentDate}
@@ -406,7 +413,7 @@ export default function Appointments() {
                 </div>
 
                 <div className="form-group">
-                  <label>Appointment Time *</label>
+                  <label>{t('time')} *</label>
                   <input
                     type="time"
                     value={formData.appointmentTime}
@@ -417,22 +424,22 @@ export default function Appointments() {
               </div>
 
               <div className="form-group">
-                <label>Reason for Visit *</label>
+                <label>{t('reasonForVisit')} *</label>
                 <textarea
                   value={formData.symptoms}
                   onChange={(e) => setFormData({...formData, symptoms: e.target.value})}
-                  placeholder="Describe the reason for your appointment..."
+                  placeholder={t('describeReasonForAppointment')}
                   rows="3"
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label>Additional Notes (Optional)</label>
+                <label>{t('additionalNotes')}</label>
                 <textarea
                   value={formData.notes}
                   onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  placeholder="Any additional information..."
+                  placeholder={t('anyAdditionalInfo')}
                   rows="2"
                 />
               </div>
@@ -443,14 +450,14 @@ export default function Appointments() {
                   onClick={() => setShowModal(false)}
                   className="btn-secondary"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
                 <button 
                   type="submit" 
                   disabled={loading}
                   className="btn-primary"
                 >
-                  {loading ? 'Booking...' : 'Book Appointment'}
+                  {loading ? `${t('booking')}...` : t('bookNewAppointment')}
                 </button>
               </div>
             </form>

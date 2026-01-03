@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from './LanguageContext';
 import './Register.css';
 
 export default function Register({ onRegistered, onSwitchToLogin }) {
   const { t } = useLanguage();
+  
+  // Remove dark mode when viewing register page (only logged-in users should have dark mode)
+  useEffect(() => {
+    document.body.classList.remove('dark-mode');
+  }, []);
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -377,7 +383,7 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
           </form>
 
           <div className="register-footer">
-            <p>{t('alreadyHaveAccount') || 'Already have an account?'} <a href="#" onClick={(e) => { e.preventDefault(); onSwitchToLogin && onSwitchToLogin(); }} className="login-link">{t('signInHere') || 'Sign in here'}</a></p>
+            <p>{t('alreadyHaveAccount') || 'Already have an account?'} <button type="button" onClick={() => onSwitchToLogin && onSwitchToLogin()} className="login-link" style={{background: 'none', border: 'none', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit'}}>{t('signInHere') || 'Sign in here'}</button></p>
           </div>
         </div>
       </div>

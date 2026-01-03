@@ -48,31 +48,38 @@
 
 .dark-mode .btn {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #ffffff !important;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .dark-mode .btn:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  color: #ffffff !important;
   box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
 }
 
 .dark-mode .btn-outline {
-  background: #0f172a;
-  border-color: #334155;
-  color: #e2e8f0;
+  background: transparent;
+  border: 2px solid #60a5fa;
+  color: #60a5fa !important;
 }
 
 .dark-mode .btn-outline:hover {
-  background: #334155;
-  border-color: #475569;
+  background: rgba(96, 165, 250, 0.15);
+  border-color: #93c5fd;
+  color: #93c5fd !important;
 }
 
 .dark-mode .btn-delete {
-  background: #7f1d1d;
-  border-color: #991b1b;
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff !important;
 }
 
 .dark-mode .btn-delete:hover {
-  background: #991b1b;
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff !important;
 }
 
 .dark-mode .list-item {
@@ -154,11 +161,17 @@
 .care-header {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
   align-items: flex-end;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #f1f5f9;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #f0f9ff;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .care-header > div {
@@ -187,16 +200,37 @@
 
 .card {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(10,25,45,0.08);
-  padding: 20px;
-  margin-bottom: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(10,25,45,0.08),
+              0 1px 3px rgba(10,25,45,0.06);
+  padding: 24px;
+  margin-bottom: 20px;
   border: 1px solid rgba(0,0,0,0.04);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .card:hover {
-  box-shadow: 0 8px 24px rgba(10,25,45,0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(10,25,45,0.12),
+              0 2px 8px rgba(10,25,45,0.08);
 }
 
 .card h4 {
@@ -214,21 +248,27 @@
 }
 
 .input {
-  padding: 11px 13px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
   flex: 1;
   min-width: 160px;
-  font-size: 14px;
-  color: #111827;
+  font-size: 15px;
+  color: #1e293b;
   background: #fff;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+}
+
+.input:hover {
+  border-color: #cbd5e1;
 }
 
 .input:focus {
   outline: none;
-  border-color: #0369a1;
-  box-shadow: 0 0 0 3px rgba(3,105,161,0.1);
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14,165,233,0.1);
+  transform: translateY(-1px);
 }
 
 .input::placeholder {
@@ -242,22 +282,47 @@ textarea.input {
 }
 
 .btn {
-  background: linear-gradient(180deg, #0369a1, #0d47a1);
+  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 11px 16px;
+  border-radius: 10px;
+  padding: 12px 24px;
   cursor: pointer;
+  font-size: 15px;
   font-weight: 700;
-  font-size: 14px;
-  box-shadow: 0 4px 12px rgba(3,105,161,0.2);
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(14,165,233,0.25);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(3,105,161,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(14,165,233,0.35);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14,165,233,0.25);
 }
 
 .btn.secondary {
@@ -288,11 +353,28 @@ textarea.input {
 .list-item {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   align-items: flex-start;
-  padding: 14px 0;
+  padding: 18px 0;
   border-bottom: 1px solid #f1f5f9;
-  transition: background 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.list-item::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.list-item:hover::before {
+  opacity: 1;
 }
 
 .list-item:last-child {
@@ -300,7 +382,9 @@ textarea.input {
 }
 
 .list-item:hover {
-  background: #f9fafb;
+  background: linear-gradient(90deg, #f0f9ff 0%, transparent 100%);
+  padding-left: 16px;
+  margin-left: -16px;
 }
 
 .list-item > div:first-child {
@@ -336,20 +420,40 @@ textarea.input {
 }
 
 .filter-btn {
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 1px solid #e2e8f0;
+  padding: 10px 20px;
+  border-radius: 24px;
+  border: 2px solid #e2e8f0;
   background: white;
   color: #64748b;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}\n\n.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+.filter-btn:hover::before {
+  width: 200px;
+  height: 200px;
 }
 
 .filter-btn:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .filter-btn.active {

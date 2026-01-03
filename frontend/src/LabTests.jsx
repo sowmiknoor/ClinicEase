@@ -52,21 +52,21 @@ export default function LabTests() {
 
   const fetchTreatedPatients = async () => {
     try {
-      // Fetch patients from consultations where doctor is assigned
-      const res = await fetch('/api/consultations', { headers: header });
+      // Fetch patients from appointments where doctor is assigned
+      const res = await fetch(`/api/appointments/doctor/${userId}`, { headers: header });
       const data = await res.json();
       if (data.ok) {
-        // Extract unique patients from consultations
+        // Extract unique patients from appointments
         const uniquePatients = [];
         const patientIds = new Set();
         
-        data.consultations.forEach(consultation => {
-          if (consultation.userId && !patientIds.has(consultation.userId._id)) {
-            patientIds.add(consultation.userId._id);
+        data.appointments.forEach(appointment => {
+          if (appointment.patientId && !patientIds.has(appointment.patientId._id)) {
+            patientIds.add(appointment.patientId._id);
             uniquePatients.push({
-              _id: consultation.userId._id,
-              name: consultation.userId.name,
-              email: consultation.userId.email
+              _id: appointment.patientId._id,
+              name: appointment.patientId.name,
+              email: appointment.patientId.email
             });
           }
         });
@@ -289,7 +289,7 @@ export default function LabTests() {
                 </select>
                 {treatedPatients.length === 0 && (
                   <p className="helper-text" style={{color: '#f59e0b', fontSize: '13px', marginTop: '8px'}}>
-                    ⚠️ No treated patients found. Patients will appear here after consultations.
+                    ⚠️ No appointed patients found. Patients will appear here after accepting their appointments.
                   </p>
                 )}
               </div>

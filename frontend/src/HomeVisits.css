@@ -802,12 +802,14 @@
 }
 
 .dark-mode .btn-view {
-  background: #334155;
-  color: #e2e8f0;
+  background: #3b82f6;
+  color: #ffffff !important;
+  border: none;
 }
 
 .dark-mode .btn-view:hover {
-  background: #475569;
+  background: #60a5fa;
+  color: #ffffff !important;
 }
 
 .dark-mode .modal-overlay {

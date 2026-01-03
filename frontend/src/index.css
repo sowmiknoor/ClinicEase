@@ -34,6 +34,21 @@ body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Custom Professional Scrollbar */
@@ -578,59 +593,70 @@ main.app-main {
 /* Patient navigation buttons */
 .patient-nav .nav-btn {
   color: #881337;
-  background: rgba(254, 242, 242, 0.8);
+  background: linear-gradient(135deg, rgba(254, 242, 242, 0.9), rgba(252, 231, 243, 0.8));
+  border-color: rgba(244, 63, 94, 0.1);
 }
 
 .patient-nav .nav-btn:hover {
-  background: #fce7f3;
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
   color: #be123c;
-  border-color: rgba(244, 63, 94, 0.2);
+  border-color: rgba(244, 63, 94, 0.25);
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.15);
 }
 
 .patient-nav .nav-btn.active {
   background: linear-gradient(135deg, #f43f5e, #ec4899);
   color: white;
-  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.35);
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.4);
   border-color: transparent;
+  font-weight: 700;
+  transform: translateY(-2px);
 }
 
 /* Doctor navigation buttons */
 .doctor-nav .nav-btn {
   color: #1e3a8a;
-  background: rgba(239, 246, 255, 0.8);
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.9), rgba(219, 234, 254, 0.8));
+  border-color: rgba(59, 130, 246, 0.1);
 }
 
 .doctor-nav .nav-btn:hover {
-  background: #dbeafe;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
   color: #1e40af;
-  border-color: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.15);
 }
 
 .doctor-nav .nav-btn.active {
   background: linear-gradient(135deg, #3b82f6, #14b8a6);
   color: white;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
   border-color: transparent;
+  font-weight: 700;
+  transform: translateY(-2px);
 }
 
 /* Admin navigation buttons */
 .admin-nav .nav-btn {
   color: #fcd34d;
-  background: rgba(51, 65, 85, 0.6);
+  background: rgba(51, 65, 85, 0.7);
+  border-color: rgba(249, 115, 22, 0.15);
 }
 
 .admin-nav .nav-btn:hover {
-  background: rgba(249, 115, 22, 0.2);
+  background: rgba(249, 115, 22, 0.25);
   color: #fef3c7;
-  border-color: rgba(249, 115, 22, 0.3);
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.2);
 }
 
 .admin-nav .nav-btn.active {
   background: linear-gradient(135deg, #f97316, #fbbf24);
   color: #0f172a;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.5);
+  font-weight: 800;
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.5);
   border-color: transparent;
+  transform: translateY(-2px);
 }
 
 /* Notification Bell Button */
@@ -1272,20 +1298,23 @@ main.app-main {
 }
 
 .dark-mode .nav-btn {
-  color: #cbd5e1;
-  background: rgba(51, 65, 85, 0.5);
-  border-color: rgba(100, 116, 139, 0.3);
+  color: #f1f5f9 !important;
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(100, 116, 139, 0.4);
+  font-weight: 600;
 }
 
 .dark-mode .nav-btn:hover {
-  background: rgba(71, 85, 105, 0.6);
-  color: #93c5fd;
-  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(71, 85, 105, 0.9);
+  color: #93c5fd !important;
+  border-color: rgba(59, 130, 246, 0.6);
 }
 
 .dark-mode .nav-btn.active {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
+  color: #ffffff !important;
+  border-color: transparent;
+  font-weight: 700;
 }
 
 .dark-mode .notification-badge {
@@ -1478,6 +1507,58 @@ main.app-main {
   background: #991b1b;
 }
 
+/* Dark mode role-specific nav button styles */
+.dark-mode .patient-nav .nav-btn {
+  color: #fca5a5 !important;
+  background: rgba(127, 29, 29, 0.3);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.dark-mode .patient-nav .nav-btn:hover {
+  background: rgba(127, 29, 29, 0.5);
+  color: #fecaca !important;
+  border-color: rgba(244, 63, 94, 0.6);
+}
+
+.dark-mode .patient-nav .nav-btn.active {
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #ffffff !important;
+}
+
+.dark-mode .doctor-nav .nav-btn {
+  color: #93c5fd !important;
+  background: rgba(30, 58, 138, 0.3);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.dark-mode .doctor-nav .nav-btn:hover {
+  background: rgba(30, 58, 138, 0.5);
+  color: #bfdbfe !important;
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.dark-mode .doctor-nav .nav-btn.active {
+  background: linear-gradient(135deg, #3b82f6, #14b8a6);
+  color: #ffffff !important;
+}
+
+.dark-mode .admin-nav .nav-btn {
+  color: #fcd34d !important;
+  background: rgba(120, 53, 15, 0.3);
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+.dark-mode .admin-nav .nav-btn:hover {
+  background: rgba(120, 53, 15, 0.5);
+  color: #fef3c7 !important;
+  border-color: rgba(249, 115, 22, 0.6);
+}
+
+.dark-mode .admin-nav .nav-btn.active {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #ffffff !important;
+}
+
 .dark-mode .notification-badge {
   background: #dc2626;
   border-color: #1e293b;
@@ -1613,25 +1694,147 @@ main.app-main {
 }
 
 .dark-mode button {
-  color: #e2e8f0;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.dark-mode button.hero-btn,
+.dark-mode .hero-btn {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+.dark-mode button.hero-btn:hover,
+.dark-mode .hero-btn:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6) !important;
+}
+
+.dark-mode button.hero-btn.outline,
+.dark-mode .hero-btn.outline {
+  background: transparent !important;
+  color: #60a5fa !important;
+  border: 2px solid #60a5fa !important;
+}
+
+.dark-mode button.hero-btn.outline:hover,
+.dark-mode .hero-btn.outline:hover {
+  background: rgba(96, 165, 250, 0.15) !important;
+  color: #93c5fd !important;
+  border-color: #93c5fd !important;
 }
 
 .dark-mode input,
 .dark-mode textarea,
 .dark-mode select {
   background: #0f172a !important;
-  color: #e2e8f0 !important;
-  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+}
+
+.dark-mode input:focus,
+.dark-mode textarea:focus,
+.dark-mode select:focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2) !important;
 }
 
 .dark-mode input::placeholder,
 .dark-mode textarea::placeholder {
   color: #64748b !important;
+  opacity: 1;
 }
 
 .dark-mode .max-w-7xl,
 .dark-mode .max-w-lg {
   color: #e2e8f8;
+}
+
+/* ========== COMPREHENSIVE DARK MODE BUTTON FIXES ========== */
+/* Ensure ALL buttons have proper contrast in dark mode */
+.dark-mode button:not(.hero-btn):not(.nav-btn):not(.menu-btn):not(.sidebar-btn),
+.dark-mode .btn:not(.btn-ghost):not(.btn-outline) {
+  color: #ffffff !important;
+}
+
+/* Action buttons */
+.dark-mode button[type="submit"],
+.dark-mode button.btn-submit,
+.dark-mode .btn-submit {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+  color: #ffffff !important;
+}
+
+.dark-mode button[type="submit"]:hover,
+.dark-mode button.btn-submit:hover,
+.dark-mode .btn-submit:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6) !important;
+}
+
+/* Success buttons */
+.dark-mode .btn-success,
+.dark-mode button.btn-success {
+  background: #22c55e !important;
+  color: #ffffff !important;
+}
+
+.dark-mode .btn-success:hover,
+.dark-mode button.btn-success:hover {
+  background: #4ade80 !important;
+}
+
+/* Danger/Delete buttons */
+.dark-mode .btn-danger,
+.dark-mode .btn-delete,
+.dark-mode .btn-cancel,
+.dark-mode button.btn-danger,
+.dark-mode button.btn-delete,
+.dark-mode button.btn-cancel {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+.dark-mode .btn-danger:hover,
+.dark-mode .btn-delete:hover,
+.dark-mode .btn-cancel:hover,
+.dark-mode button.btn-danger:hover,
+.dark-mode button.btn-delete:hover,
+.dark-mode button.btn-cancel:hover {
+  background: #dc2626 !important;
+}
+
+/* Outline/Ghost buttons */
+.dark-mode .btn-outline,
+.dark-mode .btn-ghost,
+.dark-mode button.btn-outline,
+.dark-mode button.btn-ghost {
+  background: transparent !important;
+  color: #60a5fa !important;
+  border: 2px solid #60a5fa !important;
+}
+
+.dark-mode .btn-outline:hover,
+.dark-mode .btn-ghost:hover,
+.dark-mode button.btn-outline:hover,
+.dark-mode button.btn-ghost:hover {
+  background: rgba(96, 165, 250, 0.15) !important;
+  color: #93c5fd !important;
+  border-color: #93c5fd !important;
+}
+
+/* Links and text buttons */
+.dark-mode a:not(.nav-btn):not(.sidebar-btn) {
+  color: #60a5fa;
+}
+
+.dark-mode a:not(.nav-btn):not(.sidebar-btn):hover {
+  color: #93c5fd;
+}
+
+/* Form labels */
+.dark-mode label,
+.dark-mode .form-label {
+  color: #cbd5e1 !important;
+  font-weight: 500;
 }
 
 /* Removed duplicate styles - consolidated above */

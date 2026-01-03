@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
 import './Home.css';
 
 export default function Home({ onNavigate, onLoginSuccess }) {
   const { t } = useLanguage();
+  
+  // Remove dark mode when viewing home page (only logged-in users should have dark mode)
+  useEffect(() => {
+    document.body.classList.remove('dark-mode');
+  }, []);
   const [form, setForm] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState(null);
   const [status, setStatus] = useState(null);

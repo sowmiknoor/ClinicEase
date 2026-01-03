@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
 import './Login.css';
 
-export default function Login({ onLoginSuccess }) {
+export default function Login({ onLoginSuccess, onSwitchToRegister }) {
   const { t } = useLanguage();
+  
+  // Remove dark mode when viewing login page (only logged-in users should have dark mode)
+  useEffect(() => {
+    document.body.classList.remove('dark-mode');
+  }, []);
   const [form, setForm] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState(null);
   const [status, setStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -78,21 +84,22 @@ export default function Login({ onLoginSuccess }) {
   };
 
   return (
-    <div className="login-root">
-      {/* Animated Background */}
-      <div className="login-bg-animation">
-        <div className="blob blob-1"></div>
-        <div className="blob blob-2"></div>
-        <div className="blob blob-3"></div>
-      </div>
+    <>
+      <div className="login-root">
+        {/* Animated Background */}
+        <div className="login-bg-animation">
+          <div className="blob blob-1"></div>
+          <div className="blob blob-2"></div>
+          <div className="blob blob-3"></div>
+        </div>
 
-      {/* Left Side - Branding */}
-      <div className="login-left">
-        <div className="login-branding">
-          <div className="brand-logo">
-            <div className="logo-icon">⚕️</div>
-            <h1>ClinicEase</h1>
-          </div>
+        {/* Left Side - Branding */}
+        <div className="login-left">
+          <div className="login-branding">
+            <div className="brand-logo">
+              <div className="logo-icon">⚕️</div>
+              <h1>ClinicEase</h1>
+            </div>
           <h2 className="brand-tagline">Your Health, Our Priority</h2>
           <p className="brand-description">
             Experience seamless healthcare management with our comprehensive platform. 
@@ -212,13 +219,46 @@ export default function Login({ onLoginSuccess }) {
           </form>
 
           <div className="login-footer">
-            <p>{t('dontHaveAccount')} <a href="#register" className="register-link">{t('createAccount') || 'Create one now'}</a></p>
+            <p>{t('dontHaveAccount')} <button onClick={onSwitchToRegister} className="register-link">{t('createAccount') || 'Create one now'}</button></p>
             <p className="help-text">
-              {t('needHelp') || 'Need help?'} <a href="#support" className="support-link">{t('contactSupport') || 'Contact Support'}</a>
+              {t('needHelp') || 'Need help?'} <button onClick={() => setShowContactModal(true)} className="contact-btn">{t('contactSupport') || 'Contact Support'}</button>
             </p>
           </div>
         </div>
       </div>
     </div>
+
+    {/* Contact Modal - Rendered outside login-root to avoid overflow issues */}
+    {showContactModal && (
+      <div className="contact-modal-overlay" onClick={() => setShowContactModal(false)}>
+        <div className="contact-modal-content" onClick={(e) => e.stopPropagation()}>
+          <button className="contact-modal-close" onClick={() => setShowContactModal(false)}>
+            ×
+          </button>
+          <div className="contact-modal-header">
+            <div className="contact-icon">📞</div>
+            <h3>Contact Information</h3>
+          </div>
+          <div className="contact-modal-body">
+            <div className="contact-info-item">
+              <span className="contact-label">Owner:</span>
+              <span className="contact-value">Sowmik Noor</span>
+            </div>
+            <div className="contact-info-item">
+              <span className="contact-label">Email:</span>
+              <a href="mailto:sowmiknoor5@gmail.com" className="contact-email">
+                sowmiknoor5@gmail.com
+              </a>
+            </div>
+          </div>
+          <div className="contact-modal-footer">
+            <button className="contact-modal-btn" onClick={() => setShowContactModal(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
   );
 }
