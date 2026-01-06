@@ -11,6 +11,11 @@ export default function TeleConsultation() {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [loading, setLoading] = useState(false);
+  
+  // For Google Meet link modal
+  const [showMeetModal, setShowMeetModal] = useState(false);
+  const [currentConsultId, setCurrentConsultId] = useState(null);
+  const [meetingLink, setMeetingLink] = useState('');
 
   useEffect(() => { 
     fetchConsultations(); 
@@ -127,20 +132,55 @@ export default function TeleConsultation() {
 
   const handleJoin = (consult) => {
     if (consult.meetingLink) {
+      // If meeting link exists, just open it
       window.open(consult.meetingLink, '_blank');
     } else {
       if (userRole === 'Doctor') {
-        // Only doctors can generate meeting links
-        fetch(`/api/consultations/${consult._id}/meeting`, { headers: { 'x-user-id': userId } })
-          .then(r => r.json()).then(d => { 
-            if (d.ok && d.meetingLink) {
-              window.open(d.meetingLink, '_blank');
-              fetchConsultations(); // Refresh to show link to patient
-            } else alert('Unable to get meeting link'); 
-          });
+        // Show modal for doctor to input Google Meet link
+        setCurrentConsultId(consult._id);
+        setMeetingLink('');
+        setShowMeetModal(true);
       } else {
         alert('⏳ Waiting for doctor to send the meeting invitation...');
       }
+    }
+  };
+
+  const handleSendMeetingLink = async () => {
+    if (!meetingLink.trim()) {
+      alert('Please enter a Google Meet link');
+      return;
+    }
+    
+    // Basic validation for Google Meet link
+    if (!meetingLink.includes('meet.google.com')) {
+      if (!confirm('This doesn\'t look like a Google Meet link. Send anyway?')) {
+        return;
+      }
+    }
+    
+    try {
+      const res = await fetch(`/api/consultations/${currentConsultId}/meeting-link`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': userId 
+        },
+        body: JSON.stringify({ meetingLink })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert('✅ Google Meet link sent to patient!');
+        setShowMeetModal(false);
+        setMeetingLink('');
+        setCurrentConsultId(null);
+        fetchConsultations();
+      } else {
+        alert(data.error || 'Could not send meeting link');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Server error');
     }
   };
 
@@ -361,6 +401,46 @@ export default function TeleConsultation() {
           )}
         </div>
       </div>
+
+      {/* Google Meet Link Modal for Doctors */}
+      {showMeetModal && (
+        <div className="modal-overlay" onClick={() => setShowMeetModal(false)}>
+          <div className="modal-content meet-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>🎥 Send Google Meet Link</h3>
+              <button className="modal-close" onClick={() => setShowMeetModal(false)}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p className="modal-instructions">
+                Create a Google Meet meeting and paste the link below:
+              </p>
+              <ol className="meet-steps">
+                <li>Go to <a href="https://meet.google.com" target="_blank" rel="noopener noreferrer">meet.google.com</a></li>
+                <li>Click "New meeting" → "Start an instant meeting" or "Create a meeting for later"</li>
+                <li>Copy the meeting link</li>
+                <li>Paste it below</li>
+              </ol>
+              <div className="form-group">
+                <label>🔗 Google Meet Link:</label>
+                <input 
+                  type="url" 
+                  value={meetingLink} 
+                  onChange={(e) => setMeetingLink(e.target.value)}
+                  placeholder="https://meet.google.com/abc-defg-hij"
+                  className="meet-input"
+                  autoFocus
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={() => setShowMeetModal(false)}>Cancel</button>
+              <button className="btn-primary" onClick={handleSendMeetingLink}>
+                📤 Send Link to Patient
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

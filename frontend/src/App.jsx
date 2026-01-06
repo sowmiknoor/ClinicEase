@@ -105,9 +105,9 @@ function App() {
 
     // Define role-based access
     const roleAccess = {
-      Patient: ['dashboard', 'appointments', 'medications', 'symptom', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers'],
-      Doctor: ['dashboard', 'appointments', 'medications', 'prescriptions', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum', 'health-tips', 'research-papers'],
-      Admin: ['dashboard', 'admin-dashboard', 'appointments', 'medications', 'prescriptions', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers']
+      Patient: ['dashboard', 'appointments', 'medications', 'symptom', 'home-visits', 'tele', 'labtests', 'records', 'billing', 'messages', 'notifications', 'prescriptions', 'doctors', 'forum', 'health-tips', 'research-papers'],
+      Doctor: ['dashboard', 'appointments', 'medications', 'prescriptions', 'home-visits', 'tele', 'create-medical-record', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctor-profile-edit', 'forum', 'health-tips', 'research-papers'],
+      Admin: ['dashboard', 'admin-dashboard', 'appointments', 'medications', 'prescriptions', 'home-visits', 'tele', 'labtests', 'records', 'billing', 'messages', 'notifications', 'doctors', 'forum', 'health-tips', 'research-papers']
     };
 
     return roleAccess[userRole]?.includes(pageToCheck) || false;
@@ -123,6 +123,9 @@ function App() {
         { label: t('findDoctors'), page: 'doctors' },
         { label: '📅 Appointments', page: 'appointments' },
         { label: t('medications'), page: 'medications' },
+        { label: t('prescriptions'), page: 'prescriptions' },
+        { label: '🏠 Home Visits', page: 'home-visits' },
+        { label: '💻 Tele Consult', page: 'tele' },
         { label: t('symptomCheck'), page: 'symptom' },
         { label: t('labTests'), page: 'labtests' },
         { label: t('medicalRecords'), page: 'records' },
@@ -137,6 +140,8 @@ function App() {
         { label: t('dashboard'), page: 'dashboard' },
         { label: '📅 Appointments', page: 'appointments' },
         { label: t('prescriptions'), page: 'prescriptions' },
+        { label: '🏠 Home Visits', page: 'home-visits' },
+        { label: '💻 Tele Consult', page: 'tele' },
         { label: t('createMedicalRecord'), page: 'create-medical-record' },
         { label: t('labTests'), page: 'labtests' },
         { label: t('medicalRecords'), page: 'records' },
@@ -262,16 +267,15 @@ function App() {
           {userRole && <button className="menu-btn" onClick={() => setSidebarOpen(true)}>☰</button>}
         </div>
       </header>
-      <main className="app-main" style={{ paddingTop: page === 'home' || page === 'login' || page === 'register' ? '0' : '88px' }}>
+      <main className="app-main" style={{ paddingTop: page === 'home' || page === 'login' || page === 'register' ? '0' : '144px' }}>
       {page === "home" && <Home onNavigate={setPage} onLoginSuccess={handleLoginSuccess} />}
-      {page === "register" && <Register onRegistered={handleRegistered} onSwitchToLogin={() => setPage('login')} />}
-      {page === "login" && <Login onLoginSuccess={handleLoginSuccess} onSwitchToRegister={() => setPage('register')} />}
+      {page === "register" && <Register onRegistered={handleRegistered} onSwitchToLogin={() => setPage('login')} onNavigateHome={() => setPage('home')} />}
+      {page === "login" && <Login onLoginSuccess={handleLoginSuccess} onSwitchToRegister={() => setPage('register')} onNavigateHome={() => setPage('home')} />}
       {page !== "home" && page !== "register" && page !== "login" && (
         <div className="w-full">
-          <div className={`bg-white shadow-md border-b border-gray-200 mb-6 nav-bar-wrapper ${userRole ? userRole.toLowerCase() + '-nav' : ''}`}>
-            <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-              <div />
-              <nav className="top-nav" role="navigation" aria-label="Main Navigation">
+          <div className={`compact-nav-wrapper ${userRole ? userRole.toLowerCase() + '-nav' : ''}`}>
+            <div className="compact-nav-container">
+              <nav className="compact-nav" role="navigation" aria-label="Main Navigation">
                 {getNavItems().map((item) => (
                   <button 
                     key={item.page}
@@ -291,9 +295,10 @@ function App() {
                         }
                       }
                     }} 
-                    className={`nav-btn ${page === item.page ? "active" : ""} ${item.isIcon ? "notification-btn" : ""}`}
+                    className={`compact-nav-btn ${page === item.page ? "active" : ""}`}
+                    title={item.label}
                   >
-                    {item.label}
+                    <span className="nav-label">{item.label}</span>
                     {item.isIcon && unreadNotifications > 0 && (
                       <span className="notification-badge">{unreadNotifications}</span>
                     )}

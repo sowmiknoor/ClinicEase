@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import '../index.css';
+import './Toast.css';
 
 export default function Toast({ message, type = 'info', onClose, duration = 3000 }) {
   useEffect(() => {
@@ -11,29 +11,27 @@ export default function Toast({ message, type = 'info', onClose, duration = 3000
     }
   }, [duration, onClose]);
 
-  const getIcon = () => {
-    switch (type) {
-      case 'success': return '✓';
-      case 'error': return '✕';
-      case 'warning': return '⚠';
-      default: return 'ℹ';
-    }
+  const icons = {
+    success: '✓',
+    error: '⚠',
+    warning: '⚠',
+    info: 'ℹ'
   };
 
   return (
-    <div className={`toast ${type} animate-slide-in-left`}>
-      <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{getIcon()}</span>
-      <span style={{ flex: 1 }}>{message}</span>
+    <div className={`toast toast-${type}`} role="alert" aria-live="assertive">
+      <div className="toast-icon">{icons[type]}</div>
+      <div className="toast-message">{message}</div>
       <button 
+        className="toast-close"
         onClick={onClose}
+        aria-label="Close notification"
         style={{
-          background: 'none',
+          background: 'transparent',
           border: 'none',
-          fontSize: '20px',
+          fontSize: '24px',
           cursor: 'pointer',
-          color: 'inherit',
-          opacity: 0.6,
-          padding: '0 4px'
+          padding: '0'
         }}
       >
         ×

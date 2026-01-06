@@ -133,14 +133,15 @@
 
 .stat-content h3 {
   font-size: 1.1rem;
-  color: #666;
+  color: #1f2937;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .stat-number {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: #111827;
   margin-bottom: 10px;
 }
 
@@ -149,15 +150,17 @@
   flex-direction: column;
   gap: 5px;
   font-size: 0.9rem;
-  color: #777;
+  color: #374151;
   margin-bottom: 10px;
+  font-weight: 500;
 }
 
 .stat-footer {
   font-size: 0.85rem;
-  color: #999;
+  color: #4b5563;
   padding-top: 10px;
   border-top: 1px solid #eee;
+  font-weight: 500;
 }
 
 /* Users Section */
@@ -181,13 +184,15 @@
 }
 
 .section-header h2 {
-  color: #333;
+  color: #111827;
   font-size: 1.8rem;
+  font-weight: 700;
 }
 
 .section-header p {
-  color: #666;
+  color: #374151;
   margin-top: 5px;
+  font-weight: 500;
 }
 
 .users-table-container {
@@ -568,3 +573,255 @@
     flex: 1;
   }
 }
+
+/* ============================================
+   DARK MODE STYLES - COMPLETE COVERAGE
+   ============================================ */
+
+.dark-mode .admin-dashboard {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  min-height: 100vh;
+}
+
+.dark-mode .admin-header {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid #334155;
+  backdrop-filter: blur(20px);
+}
+
+.dark-mode .admin-header h1 {
+  color: #f1f5f9;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .admin-subtitle {
+  color: #cbd5e1;
+}
+
+/* Tabs */
+.dark-mode .tab-btn {
+  background: rgba(51, 65, 85, 0.6);
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+.dark-mode .tab-btn:hover {
+  background: rgba(71, 85, 105, 0.8);
+}
+
+.dark-mode .tab-btn.active {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+/* Stat Cards */
+.dark-mode .stat-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .stat-card:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  border-color: #475569;
+}
+
+.dark-mode .stat-content h3 {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.dark-mode .stat-number {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.dark-mode .stat-breakdown {
+  color: #e2e8f0;
+}
+
+.dark-mode .stat-breakdown span,
+.dark-mode .stat-breakdown div {
+  color: #e2e8f0;
+}
+
+.dark-mode .stat-footer {
+  color: #94a3b8;
+  border-top-color: #334155;
+}
+
+/* Sections */
+.dark-mode .users-section,
+.dark-mode .revenue-section,
+.dark-mode .content-section,
+.dark-mode .activity-section {
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .section-header h2 {
+  color: #f1f5f9;
+}
+
+.dark-mode .section-header p {
+  color: #94a3b8;
+}
+
+/* Users Table */
+.dark-mode .users-table th {
+  background: #0f172a;
+  color: #f1f5f9;
+  border-bottom-color: #334155;
+}
+
+.dark-mode .users-table td {
+  color: #e2e8f0;
+  border-bottom-color: #334155;
+}
+
+.dark-mode .users-table tr:hover {
+  background: #334155;
+}
+
+/* Role Badges */
+.dark-mode .role-badge.patient {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+
+.dark-mode .role-badge.doctor {
+  background: #312e81;
+  color: #c4b5fd;
+}
+
+.dark-mode .role-badge.admin {
+  background: #7c2d12;
+  color: #fdba74;
+}
+
+/* Action Buttons */
+.dark-mode .btn-action {
+  border: 1px solid #475569;
+}
+
+.dark-mode .btn-danger {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.dark-mode .btn-danger:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.dark-mode .btn-success {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.dark-mode .btn-success:hover {
+  background: #15803d;
+  border-color: #15803d;
+}
+
+/* Revenue Section */
+.dark-mode .period-select {
+  background: #1e293b;
+  color: #60a5fa;
+  border-color: #3b82f6;
+}
+
+.dark-mode .period-select:hover {
+  background: #334155;
+}
+
+.dark-mode .revenue-card {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.dark-mode .revenue-chart h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .chart-bar {
+  background: linear-gradient(to top, #3b82f6, #1e40af);
+}
+
+.dark-mode .bar-label {
+  color: #cbd5e1;
+}
+
+.dark-mode .bar-count {
+  color: #64748b;
+}
+
+/* Content Section */
+.dark-mode .content-group h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .content-item {
+  background: #0f172a;
+  border-left-color: #3b82f6;
+  border: 1px solid #334155;
+}
+
+.dark-mode .content-info h4 {
+  color: #f1f5f9;
+}
+
+.dark-mode .content-info p {
+  color: #cbd5e1;
+}
+
+.dark-mode .content-author {
+  background: #1e293b;
+  color: #60a5fa;
+  border: 1px solid #334155;
+}
+
+/* Activity Section */
+.dark-mode .activity-group h3 {
+  color: #f1f5f9;
+}
+
+.dark-mode .activity-item {
+  background: #0f172a;
+  border-left-color: #3b82f6;
+  border: 1px solid #334155;
+}
+
+.dark-mode .activity-icon {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+.dark-mode .activity-content strong {
+  color: #f1f5f9;
+}
+
+.dark-mode .activity-content {
+  color: #cbd5e1;
+}
+
+.dark-mode .activity-time {
+  color: #64748b;
+}
+
+/* Loading State */
+.dark-mode .loading-container {
+  color: #e2e8f0;
+}
+
+.dark-mode .spinner {
+  border-color: rgba(148, 163, 184, 0.3);
+  border-top-color: #60a5fa;
+}
+
+/* Empty State */
+.dark-mode .empty-state {
+  color: #64748b;
+}
+

@@ -17,6 +17,7 @@ router.get('/:id/meeting', consultationController.ensureMeetingLink);
 router.patch('/:id/accept', consultationController.acceptConsultation);
 router.patch('/:id/reject', consultationController.rejectConsultation);
 router.patch('/:id/complete', consultationController.completeConsultation);
+router.patch('/:id/meeting-link', consultationController.setMeetingLink);
 
 module.exports = router;
 //ho vai 

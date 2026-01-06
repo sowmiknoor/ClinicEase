@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLanguage } from './LanguageContext';
 import './Register.css';
 
-export default function Register({ onRegistered, onSwitchToLogin }) {
+export default function Register({ onRegistered, onSwitchToLogin, onNavigateHome }) {
   const { t } = useLanguage();
   
   // Remove dark mode when viewing register page (only logged-in users should have dark mode)
@@ -383,7 +383,53 @@ export default function Register({ onRegistered, onSwitchToLogin }) {
           </form>
 
           <div className="register-footer">
-            <p>{t('alreadyHaveAccount') || 'Already have an account?'} <button type="button" onClick={() => onSwitchToLogin && onSwitchToLogin()} className="login-link" style={{background: 'none', border: 'none', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit'}}>{t('signInHere') || 'Sign in here'}</button></p>
+            <p>
+              {t('alreadyHaveAccount') || 'Already have an account?'}{' '}
+              <button 
+                type="button" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onSwitchToLogin) {
+                    onSwitchToLogin();
+                  }
+                }} 
+                className="login-link" 
+                style={{
+                  background: 'none', 
+                  border: 'none', 
+                  color: 'inherit', 
+                  textDecoration: 'underline', 
+                  cursor: 'pointer', 
+                  padding: 0, 
+                  font: 'inherit'
+                }}
+              >
+                {t('signInHere') || 'Sign in here'}
+              </button>
+            </p>
+            <p style={{ marginTop: '10px' }}>
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigateHome) {
+                    onNavigateHome();
+                  }
+                }}
+                style={{
+                  background: 'none', 
+                  border: 'none', 
+                  color: '#667eea', 
+                  textDecoration: 'none', 
+                  cursor: 'pointer', 
+                  padding: 0, 
+                  font: 'inherit',
+                  fontSize: '14px'
+                }}
+              >
+                ← {t('backToHome') || 'Back to Home'}
+              </button>
+            </p>
           </div>
         </div>
       </div>

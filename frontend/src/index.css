@@ -4,6 +4,7 @@
    ============================================ */
 @import './design-system.css';
 @import './ui-fixes.css';
+@import './ux-enhancements.css';
 
 /* ========== GLOBAL RESET ========== */
 * { 
@@ -545,6 +546,233 @@ main.app-main {
   min-height: 100vh;
 }
 
+/* Compact Navigation Wrapper */
+/* ====================================================
+   CLEAN MINIMALIST NAVIGATION
+   ==================================================== */
+
+.compact-nav-wrapper {
+  position: fixed;
+  top: 76px;
+  left: 0;
+  right: 0;
+  z-index: 45;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.compact-nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(203, 213, 225, 0.5) transparent;
+}
+
+.compact-nav-container::-webkit-scrollbar {
+  height: 2px;
+}
+
+.compact-nav-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.compact-nav-container::-webkit-scrollbar-thumb {
+  background: rgba(203, 213, 225, 0.5);
+  border-radius: 10px;
+}
+
+.compact-nav {
+  display: flex;
+  gap: 4px;
+  padding: 8px 0;
+  min-width: max-content;
+}
+
+/* Clean Navigation Buttons */
+.compact-nav-btn {
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+}
+
+.compact-nav-btn:hover {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.compact-nav-btn .nav-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.compact-nav-btn .nav-icon {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* Active State */
+.compact-nav-btn.active {
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.compact-nav-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: currentColor;
+}
+
+/* PATIENT THEME */
+.compact-nav-wrapper.patient-nav {
+  background: #fff5f7;
+  border-bottom-color: #fecdd3;
+}
+
+.patient-nav .compact-nav-btn:hover {
+  background: #ffe4e6;
+  color: #881337;
+}
+
+.patient-nav .compact-nav-btn.active {
+  background: #fecdd3;
+  color: #be123c;
+}
+
+.patient-nav .compact-nav-btn.active::after {
+  background: linear-gradient(90deg, #f43f5e, #ec4899);
+}
+
+/* DOCTOR THEME */
+.compact-nav-wrapper.doctor-nav {
+  background: #f0f9ff;
+  border-bottom-color: #bae6fd;
+}
+
+.doctor-nav .compact-nav-btn:hover {
+  background: #e0f2fe;
+  color: #0c4a6e;
+}
+
+.doctor-nav .compact-nav-btn.active {
+  background: #bae6fd;
+  color: #075985;
+}
+
+.doctor-nav .compact-nav-btn.active::after {
+  background: linear-gradient(90deg, #3b82f6, #14b8a6);
+}
+
+/* ADMIN THEME */
+.compact-nav-wrapper.admin-nav {
+  background: #1e293b;
+  border-bottom-color: #334155;
+}
+
+.admin-nav .compact-nav-btn {
+  color: #94a3b8;
+}
+
+.admin-nav .compact-nav-btn:hover {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.admin-nav .compact-nav-btn.active {
+  background: #475569;
+  color: #fbbf24;
+}
+
+.admin-nav .compact-nav-btn.active::after {
+  background: linear-gradient(90deg, #f97316, #fbbf24);
+}
+
+/* Notification Badge */
+.compact-nav-btn .notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #ef4444;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .compact-nav-container {
+    padding: 0 16px;
+  }
+  
+  .compact-nav {
+    gap: 2px;
+  }
+  
+  .compact-nav-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .compact-nav-btn {
+    padding: 10px 14px;
+    gap: 6px;
+  }
+  
+  .compact-nav-btn .nav-label {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .compact-nav-wrapper {
+    top: 56px;
+  }
+  
+  .compact-nav {
+    gap: 4px;
+    padding: 8px 0;
+  }
+  
+  .compact-nav-btn {
+    padding: 7px 14px;
+    font-size: 12px;
+    min-height: 36px;
+    border-radius: 8px;
+  }
+  
+  .compact-nav-btn .nav-label {
+    font-size: 12px;
+  }
+}
+
+/* Old navigation styles for backward compatibility */
 /* Top Navigation Bar */
 .top-nav {
   display: flex;

@@ -51,6 +51,40 @@ export default function MyMedications() {
         <p>Manage your prescribed medications and treatment plan</p>
       </div>
 
+      {/* Online Pharmacy Section */}
+      <div className="online-pharmacy-section">
+        <div className="pharmacy-card">
+          <div className="pharmacy-header">
+            <h2>🏪 Order Medicines Online</h2>
+            <p>Get your prescribed medications delivered to your doorstep</p>
+          </div>
+          <div className="pharmacy-content">
+            <a 
+              href="https://www.arogga.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="pharmacy-link arogga"
+            >
+              <div className="pharmacy-logo">
+                <div className="logo-circle arogga-logo">
+                  <span className="logo-text">A</span>
+                </div>
+              </div>
+              <div className="pharmacy-info">
+                <h3>Arogga</h3>
+                <p>Order medicines from Bangladesh's trusted online pharmacy</p>
+                <div className="pharmacy-features">
+                  <span className="feature">🚚 Home Delivery</span>
+                  <span className="feature">💳 Cash on Delivery</span>
+                  <span className="feature">✅ Verified Medicines</span>
+                </div>
+              </div>
+              <div className="pharmacy-arrow">→</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
       {medications.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">💊</div>

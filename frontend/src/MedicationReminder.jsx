@@ -492,11 +492,11 @@ export default function MedicationReminder() {
                   <div className="medication-details">
                     <div className="detail-row">
                       <span className="label">Schedule:</span>
-                      <span className="value">{med.timesPerDay || med.reminderTimes?.length} times/day</span>
+                      <span className="value">{med.reminderTimes?.length || med.timesPerDay || 1} {med.reminderTimes?.length === 1 ? 'time' : 'times'}/day</span>
                     </div>
                     <div className="detail-row">
                       <span className="label">Times:</span>
-                      <span className="value">{med.reminderTimes?.join(', ')}</span>
+                      <span className="value">{med.reminderTimes?.join(', ') || 'Not set'}</span>
                     </div>
                     <div className="detail-row">
                       <span className="label">Duration:</span>

@@ -334,18 +334,30 @@
 .detail-row {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0;
   font-size: 14px;
+  line-height: 1.6;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
 }
 
 .detail-row .label {
   color: #64748b;
   font-weight: 600;
+  min-width: 100px;
+  flex-shrink: 0;
 }
 
 .detail-row .value {
   color: #1e293b;
   font-weight: 500;
   text-align: right;
+  flex: 1;
+  word-break: break-word;
 }
 
 /* Tracking Stats */
@@ -354,6 +366,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .tracking-stats.small {
@@ -363,9 +376,21 @@
 .stat-box {
   background: #f8fafc;
   border-radius: 12px;
-  padding: 16px;
+  padding: 18px 16px;
   text-align: center;
-  border: 2px solid #e5e7eb;
+  border: 3px solid #e5e7eb;
+  transition: all 0.3s ease;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .stat-box.taken {
@@ -384,56 +409,89 @@
 }
 
 .stat-value {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 36px;
+  font-weight: 900;
   color: #1e293b;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  line-height: 1;
+  width: 100%;
+  text-align: center;
 }
 
 .stat-label {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  width: 100%;
+  text-align: center;
 }
 
 /* Adherence Section */
 .adherence-section {
   margin-bottom: 20px;
-  padding: 16px;
-  background: #f8fafc;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   border-radius: 12px;
+  border: 1px solid #e2e8f0;
 }
 
 .adherence-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  font-size: 14px;
-  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 700;
   color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .adherence-percentage {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .progress-bar {
   width: 100%;
-  height: 12px;
-  background: #e5e7eb;
-  border-radius: 6px;
+  height: 16px;
+  background: #e2e8f0;
+  border-radius: 8px;
   overflow: hidden;
   margin-bottom: 12px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .progress-fill {
   height: 100%;
   transition: width 0.5s ease, background-color 0.3s ease;
-  border-radius: 6px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .adherence-message {
