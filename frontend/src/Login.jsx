@@ -86,6 +86,14 @@ export default function Login({ onLoginSuccess, onSwitchToRegister, onNavigateHo
   return (
     <>
       <div className="login-root">
+        {/* Top Logo Header */}
+        <div className="login-top-header">
+          <div className="top-logo">
+            <span className="top-logo-icon">⚕️</span>
+            <span className="top-logo-text">CLINICEASE</span>
+          </div>
+        </div>
+
         {/* Animated Background */}
         <div className="login-bg-animation">
           <div className="blob blob-1"></div>

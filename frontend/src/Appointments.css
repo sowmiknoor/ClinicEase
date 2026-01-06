@@ -17,6 +17,8 @@
   margin-bottom: 36px;
   gap: 20px;
   flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(14, 165, 233, 0.1);
 }
 
 .appointments-header h2 {
@@ -25,6 +27,13 @@
   color: #0f172a;
   margin: 0;
   letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dark-mode .appointments-header {
+  border-bottom-color: rgba(96, 165, 250, 0.2);
 }
 
 .dark-mode .appointments-header h2 {
@@ -865,21 +874,38 @@
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.25);
   width: fit-content;
   white-space: nowrap;
+  font-size: 16px;
+  padding: 14px 32px;
+  min-width: 180px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.appointments-header .btn-primary {
+  font-size: 15px;
+  padding: 12px 26px;
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-3px);
+  transform: translateY(-3px) scale(1.02);
   box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4);
+  background: linear-gradient(135deg, #0284c7, #0891b2);
 }
 
 .btn-primary:active:not(:disabled) {
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(0.98);
   box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
 }
 
 .btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .btn-secondary {
