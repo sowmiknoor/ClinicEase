@@ -735,6 +735,21 @@
 @media (max-width: 968px) {
   .login-root {
     flex-direction: column;
+    padding-top: 85px;
+  }
+
+  .login-top-header {
+    padding: 15px 30px;
+  }
+
+  .top-logo-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+
+  .top-logo-text {
+    font-size: 20px;
   }
   
   .login-left {
@@ -744,21 +759,36 @@
   .login-right {
     flex: none;
     width: 100%;
-    padding: 20px;
+    padding: 40px 20px;
+    min-height: calc(100vh - 85px);
   }
   
   .login-card {
-    padding: 32px;
+    padding: 40px 32px;
   }
 }
 
 @media (max-width: 480px) {
+  .login-top-header {
+    padding: 12px 20px;
+  }
+
+  .top-logo-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .top-logo-text {
+    font-size: 18px;
+  }
+
   .login-card {
-    padding: 24px;
+    padding: 32px 24px;
   }
   
   .login-header h2 {
-    font-size: 28px;
+    font-size: 26px;
   }
   
   .input-wrapper input {
