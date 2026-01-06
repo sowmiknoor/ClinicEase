@@ -148,14 +148,56 @@ export default function Records() {
       </div>
 
       {userRole !== 'Patient' && (
-        <form className="card" onSubmit={submit}>
-          <h4>Add Record</h4>
-          <div className="row">
-            <input className="input" placeholder="Title" value={form.title} onChange={e=>setForm({...form,title:e.target.value})} required />
-            <input className="input" placeholder="Attachment URL" value={form.attachmentUrl} onChange={e=>setForm({...form,attachmentUrl:e.target.value})} />
+        <form className="card add-record-form" onSubmit={submit}>
+          <div className="form-header">
+            <h4>📝 Add Record</h4>
+            <p className="form-subtitle">Create a new medical record for patient reference</p>
           </div>
-          <textarea className="input" placeholder="Description" value={form.description} onChange={e=>setForm({...form,description:e.target.value})} />
-          <button className="btn" type="submit">Save</button>
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">Record Title</label>
+              <input 
+                className="input" 
+                placeholder="E.g., Annual Checkup, Blood Test Results" 
+                value={form.title} 
+                onChange={e=>setForm({...form,title:e.target.value})} 
+                required 
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Attachment URL</label>
+              <input 
+                className="input" 
+                placeholder="https://example.com/document.pdf" 
+                value={form.attachmentUrl} 
+                onChange={e=>setForm({...form,attachmentUrl:e.target.value})} 
+              />
+            </div>
+          </div>
+          <div className="form-group full-width">
+            <label className="form-label">Description</label>
+            <textarea 
+              className="input textarea-large" 
+              placeholder="Enter detailed medical record information, findings, or notes..." 
+              value={form.description} 
+              onChange={e=>setForm({...form,description:e.target.value})} 
+              rows="4"
+            />
+          </div>
+          <div className="form-actions">
+            <button className="btn btn-primary" type="submit">
+              <span className="btn-icon">💾</span>
+              Save Record
+            </button>
+            <button 
+              className="btn btn-secondary" 
+              type="button" 
+              onClick={() => setForm({ title: '', description: '', attachmentUrl: '' })}
+            >
+              <span className="btn-icon">🔄</span>
+              Reset
+            </button>
+          </div>
         </form>
       )}
 

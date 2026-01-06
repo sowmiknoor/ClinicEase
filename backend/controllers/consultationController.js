@@ -181,7 +181,7 @@ exports.acceptConsultation = async (req, res) => {
     const notification = new Notification({
       userId: consult.userId._id,
       title: '✅ Consultation Accepted',
-      body: `Dr. ${doctor.name} has accepted your tele-consultation request scheduled on ${new Date(consult.scheduledAt).toLocaleString()}.`,
+      body: `Dr. ${doctor.name} has accepted your tele-consultation request scheduled on ${new Date(consult.scheduledAt).toLocaleString()}. Please wait for the meeting link.`,
       category: 'tele-consult'
     });
     await notification.save();
@@ -190,6 +190,44 @@ exports.acceptConsultation = async (req, res) => {
     res.json({ ok: true, message: 'Consultation accepted', consultation: consult });
   } catch (err) {
     console.error('Error accepting consultation:', err);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+};
+
+// Set Google Meet link (Doctor only)
+exports.setMeetingLink = async (req, res) => {
+  try {
+    const { meetingLink } = req.body;
+    const consult = await Consultation.findById(req.params.id).populate('userId', 'name');
+    
+    if (!consult) return res.status(404).json({ ok: false, error: 'Consultation not found' });
+    
+    // Verify the current user is the doctor assigned to this consultation
+    if (!consult.doctorId || consult.doctorId.toString() !== req.userId) {
+      return res.status(403).json({ ok: false, error: 'Unauthorized - Not assigned doctor' });
+    }
+
+    if (!meetingLink || !meetingLink.trim()) {
+      return res.status(400).json({ ok: false, error: 'Meeting link is required' });
+    }
+    
+    consult.meetingLink = meetingLink;
+    await consult.save();
+
+    // Send notification to patient
+    const doctor = await User.findById(req.userId);
+    const notification = new Notification({
+      userId: consult.userId._id,
+      title: '🎥 Video Call Link Received!',
+      body: `Dr. ${doctor.name} has sent you a Google Meet link for your consultation on ${new Date(consult.scheduledAt).toLocaleString()}. Click to join the video call!`,
+      category: 'tele-consult'
+    });
+    await notification.save();
+    console.log('Meeting link notification sent to patient:', consult.userId._id);
+
+    res.json({ ok: true, message: 'Meeting link sent successfully', consultation: consult });
+  } catch (err) {
+    console.error('Error setting meeting link:', err);
     res.status(500).json({ ok: false, error: err.message });
   }
 };

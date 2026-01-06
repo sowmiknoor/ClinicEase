@@ -28,6 +28,7 @@ export default function Appointments() {
     if (userRole === 'Patient') {
       fetchDoctors();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAppointments = async () => {
@@ -41,14 +42,20 @@ export default function Appointments() {
       });
       const data = await response.json();
       if (data.ok) {
-        // Remove duplicates based on _id
+        // Remove duplicates based on _id to ensure unique appointments
+        const appointmentsArray = data.appointments || [];
         const uniqueAppointments = Array.from(
-          new Map(data.appointments?.map(app => [app._id, app])).values()
+          new Map(appointmentsArray.map(app => [app._id, app])).values()
         );
-        console.log('Total appointments from API:', data.appointments?.length);
-        console.log('Unique appointments:', uniqueAppointments.length);
-        console.log('Appointments:', uniqueAppointments);
-        setAppointments(uniqueAppointments || []);
+        console.log('Total appointments from API:', appointmentsArray.length);
+        console.log('Unique appointments after deduplication:', uniqueAppointments.length);
+        
+        // Set appointments only if they've changed to prevent unnecessary re-renders
+        setAppointments(prev => {
+          const prevIds = prev.map(a => a._id).sort().join(',');
+          const newIds = uniqueAppointments.map(a => a._id).sort().join(',');
+          return prevIds === newIds ? prev : uniqueAppointments;
+        });
       }
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -242,9 +249,14 @@ export default function Appointments() {
             </button>
           </div>
         ) : (
-          appointments.map(appointment => (
-            <div key={appointment._id} className="appointment-card">
-              <div className="appointment-header-section">
+          <>
+            {appointments.map((appointment, index) => (
+              <div 
+                key={`appointment-${appointment._id}`} 
+                className="appointment-card"
+                style={{ '--card-index': index }}
+              >
+                <div className="appointment-header-section">
                 <div className="appointment-type">
                   <span className="type-icon">📅</span>
                   <span className="type-text">{t('doctorAppointment')}</span>
@@ -349,7 +361,8 @@ export default function Appointments() {
                 )}
               </div>
             </div>
-          ))
+          ))}
+          </>
         )}
       </div>
 

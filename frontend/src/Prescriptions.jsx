@@ -21,16 +21,25 @@ export default function Prescriptions() {
       setLoading(true);
       const endpoint = `/api/prescriptions`;
       
+      console.log('Fetching prescriptions for user:', userId, 'role:', userRole);
+      
       const response = await fetch(endpoint, {
         headers: { 'x-user-id': userId }
       });
       const data = await response.json();
       
+      console.log('Prescriptions API response:', data);
+      
       if (data.ok) {
         setPrescriptions(data.prescriptions || []);
+        console.log('Loaded prescriptions count:', data.prescriptions?.length || 0);
+      } else {
+        console.error('Failed to load prescriptions:', data);
+        setMessage({ type: 'error', text: data.msg || 'Failed to load prescriptions' });
       }
     } catch (error) {
       console.error('Error fetching prescriptions:', error);
+      setMessage({ type: 'error', text: 'Error connecting to server' });
     } finally {
       setLoading(false);
     }
@@ -107,6 +116,42 @@ export default function Prescriptions() {
         </div>
       )}
 
+      {/* Online Pharmacy Section - Only for Patients */}
+      {userRole === 'Patient' && (
+        <div className="online-pharmacy-section">
+          <div className="pharmacy-card">
+            <div className="pharmacy-header">
+              <h2>🏪 Order Medicines Online</h2>
+              <p>Get your prescribed medications delivered to your doorstep</p>
+            </div>
+            <div className="pharmacy-content">
+              <a 
+                href="https://www.arogga.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="pharmacy-link arogga"
+              >
+                <div className="pharmacy-logo">
+                  <div className="logo-circle arogga-logo">
+                    <span className="logo-text">A</span>
+                  </div>
+                </div>
+                <div className="pharmacy-info">
+                  <h3>Arogga</h3>
+                  <p>Order medicines from Bangladesh's trusted online pharmacy</p>
+                  <div className="pharmacy-features">
+                    <span className="feature">🚚 Home Delivery</span>
+                    <span className="feature">💳 Cash on Delivery</span>
+                    <span className="feature">✅ Verified Medicines</span>
+                  </div>
+                </div>
+                <div className="pharmacy-arrow">→</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Prescriptions List */}
       <div className="prescriptions-list">
         {loading ? (
@@ -118,9 +163,7 @@ export default function Prescriptions() {
             <p>
               {userRole === 'Patient' 
                 ? 'You don\'t have any prescriptions yet. Your doctor will prescribe medications when needed.'
-                : showCreateForm 
-                  ? 'Fill out the form above to create your first prescription.'
-                  : 'Click "+ New Prescription" above to issue your first prescription to a patient.'}
+                : 'No prescriptions found in the system.'}
             </p>
           </div>
         ) : (

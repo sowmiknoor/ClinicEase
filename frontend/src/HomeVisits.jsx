@@ -133,10 +133,16 @@ export default function HomeVisits() {
   };
 
   const handleAccept = async (visitId) => {
+    if (!confirm('Are you sure you want to accept this home visit request?')) return;
+    
     try {
+      setLoading(true);
       const response = await fetch(`/api/home-visits/${visitId}/accept`, {
         method: 'PATCH',
-        headers: { 'x-user-id': userId }
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': userId 
+        }
       });
 
       const data = await response.json();
@@ -144,15 +150,24 @@ export default function HomeVisits() {
         setMessage({ type: 'success', text: 'Home visit accepted successfully' });
         fetchHomeVisits();
       } else {
-        setMessage({ type: 'error', text: data.message });
+        setMessage({ type: 'error', text: data.message || 'Failed to accept visit' });
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Error accepting visit' });
+      console.error('Error accepting visit:', error);
+      setMessage({ type: 'error', text: 'Error accepting visit: ' + error.message });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleReject = async (visitId) => {
+    if (!rejectionReason.trim()) {
+      setMessage({ type: 'error', text: 'Please provide a rejection reason' });
+      return;
+    }
+
     try {
+      setLoading(true);
       const response = await fetch(`/api/home-visits/${visitId}/reject`, {
         method: 'PATCH',
         headers: {
@@ -169,18 +184,27 @@ export default function HomeVisits() {
         setRejectionReason('');
         fetchHomeVisits();
       } else {
-        setMessage({ type: 'error', text: data.message });
+        setMessage({ type: 'error', text: data.message || 'Failed to reject visit' });
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Error rejecting visit' });
+      console.error('Error rejecting visit:', error);
+      setMessage({ type: 'error', text: 'Error rejecting visit: ' + error.message });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleComplete = async (visitId) => {
+    if (!confirm('Mark this home visit as completed?')) return;
+
     try {
+      setLoading(true);
       const response = await fetch(`/api/home-visits/${visitId}/complete`, {
         method: 'PATCH',
-        headers: { 'x-user-id': userId }
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': userId 
+        }
       });
 
       const data = await response.json();
@@ -188,10 +212,13 @@ export default function HomeVisits() {
         setMessage({ type: 'success', text: 'Home visit marked as completed' });
         fetchHomeVisits();
       } else {
-        setMessage({ type: 'error', text: data.message });
+        setMessage({ type: 'error', text: data.message || 'Failed to complete visit' });
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Error completing visit' });
+      console.error('Error completing visit:', error);
+      setMessage({ type: 'error', text: 'Error completing visit: ' + error.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -474,12 +501,14 @@ export default function HomeVisits() {
                       <button 
                         className="btn-accept"
                         onClick={() => handleAccept(visit._id)}
+                        disabled={loading}
                       >
                         ✓ Accept
                       </button>
                       <button 
                         className="btn-reject"
                         onClick={() => setShowRejectModal(visit._id)}
+                        disabled={loading}
                       >
                         ✕ Reject
                       </button>
@@ -490,6 +519,7 @@ export default function HomeVisits() {
                     <button 
                       className="btn-complete"
                       onClick={() => handleComplete(visit._id)}
+                      disabled={loading}
                     >
                       Mark Completed
                     </button>

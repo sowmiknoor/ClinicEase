@@ -1276,3 +1276,235 @@
 .btn-view-all:active {
   transform: translateY(0);
 }
+
+/* Lab Test Header Section with Button */
+.labtest-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 20px;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.btn-view-catalog-header {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+  white-space: nowrap;
+}
+
+.btn-view-catalog-header:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+}
+
+.btn-view-catalog-header:active {
+  transform: translateY(0);
+}
+
+/* Test Catalog Section (Inline Display) */
+.test-catalog-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #bae6fd;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 30px rgba(6, 182, 212, 0.1);
+}
+
+.catalog-section-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.catalog-section-header h3 {
+  color: #0c4a6e;
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.catalog-description {
+  color: #0369a1;
+  font-size: 15px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.catalog-filters-inline {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.catalog-search-inline {
+  flex: 2;
+  padding: 14px 20px;
+  border: 2px solid #bae6fd;
+  border-radius: 12px;
+  font-size: 15px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.catalog-search-inline:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
+}
+
+.catalog-category-filter-inline {
+  flex: 1;
+  padding: 14px 18px;
+  border: 2px solid #bae6fd;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.catalog-category-filter-inline:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
+}
+
+.catalog-content-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.catalog-content-inline::-webkit-scrollbar {
+  width: 10px;
+}
+
+.catalog-content-inline::-webkit-scrollbar-track {
+  background: rgba(186, 230, 253, 0.3);
+  border-radius: 10px;
+}
+
+.catalog-content-inline::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+  border-radius: 10px;
+}
+
+.catalog-content-inline::-webkit-scrollbar-thumb:hover {
+  background: #0891b2;
+}
+
+.no-results-inline {
+  text-align: center;
+  padding: 48px 20px;
+  color: #0369a1;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.catalog-category-inline {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.08);
+  border: 1px solid #bae6fd;
+}
+
+.catalog-category-title-inline {
+  color: #0c4a6e;
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.3px;
+}
+
+.category-icon {
+  font-size: 24px;
+}
+
+.category-count {
+  margin-left: auto;
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.catalog-tests-inline {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.catalog-test-card-inline {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #bae6fd;
+  padding: 14px 18px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.catalog-test-card-inline:hover {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+}
+
+.test-icon-inline {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.test-name-inline {
+  color: #0c4a6e;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .labtest-header-section {
+    flex-direction: column;
+  }
+  
+  .btn-view-catalog-header {
+    width: 100%;
+  }
+  
+  .catalog-filters-inline {
+    flex-direction: column;
+  }
+  
+  .catalog-tests-inline {
+    grid-template-columns: 1fr;
+  }
+  
+  .test-catalog-section {
+    padding: 20px;
+  }
+}

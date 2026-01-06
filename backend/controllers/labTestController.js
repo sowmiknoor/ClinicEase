@@ -15,17 +15,27 @@ const scopeFilter = (user) => {
 
 exports.create = async (req, res) => {
   try {
-    // Only doctors can suggest/create lab tests
-    if (req.user.role !== 'Doctor' && req.user.role !== 'Admin') {
-      return res.status(403).json({ ok: false, msg: 'Only doctors can suggest lab tests' });
-    }
-
     const { patientId, testType, scheduledDate, notes, category, labName, labLocation, batchOrderId } = req.body;
-    if (!patientId) return res.json({ ok: false, msg: 'patientId required' });
+    
+    // Determine the actual patient ID based on role
+    let actualPatientId;
+    let actualDoctorId = null;
+    
+    if (req.user.role === 'Patient') {
+      // Patient ordering for themselves
+      actualPatientId = req.user._id;
+    } else if (req.user.role === 'Doctor' || req.user.role === 'Admin') {
+      // Doctor/Admin suggesting for a patient
+      if (!patientId) return res.json({ ok: false, msg: 'patientId required' });
+      actualPatientId = patientId;
+      actualDoctorId = req.user._id;
+    } else {
+      return res.status(403).json({ ok: false, msg: 'Unauthorized' });
+    }
     
     const test = await LabTest.create({ 
-      patientId, 
-      doctorId: req.user._id, 
+      patientId: actualPatientId, 
+      doctorId: actualDoctorId, 
       testType, 
       category,
       scheduledDate, 
@@ -56,25 +66,28 @@ exports.create = async (req, res) => {
     }
 
     if (shouldNotify) {
-      // Count how many tests are in this batch
-      let testCount = 1;
-      if (batchOrderId) {
-        testCount = await LabTest.countDocuments({ batchOrderId });
-      }
+      // Only send notification if a doctor suggested the test
+      if (actualDoctorId) {
+        // Count how many tests are in this batch
+        let testCount = 1;
+        if (batchOrderId) {
+          testCount = await LabTest.countDocuments({ batchOrderId });
+        }
 
-      const patient = await User.findById(patientId);
-      const notification = new Notification({
-        userId: patientId,
-        title: batchOrderId 
-          ? `🔬 New Lab Test Batch Suggested (${testCount} Tests)`
-          : '🔬 New Lab Test Suggested',
-        body: batchOrderId
-          ? `Dr. ${req.user.name} has suggested ${testCount} lab tests for you. Please check your Lab Tests page for details.`
-          : `Dr. ${req.user.name} has suggested a ${testType} test. Please check your Lab Results page for details.`,
-        category: 'lab-test'
-      });
-      await notification.save();
-      console.log(`Lab test notification sent to patient: ${patientId} (${batchOrderId ? 'Batch: ' + testCount + ' tests' : 'Single test'})`);
+        const patient = await User.findById(actualPatientId);
+        const notification = new Notification({
+          userId: actualPatientId,
+          title: batchOrderId 
+            ? `🔬 New Lab Test Batch Suggested (${testCount} Tests)`
+            : '🔬 New Lab Test Suggested',
+          body: batchOrderId
+            ? `Dr. ${req.user.name} has suggested ${testCount} lab tests for you. Please check your Lab Tests page for details.`
+            : `Dr. ${req.user.name} has suggested a ${testType} test. Please check your Lab Results page for details.`,
+          category: 'lab-test'
+        });
+        await notification.save();
+        console.log(`Lab test notification sent to patient: ${actualPatientId} (${batchOrderId ? 'Batch: ' + testCount + ' tests' : 'Single test'})`);
+      }
     }
 
     res.json({ ok: true, labTest: test });

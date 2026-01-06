@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
+import { useToast } from './utils/useToast';
+import ToastContainer from './components/ToastContainer';
 import './Profile.css';
 
 function Profile() {
   const { t } = useLanguage();
+  const { toasts, removeToast, success } = useToast();
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
@@ -91,7 +94,7 @@ function Profile() {
 
     setUserInfo(editedInfo);
     setIsEditing(false);
-    alert('Profile updated successfully!');
+    success('Profile updated successfully!');
   };
 
   const handleChangePhoto = () => {
@@ -257,6 +260,7 @@ function Profile() {
           </div>
         </div>
       </div>
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 }

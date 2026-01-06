@@ -112,6 +112,16 @@ exports.acceptHomeVisit = async (req, res) => {
       .populate('patientId', 'name email phone')
       .populate('doctorId', 'name email phone');
 
+    // Send notification to patient
+    if (populated.patientId) {
+      await Notification.create({
+        userId: populated.patientId._id,
+        title: '✅ Home Visit Request Accepted',
+        body: `Dr. ${populated.doctorId?.name || 'Your doctor'} has accepted your home visit request for ${new Date(populated.visitDate).toLocaleDateString()} at ${populated.visitTime}.`,
+        category: 'home-visit'
+      });
+    }
+
     console.log('Home visit accepted by doctor:', id);
 
     res.json({ ok: true, message: 'Home visit request accepted', homeVisit: populated });
@@ -149,6 +159,16 @@ exports.rejectHomeVisit = async (req, res) => {
     const populated = await HomeVisit.findById(homeVisit._id)
       .populate('patientId', 'name email phone')
       .populate('doctorId', 'name email phone');
+
+    // Send notification to patient
+    if (populated.patientId) {
+      await Notification.create({
+        userId: populated.patientId._id,
+        title: '❌ Home Visit Request Declined',
+        body: `Dr. ${populated.doctorId?.name || 'Your doctor'} has declined your home visit request. Reason: ${rejectionReason || 'Not specified'}`,
+        category: 'home-visit'
+      });
+    }
 
     console.log('Home visit rejected by doctor:', id);
 

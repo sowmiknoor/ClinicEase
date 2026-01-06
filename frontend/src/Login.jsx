@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
 import './Login.css';
 
-export default function Login({ onLoginSuccess, onSwitchToRegister }) {
+export default function Login({ onLoginSuccess, onSwitchToRegister, onNavigateHome }) {
   const { t } = useLanguage();
   
   // Remove dark mode when viewing login page (only logged-in users should have dark mode)
@@ -222,6 +222,9 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) {
             <p>{t('dontHaveAccount')} <button onClick={onSwitchToRegister} className="register-link">{t('createAccount') || 'Create one now'}</button></p>
             <p className="help-text">
               {t('needHelp') || 'Need help?'} <button onClick={() => setShowContactModal(true)} className="contact-btn">{t('contactSupport') || 'Contact Support'}</button>
+            </p>
+            <p className="help-text" style={{ marginTop: '10px' }}>
+              <button onClick={onNavigateHome} className="contact-btn" style={{ color: '#667eea' }}>← {t('backToHome') || 'Back to Home'}</button>
             </p>
           </div>
         </div>

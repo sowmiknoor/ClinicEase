@@ -1,6 +1,8 @@
 const MedicalRecord = require('../models/MedicalRecord');
 const Prescription = require('../models/Prescription');
 const Record = require('../models/Record');
+const LabTest = require('../models/LabTest');
+const Notification = require('../models/Notification');
 
 // Doctor: Create medical record for patient
 exports.createMedicalRecord = async (req, res) => {
@@ -85,6 +87,41 @@ exports.createMedicalRecord = async (req, res) => {
 
         await prescriptionEntry.save();
         console.log('Prescription created:', prescriptionEntry._id, 'for patient:', patientId);
+      }
+    }
+
+    // If lab tests are recommended, create LabTest documents
+    if (labTestsRecommended && labTestsRecommended.length > 0) {
+      const validLabTests = labTestsRecommended.filter(test => test && test.trim());
+      
+      if (validLabTests.length > 0) {
+        // Generate batch order ID for grouped tests
+        const batchOrderId = `BATCH-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
+        // Create lab test documents
+        const labTestPromises = validLabTests.map(testType => 
+          LabTest.create({
+            patientId,
+            doctorId,
+            testType,
+            category: 'General', // Default category
+            status: 'ordered',
+            batchOrderId,
+            notes: `Recommended by Dr. ${doctorId} - ${diagnosis}`
+          })
+        );
+
+        await Promise.all(labTestPromises);
+        console.log(`Created ${validLabTests.length} lab test(s) for patient:`, patientId);
+
+        // Send notification to patient about lab tests
+        const notification = new Notification({
+          userId: patientId,
+          title: `🔬 New Lab Tests Recommended (${validLabTests.length} ${validLabTests.length === 1 ? 'Test' : 'Tests'})`,
+          body: `Dr. has recommended ${validLabTests.length} lab test(s) for you. Please check your Lab Tests page for details.`,
+          category: 'lab-test'
+        });
+        await notification.save();
       }
     }
 

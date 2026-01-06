@@ -194,6 +194,7 @@ export default function Dashboard({ onNavigate }) {
             <div className="card quick">
               <h3>{t('quickActions')}</h3>
               <div className="quick-grid">
+                <button onClick={() => onNavigate('prescriptions')}>{t('prescriptions')}</button>
                 <button onClick={() => onNavigate('medications')}>{t('addMedication')}</button>
                 <button onClick={() => onNavigate('symptom')}>{t('checkSymptoms')}</button>
                 <button onClick={() => onNavigate('home-visits')}>{t('requestHomeVisit')}</button>

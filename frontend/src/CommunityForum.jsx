@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
+import { useToast } from './utils/useToast';
+import ToastContainer from './components/ToastContainer';
 import './CommunityForum.css';
 import CreatePostModal from './CreatePostModal';
 import PostDetailModal from './PostDetailModal';
 
 export default function CommunityForum() {
   const { t } = useLanguage();
+  const { toasts, removeToast, success, error } = useToast();
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -92,13 +95,13 @@ export default function CommunityForum() {
       if (data.ok) {
         setPosts(posts.filter(p => p._id !== postId));
         setSelectedPost(null);
-        alert('Post deleted successfully');
+        success('Post deleted successfully');
       } else {
-        alert(data.msg || 'Failed to delete post');
+        error(data.msg || 'Failed to delete post');
       }
     } catch (err) {
       console.error('Failed to delete post:', err);
-      alert('Error deleting post');
+      error('Error deleting post');
     }
   };
 
@@ -115,13 +118,13 @@ export default function CommunityForum() {
       const data = await res.json();
       if (data.ok) {
         fetchPosts();
-        alert('Post hidden successfully');
+        success('Post hidden successfully');
       } else {
-        alert(data.msg || 'Failed to hide post');
+        error(data.msg || 'Failed to hide post');
       }
     } catch (err) {
       console.error('Failed to hide post:', err);
-      alert('Error hiding post');
+      error('Error hiding post');
     }
   };
 
@@ -134,13 +137,13 @@ export default function CommunityForum() {
       const data = await res.json();
       if (data.ok) {
         fetchPosts();
-        alert('Post unhidden successfully');
+        success('Post unhidden successfully');
       } else {
-        alert(data.msg || 'Failed to unhide post');
+        error(data.msg || 'Failed to unhide post');
       }
     } catch (err) {
       console.error('Failed to unhide post:', err);
-      alert('Error unhiding post');
+      error('Error unhiding post');
     }
   };
 
@@ -354,6 +357,7 @@ export default function CommunityForum() {
           onUpdate={fetchPosts}
         />
       )}
+      <ToastContainer toasts={toasts} onClose={removeToast} />
     </div>
   );
 }

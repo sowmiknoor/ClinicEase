@@ -21,6 +21,7 @@ export default function LabTests() {
   const [expandedBatches, setExpandedBatches] = useState({});
   const [showCatalog, setShowCatalog] = useState(false);
   const [showAllTests, setShowAllTests] = useState(false);
+  const [showTestCatalog, setShowTestCatalog] = useState(false); // New state for viewing all tests
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const header = { 'Content-Type': 'application/json', 'x-user-id': userId };
@@ -120,11 +121,21 @@ export default function LabTests() {
       if (successful === selectedTests.length) {
         setForm({ scheduledDate:'', labName:'', labLocation:'', notes:'' }); 
         setSelectedTests([]);
-        fetchData(); 
+        
+        // Fetch updated data and scroll to list
+        setTimeout(() => {
+          fetchData();
+          // Scroll to the test list section
+          const listSection = document.querySelector('.labtest-list-section');
+          if (listSection) {
+            listSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 300);
+        
         alert(`✅ Successfully ordered ${successful} lab test(s)!\n\n📦 Batch Order Created\n\n✨ All ${successful} tests are grouped together.\n📄 Click "Download Combined PDF" to get ONE comprehensive report with all test results.`);
       } else {
         alert(`⚠️ ${successful}/${selectedTests.length} tests ordered successfully`);
-        fetchData();
+        setTimeout(() => fetchData(), 300);
       }
     } catch (err) {
       console.error(err);
@@ -262,8 +273,74 @@ export default function LabTests() {
 
   return (
     <div className="labtest-root">
-      <h2>🔬 Laboratory Tests</h2>
-      <p className="subtitle">Order and track lab tests from our comprehensive catalog</p>
+      <div className="labtest-header-section">
+        <div className="header-left">
+          <h2>🔬 Laboratory Tests</h2>
+          <p className="subtitle">Order and track lab tests from our comprehensive catalog</p>
+        </div>
+        <button 
+          className="btn-view-catalog-header"
+          onClick={() => setShowTestCatalog(!showTestCatalog)}
+        >
+          {showTestCatalog ? '📋 Hide Test Catalog' : '📚 View All Available Tests'}
+        </button>
+      </div>
+
+      {/* Show Test Catalog for All Users */}
+      {showTestCatalog && (
+        <div className="test-catalog-section">
+          <div className="catalog-section-header">
+            <h3>📚 Complete Lab Test Catalog</h3>
+            <p className="catalog-description">Browse all available lab tests by category</p>
+          </div>
+          
+          <div className="catalog-filters-inline">
+            <input 
+              className="catalog-search-inline"
+              type="text"
+              placeholder="🔍 Search tests..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select 
+              className="catalog-category-filter-inline"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option value="">All Categories ({Object.keys(catalog).length})</option>
+              {Object.keys(catalog).map(cat => (
+                <option key={cat} value={cat}>{cat} ({catalog[cat].length})</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="catalog-content-inline">
+            {Object.keys(filteredCatalog()).length === 0 ? (
+              <div className="no-results-inline">
+                <p>No tests found matching your search.</p>
+              </div>
+            ) : (
+              Object.keys(filteredCatalog()).map(category => (
+                <div key={category} className="catalog-category-inline">
+                  <h4 className="catalog-category-title-inline">
+                    <span className="category-icon">🧪</span>
+                    {category}
+                    <span className="category-count">({filteredCatalog()[category].length} tests)</span>
+                  </h4>
+                  <div className="catalog-tests-inline">
+                    {filteredCatalog()[category].map((test, idx) => (
+                      <div key={idx} className="catalog-test-card-inline">
+                        <span className="test-icon-inline">🔬</span>
+                        <span className="test-name-inline">{test}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="labtest-layout">
         {/* Order Form - Only for Doctors */}
@@ -405,17 +482,126 @@ export default function LabTests() {
           </form>
           </div>
         ) : (
-          <div className="patient-notice">
-            <div className="notice-icon">👨‍⚕️</div>
-            <h3>Lab Tests Suggested by Your Doctor</h3>
-            <p>Your doctor will suggest lab tests based on your health condition.</p>
-            <p>All suggested tests will appear in the list below and in your Lab Results page.</p>
+          <div className="labtest-form-section">
+            <form className="labtest-form" onSubmit={submit}>
+              <h3>🔬 Order Your Lab Tests</h3>
+              <p className="form-description">Select tests from our catalog and schedule your appointment</p>
+              
+              <div className="form-group">
+                <label>🧪 Selected Tests <span className="required-badge">Required</span></label>
+                <div className="selected-tests-container">
+                  {selectedTests.length === 0 ? (
+                    <div className="no-tests-selected">
+                      <p>No tests selected yet</p>
+                      <button 
+                        type="button" 
+                        className="btn-browse"
+                        onClick={() => setShowCatalog(true)}
+                      >
+                        📚 Browse Catalog
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="selected-tests-list">
+                        {selectedTests.map((test, idx) => (
+                          <div key={idx} className="selected-test-chip">
+                            <div className="test-chip-info">
+                              <span className="test-chip-name">{test.testType}</span>
+                              <span className="test-chip-category">{test.category}</span>
+                            </div>
+                            <button 
+                              type="button"
+                              className="test-chip-remove"
+                              onClick={() => removeTest(test.testType, test.category)}
+                              title="Remove test"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      <button 
+                        type="button" 
+                        className="btn-add-more"
+                        onClick={() => setShowCatalog(true)}
+                      >
+                        ➕ Add More Tests
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>📅 Schedule Date & Time</label>
+                <input 
+                  className="form-input" 
+                  type="datetime-local" 
+                  value={form.scheduledDate} 
+                  onChange={e => setForm({...form, scheduledDate: e.target.value})} 
+                />
+              </div>
+
+              <div className="form-group">
+                <label>🏢 Hospital / Diagnostic Center <span className="required-badge">Required</span></label>
+                <select
+                  className="form-input"
+                  value={form.labName}
+                  onChange={e => {
+                    const selectedLab = bangladeshLabs.find(lab => lab.name === e.target.value);
+                    setForm({
+                      ...form, 
+                      labName: e.target.value,
+                      labLocation: selectedLab ? `${selectedLab.location}, ${selectedLab.city}` : ''
+                    });
+                  }}
+                  required
+                >
+                  <option value="">-- Select Hospital/Diagnostic Center --</option>
+                  {bangladeshLabs.map((lab, idx) => (
+                    <option key={idx} value={lab.name}>
+                      {lab.name} - {lab.city} ({lab.type})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>📍 Lab Location</label>
+                <input 
+                  className="form-input" 
+                  placeholder="Auto-filled when you select a lab" 
+                  value={form.labLocation} 
+                  onChange={e => setForm({...form, labLocation: e.target.value})} 
+                  readOnly
+                />
+              </div>
+
+              <div className="form-group">
+                <label>📝 Notes</label>
+                <textarea 
+                  className="form-textarea" 
+                  placeholder="Any special instructions or health concerns"
+                  value={form.notes} 
+                  onChange={e => setForm({...form, notes: e.target.value})} 
+                  rows="3"
+                />
+              </div>
+
+              <button className="btn-submit" type="submit" disabled={selectedTests.length === 0}>
+                {selectedTests.length === 0 
+                  ? 'Select Tests to Order' 
+                  : `Order ${selectedTests.length} Test${selectedTests.length > 1 ? 's' : ''}`
+                }
+              </button>
+            </form>
           </div>
         )}
 
         {/* Test List */}
         <div className="labtest-list-section">
-          <h3>📊 {userRole === 'Doctor' || userRole === 'Admin' ? 'Suggested Lab Tests' : 'Your Lab Tests'}</h3>
+          <h3>📊 Your Lab Tests</h3>
           
           {list.length === 0 ? (
             <div className="empty-state">
