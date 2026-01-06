@@ -5,7 +5,7 @@ const ResearchPaper = require('./models/ResearchPaper');
 
 dotenv.config();
 
-const MONGO = process.env.MONGO_URI || 'mongodb://localhost:27017/clinic-ease';
+const MONGO = process.env.MONGO_URI ;
 
 // Sample Health Tips
 const healthTips = [

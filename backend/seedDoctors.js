@@ -4,7 +4,7 @@ const User = require('./models/User');
 
 dotenv.config();
 
-const MONGO = process.env.MONGO_URI || 'mongodb://localhost:27017/clinic-ease';
+const MONGO = process.env.MONGO_URI ;
 
 // Comprehensive list of medical specializations
 const specializations = [

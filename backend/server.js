@@ -58,7 +58,7 @@ app.use((err, req, res, next) => {
 
 // Connect MongoDB with retry logic and start server
 const PORT = process.env.PORT || 5001;
-const MONGO = process.env.MONGO_URI || 'mongodb://localhost:27017/clinic-ease';
+const MONGO = process.env.MONGO_URI ;
 
 let server;
 
